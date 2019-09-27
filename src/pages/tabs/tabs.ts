@@ -265,6 +265,9 @@ export class TabsPage {
 
     // tabs페이지를 벗어날때 = 그룹변경 , 로그아웃 등.
     this.electron.setAppBadge(0);
+
+    //캐시초기화를 위해 null
+    this.bizFire.onBizGroupSelected.next(null);
   }
 
 }

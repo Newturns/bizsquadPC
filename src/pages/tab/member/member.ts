@@ -45,7 +45,7 @@ export class MemberPage {
 
   langPack : any;
 
-  filteredList: string[];
+  filteredList: string[] = null;
 
   constructor(
     public navCtrl: NavController,
@@ -71,7 +71,13 @@ export class MemberPage {
     .pipe(filter(g=>g!=null),takeUntil(this._unsubscribeAll))
     .subscribe((group) => {
       this.currentGroup = group;
-      this.filteredList = this.currentGroup.getMemberIds(true);
+
+      console.log("filteredList :", this.filteredList);
+
+      if(this.filteredList === null) {
+        console.log("filteredList :this is null :", this.filteredList);
+        this.filteredList = this.currentGroup.getMemberIds(true);
+      }
     });
   }
   // 자신 프로필 사진 클릭시 프로필보기.
@@ -111,6 +117,10 @@ export class MemberPage {
 
   makeUserStatus(userData : IUserData) {
     return Commons.makeUserStatus(userData);
+  }
+
+  sss(user) {
+    console.log(user);
   }
 
   ngOnDestroy(): void {

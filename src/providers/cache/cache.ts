@@ -50,7 +50,9 @@ export class CacheService {
     /*
     * 그룹이 바뀌면 캐쉬를 지운다.
     * */
-    this.bizFire.onBizGroupSelected.subscribe(()=> this.clear());
+    this.bizFire.onBizGroupSelected.subscribe((group)=> {
+      if(group === null) this.clear();
+    });
   }
 
   clear(){

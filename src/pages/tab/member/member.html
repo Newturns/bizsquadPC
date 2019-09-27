@@ -1,5 +1,5 @@
 <!--new member page-->
-<ion-content no-padding class="content-color" overflow-scroll = "true">
+<ion-content no-padding class="content-color" overflow-scroll ="true">
   <ion-scroll class="scrollable" scrollY="true">
     <ion-searchbar no-padding [(ngModel)]="serachValue" style="padding-bottom:5px;"></ion-searchbar>
     <ion-list style="margin-bottom:56px;">
@@ -14,7 +14,7 @@
               <span class="displayName">{{ setUserName(user.data) }}</span>
               <div class="statusBadge" [style.background-color]="makeUserStatus(user.data)"></div>
             </ion-avatar>
-            <h2 class="user-name d-flex align-items-center">
+            <h2 class="user-name d-flex align-items-center" (click)="sss(user)">
               <div class="mr-auto" *ngIf="user.data.displayName">{{ user.data.displayName }}</div>
               <div class="mr-auto" *ngIf="!user.data.displayName">{{ user.data.email }}</div>
               <ion-icon *ngIf="isManagerUser(user)" class="chat-count" name="customCrown"></ion-icon>
