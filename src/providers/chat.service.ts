@@ -143,7 +143,7 @@ export class ChatService {
 
       const pushTitle = `[${this.bizFire.currentBizGroup.data.team_name}] ${this.bizFire.currentUserValue.displayName}`;
       const pushData = { cid: currentChat.cid, type: currentChat.data.type, gid: currentChat.data.gid };
-      pushData.type = 'member' ? STRINGS.GROUP_CHAT : STRINGS.SQUAD_CHAT;
+      pushData.type = pushData.type === 'member' ? STRINGS.GROUP_CHAT : STRINGS.SQUAD_CHAT;
       console.log("pushDatapushData",pushData);
 
       this.sendPush(Commons.memberUID(members),pushTitle,this.convertMessage(text),pushData);
