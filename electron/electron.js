@@ -28,7 +28,7 @@ let devMode = true;
 
 const mainMenuTemplate = defaultMenu(app,shell);
 // Add custom menu
-mainMenuTemplate.splice(3, 1, {
+mainMenuTemplate.splice(2, 2, {
   label: 'Window',
   submenu: [
     {
