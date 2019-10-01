@@ -24,7 +24,7 @@ let win;
 let history;
 let selectChatRoom;
 let testRooms = {};
-let devMode = false;
+let devMode = true;
 
 const mainMenuTemplate = defaultMenu(app,shell);
 // Add custom menu
@@ -47,13 +47,6 @@ let trayContextMenu = Menu.buildFromTemplate([
         accelerator: 'CmdOrCtrl+S',
         click: function () {
             win.show();
-        },
-    },
-    {
-        label: 'Update history',
-        accelerator: 'CmdOrCtrl+U',
-        click: function () {
-            historyWindow();
         },
     },
     {
@@ -82,31 +75,6 @@ contextMenu({
 		visible: params.mediaType === 'image'
 	}]
 });
-function historyWindow() {
-    // Create the browser window.
-    history = new BrowserWindow({
-        width: 700,
-        height: 500,
-        frame: true,
-        titleBarStyle: 'hidden-inset',
-    });
-
-
-    history.loadURL(url.format({
-        pathname: path.join(__dirname, '../www/history.html'),
-        protocol: 'file:',
-        slashes: true
-    }));
-
-    if(devMode) {
-      history.webContents.openDevTools();
-    }
-
-    // 창이 닫히면 호출됩니다.
-    history.on('closed', () => {
-        history = null;
-    });
-}
 
 function createWindow() {
 

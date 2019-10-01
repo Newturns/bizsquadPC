@@ -70,10 +70,10 @@ export class TokenProvider {
       this.loading.show();
       this.getToken(this.bizFire.uid).then((token : string) => {
         if(type === 'serviceinfo') {
-          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=home/${gid}/serviceinfo`);
+          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=serviceinfo/${gid}`);
         }
         if(type === 'member'){
-          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=home/${gid}/users`);
+          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=users/${gid}`);
         }
         if(type === 'bbs') {
           this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=bbs/${gid}`);
