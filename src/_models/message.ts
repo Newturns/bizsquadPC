@@ -10,6 +10,7 @@ export interface IChat extends ISquad{
 export interface IChatData extends ISquadData{
   created: any,
   members: any,
+  title?: string,
   gid?: string,
   lastMessage? : { text?: string, files?: any[] },
   lastMessageTime?: any,

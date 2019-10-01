@@ -74,7 +74,7 @@ export class ChatService {
         this.createRoom(newRoom);
     }
 
-    createRoomByFabs(users:IUser[]) {
+    createRoomByFabs(data : any) {
 
         const now = new Date();
         const myValue = this.bizFire.currentUserValue;
@@ -89,9 +89,11 @@ export class ChatService {
             status: true,
             type: 'member'
         };
-        if(users.length > 0){
-            users.forEach(u => { newRoom.members[u.uid] = true; });
+        if(data.isChecked.length > 0){
+          data.isChecked.forEach(u => { newRoom.members[u.uid] = true; });
         }
+
+        if(data.title) newRoom.title = data.title;
 
         console.log("newRoomnewRoom",newRoom);
         this.createRoom(newRoom);

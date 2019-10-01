@@ -24,20 +24,29 @@ let win;
 let history;
 let selectChatRoom;
 let testRooms = {};
-let devMode = true;
+let devMode = false;
 
 const mainMenuTemplate = defaultMenu(app,shell);
 // Add custom menu
-mainMenuTemplate.splice(2, 2, {
+mainMenuTemplate.splice(2, 3,
+  {
   label: 'Window',
-  submenu: [
-    {
+  submenu: [{
       label: 'Close',
       accelerator: process.platform === 'darwin' ? 'CmdOrCtrl+W' : 'Escape',
       role:'hide',
-    }
-  ]
-});
+    }]
+  },
+  {
+    role: 'help',
+    submenu: [
+      {
+        label: 'Learn More',
+        click () { require('electron').shell.openExternal('https://www.bizsquad.net/user-guide/?lang=en') }
+      }
+    ]
+  }
+);
 
 // Electron 으로 Desktop 앱을 만드는 과정에서 자꾸 Tray 아이콘이 사라지는 현상이 발생하는 경우가 있는데, 이런 경우는 아래와 같이 수정하면 대부분 해결됩니다.
 let tray = null;

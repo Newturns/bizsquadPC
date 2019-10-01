@@ -50,7 +50,7 @@ export class ChatRoomComponent extends TakeUntil {
     if(room) {
       let reload = true;
 
-      if(this.room ){
+      if(this.room){
         const oldCount = this._room.isPublic()? this.bizFire.currentBizGroup.getMemberCount() : this._room.getMemberCount();
         const newCount = room.isPublic() ? this.bizFire.currentBizGroup.getMemberCount() : room.getMemberCount();
         // member 수가 다를 때만 리로드.
@@ -123,30 +123,36 @@ export class ChatRoomComponent extends TakeUntil {
       return;
     }
 
-    if(this.room.data.type === 'member') {
-      this.chatTitle = '';
-      this.cacheService.resolvedUserList(this.room.getMemberIds(false), Commons.userInfoSorter)
-        .subscribe((users :IUser[]) => {
+    this._squadChat = this.room.data.type !== 'member';
+
+    if(this._squadChat) {
+
+      this.userCount = this.room.isPublic() ? this.bizFire.currentBizGroup.getMemberCount() : this.room.getMemberCount();
+      this.chatTitle = this.room.data.name;
+
+    } else {
+
+      this.userCount = this.room.getMemberCount();
+      this.chatTitle = this.room.data.title;
+
+      if(this.chatTitle == null) {
+
+        this.chatTitle = '';
+        this.cacheService.resolvedUserList(this.room.getMemberIds(false), Commons.userInfoSorter)
+        .subscribe((users: IUser[]) => {
 
           users.forEach(u => {
-            if(this.chatTitle.length > 0){
+            if (this.chatTitle.length > 0) {
               this.chatTitle += ',';
             }
             this.chatTitle += u.data.displayName;
           });
-          if(users.length === 0) {
+          if (users.length === 0) {
             this.chatTitle = this.langPack['no_members'];
           }
         });
 
-      this.userCount = this.room.getMemberCount();
-
-
-    } else {
-      // General 스쿼드 채팅
-      this._squadChat = true;
-      this.chatTitle = this.room.data.name;
-      this.userCount = this.room.isPublic() ? this.bizFire.currentBizGroup.getMemberCount() : this.room.getMemberCount();
+      }
 
     }
   }

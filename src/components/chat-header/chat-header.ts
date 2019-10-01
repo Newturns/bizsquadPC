@@ -24,6 +24,8 @@ export class ChatHeaderComponent {
 
   public isMemberChat: boolean;
 
+  private _squadChat: boolean;
+
   @Input()
   set chat(room: IChat) {
     if(room) {
@@ -72,33 +74,36 @@ export class ChatHeaderComponent {
       return;
     }
 
-    console.log(this.langPack);
+    this._squadChat = this.room.data.type !== 'member';
 
-    if(this.room.data.type === 'member') {
-      this.isMemberChat = true;
-      this.cacheService.resolvedUserList(this.room.getMemberIds(false), Commons.userInfoSorter)
-        .subscribe((users :IUser[]) => {
-          this.chatTitle = '';
-          users.forEach(u => {
-            if(this.chatTitle.length > 0){
-              this.chatTitle += ',';
-            }
-            this.chatTitle += u.data.displayName;
-          });
+    if(this._squadChat) {
 
-          if(users.length === 0){
-            // no user left only me.
-            // add no user
-            this.chatTitle = 'No user';
-          }
-        });
-      this.userCount = this.room.getMemberCount();
+      this.userCount = this.room.isPublic() ? this.bizFire.currentBizGroup.getMemberCount() : this.room.getMemberCount();
+      this.chatTitle = this.room.data.name;
 
     } else {
-      // 스쿼드 채팅.
-      this.isMemberChat = false;
-      this.chatTitle = this.room.data.name;
-      this.userCount = this.room.isPublic() ? this.bizFire.currentBizGroup.getMemberCount() : this.room.getMemberCount();
+
+      this.userCount = this.room.getMemberCount();
+      this.chatTitle = this.room.data.title;
+
+      if(this.chatTitle == null) {
+
+        this.chatTitle = '';
+        this.cacheService.resolvedUserList(this.room.getMemberIds(false), Commons.userInfoSorter)
+          .subscribe((users: IUser[]) => {
+
+            users.forEach(u => {
+              if (this.chatTitle.length > 0) {
+                this.chatTitle += ',';
+              }
+              this.chatTitle += u.data.displayName;
+            });
+            if (users.length === 0) {
+              this.chatTitle = this.langPack['no_members'];
+            }
+          });
+
+      }
     }
   }
 

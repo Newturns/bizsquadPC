@@ -271,6 +271,11 @@ export const language = {
         "en": "Select the member<br> you want to chat with in the list.",
         "ja": "招待したいメンバーを<br> 選択してください"
       }
+      ,"chat_room_title": {
+        "ko": "방 제목을 입력해 주세요.",
+        "en": "Please enter a room title",
+        "ja": "ルームタイトルを入力してください"
+      }
       ,"password": {
         "ko": "패스워드",
         "en": "Password",
