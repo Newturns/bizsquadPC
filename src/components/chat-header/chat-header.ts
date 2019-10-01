@@ -22,9 +22,7 @@ export class ChatHeaderComponent {
 
   private langPack : any;
 
-  public isMemberChat: boolean;
-
-  private _squadChat: boolean;
+  public squadChat: boolean;
 
   @Input()
   set chat(room: IChat) {
@@ -74,9 +72,9 @@ export class ChatHeaderComponent {
       return;
     }
 
-    this._squadChat = this.room.data.type !== 'member';
+    this.squadChat = this.room.data.type !== 'member';
 
-    if(this._squadChat) {
+    if(this.squadChat) {
 
       this.userCount = this.room.isPublic() ? this.bizFire.currentBizGroup.getMemberCount() : this.room.getMemberCount();
       this.chatTitle = this.room.data.name;
