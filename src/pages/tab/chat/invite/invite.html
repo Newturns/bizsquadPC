@@ -36,6 +36,6 @@
   </ion-scroll>
 </ion-content>
 <ion-footer>
-    <button class="footer-button" ion-button round small color="light" (click)="closePopup()">cencel</button>
-    <button ion-button round small [color]="groupMainColor" (click)="invite()">invite</button>
+    <button class="footer-button" ion-button round small color="light" (click)="closePopup()">{{langPack['cancel']}}</button>
+    <button ion-button round small [color]="groupMainColor" (click)="invite()">{{langPack['invite']}}</button>
 </ion-footer>

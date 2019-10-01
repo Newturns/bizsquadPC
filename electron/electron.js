@@ -24,7 +24,7 @@ let win;
 let history;
 let selectChatRoom;
 let testRooms = {};
-let devMode = false;
+let devMode = true;
 
 const mainMenuTemplate = defaultMenu(app,shell);
 // Add custom menu
@@ -33,7 +33,7 @@ mainMenuTemplate.splice(3, 1, {
   submenu: [
     {
       label: 'Close',
-      accelerator: 'CmdOrCtrl+W',
+      accelerator: process.platform === 'darwin' ? 'CmdOrCtrl+W' : 'Escape',
       role:'hide',
     }
   ]
@@ -245,10 +245,11 @@ ipcMain.on('createChatRoom', (event, chatRoom) => {
           {
             label: "Quit",
             submenu: [
-              { label: "Quit",
-                accelerator: "Escape",
+              {
+                label: "close",
+                accelerator: process.platform === 'darwin' ? 'CmdOrCtrl+W' : 'Escape',
                 click: () => testRooms[chatRoomId].close()
-              }
+              },
             ]},
           {
             label: "Edit",
