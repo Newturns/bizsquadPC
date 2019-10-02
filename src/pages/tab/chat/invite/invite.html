@@ -12,12 +12,6 @@
     </div>
   </ion-scroll>
   <ion-searchbar [style.background-color]="currentGroup.data.team_color" [(ngModel)]="serachValue" mode="ios" placeholder="{{langPack['search']}}"></ion-searchbar>
-  <div class="roomTitle_div" [style.background-color]="currentGroup.data.team_color">
-    <form [formGroup]="form">
-      <ion-input formControlName="title" class="custom_input" type="text" placeholder="{{langPack['chat_room_title']}}" mode="ios">
-      </ion-input>
-    </form>
-  </div>
 </ion-header>
 
 <ion-content no-padding>

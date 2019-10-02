@@ -74,7 +74,7 @@ export class ChatService {
         this.createRoom(newRoom);
     }
 
-    createRoomByFabs(data : any) {
+    createRoomByFabs(isChecked) {
 
         const now = new Date();
         const myValue = this.bizFire.currentUserValue;
@@ -89,11 +89,9 @@ export class ChatService {
             status: true,
             type: 'member'
         };
-        if(data.isChecked.length > 0){
-          data.isChecked.forEach(u => { newRoom.members[u.uid] = true; });
+        if(isChecked.length > 0){
+          isChecked.forEach(u => { newRoom.members[u.uid] = true; });
         }
-
-        if(data.title) newRoom.title = data.title;
 
         console.log("newRoomnewRoom",newRoom);
         this.createRoom(newRoom);

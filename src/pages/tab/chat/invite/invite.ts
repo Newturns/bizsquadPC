@@ -7,12 +7,10 @@ import { BizFireService } from '../../../../providers';
 import { filter, takeUntil, map } from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
 import deepEqual from 'deep-equal';
-import {LangService} from "../../../../providers/lang-service";
 import {IBizGroup, IUser, IUserData} from "../../../../_models";
 import {IChat} from "../../../../_models/message";
 import {Commons} from "../../../../biz-common/commons";
 import {CacheService} from "../../../../providers/cache/cache";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @IonicPage({
   name: 'page-invite',
@@ -36,8 +34,6 @@ export class InvitePage {
 
   userList$: Observable<IUser[]>;
 
-  form: FormGroup;
-
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -46,7 +42,6 @@ export class InvitePage {
     public chatService: ChatService,
     public electron : Electron,
     private cacheService : CacheService,
-    private fb: FormBuilder,
     public groupColorProvider: GroupColorProvider) {
       this._unsubscribeAll = new Subject<any>();
 
@@ -55,10 +50,6 @@ export class InvitePage {
         .subscribe((l: any) => {
           this.langPack = l.pack();
       });
-
-    this.form = this.fb.group({
-      'title': ['', [Validators.maxLength(50)]],
-    });
   }
 
   ngOnInit(): void {
@@ -106,13 +97,7 @@ export class InvitePage {
     }
     if(this.isChecked.length > 0) {
       if(selectedRoom == null){
-        const chatTitle = this.form.get('title').value;
-        const data = {
-          isChecked : this.isChecked
-        };
-        if(chatTitle != null) data['title'] = chatTitle;
-
-        this.chatService.createRoomByFabs(data);
+        this.chatService.createRoomByFabs(this.isChecked);
         this.viewCtrl.dismiss();
       } else {
         this.chatService.onSelectChatRoom.next(selectedRoom);

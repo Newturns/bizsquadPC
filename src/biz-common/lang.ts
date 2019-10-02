@@ -202,7 +202,7 @@ export const language = {
         "ja": "業務日誌"
       },
       "workflow": {
-        "ko": "전자결제",
+        "ko": "전자결재",
         "en": "Workflow",
         "ja": "電子決済"
       },
