@@ -211,6 +211,11 @@ export const language = {
         "en": "Squad",
         "ja": "スクワッド"
       }
+      ,"change_title": {
+        "ko": "타이틀 변경",
+        "en": "Change Title",
+        "ja": "タイトル変更"
+      }
       ,"deleted": {
         "ko": "삭제하였습니다.",
         "en": "Deleted.",

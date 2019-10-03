@@ -261,41 +261,65 @@ export class ChatService {
 
     async sendPush(targetUids: any[],pushTitle:any, msg:string, data: any){
 
-      return new Promise<any>(resolve => {
-        const headers = {
-          headers: new HttpHeaders({
-            'authorization': this.bizFire.uid
-          })
-        };
+      const payload = {
+        notification: {
+          title: pushTitle,
+          body: msg,
+        },
+        data: {
+          cid: data.cid,
+          type: data.type,
+          gid: data.gid
+        }
+      };
 
-        const payload = {
-          notification: {
-            title: pushTitle,
-            body: msg,
-          },
-          data: {
-            cid: data.cid,
-            type: data.type,
-            gid: data.gid
+      const userWithPushAllowed = await this.getPushAllowedUserListFrom(data.gid, data.cid, targetUids);
+      console.log(userWithPushAllowed);
+
+      const body = {
+        usersUid: userWithPushAllowed,
+        payload: payload
+      };
+
+      //-----------------------------------------------//
+      // send push
+      //-----------------------------------------------//
+      const path = `${environment.bizServerUri}/sendFCM`;
+
+      const headers = {
+        headers: new HttpHeaders({
+          'authorization': this.bizFire.uid
+        })
+      };
+
+      this.http.post(path, body, headers)
+        .subscribe((result: any) => {
+          console.log("resultresult",result);
+        },(error => {
+          console.error("sendPush error",error);
+        }));
+
+      return true;
+    }
+
+    private async getPushAllowedUserListFrom(gid: string, cid: string, userList: string[]){
+      const promises = userList.map(async uid => {
+        const snap = await this.bizFire.afStore.doc(Commons.userDataPath(gid, uid)).get().toPromise();
+        let ret = uid;
+        if(snap.exists){
+          const userData = snap.data();
+          if(userData[cid] && userData[cid]['notify'] === false){
+            //console.log(`${uid} 는 제외`);
+            ret = null;
           }
-        };
-
-        console.log("payloadpayloadpayload :",payload);
-
-        const path = `${environment.bizServerUri}/sendFCM`;
-        let body = {
-          usersUid: targetUids,
-          payload: payload
-        };
-        this.http.post(path, body, headers)
-          .subscribe((result: any) => {
-            console.log("resultresult",result);
-            resolve(result);
-          },(error => {
-            console.error("sendPush error",error);
-            resolve(null);
-          }));
+        }
+        // userData 가 없으면,
+        // 일단 PUSH는 보낸다.
+        return ret;
       });
+
+      const userWithPushAllowed = await Promise.all(promises);
+      return userWithPushAllowed.filter(uid => uid != null);
     }
 
     private convertMessage(text: string): string {

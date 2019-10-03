@@ -7,6 +7,9 @@ import {IUser} from "../../_models";
 import {CacheService} from "../../providers/cache/cache";
 import {BizFireService} from "../../providers";
 import {MembersPopoverComponent} from "../members-popover/members-popover";
+import {TakeUntil} from "../../biz-common/take-until";
+import {AlertProvider} from "../../providers/alert/alert";
+import {ChatService} from "../../providers/chat.service";
 
 /**
  * Generated class for the ChatHeaderComponent component.
@@ -18,11 +21,14 @@ import {MembersPopoverComponent} from "../members-popover/members-popover";
   selector: 'chat-header',
   templateUrl: 'chat-header.html'
 })
-export class ChatHeaderComponent {
+export class ChatHeaderComponent extends TakeUntil {
 
   private langPack : any;
 
   public squadChat: boolean;
+
+  notifications = 'notifications' || 'notifications-off';
+  private userCustomData : any;
 
   @Input()
   set chat(room: IChat) {
@@ -61,8 +67,30 @@ export class ChatHeaderComponent {
     public electron : Electron,
     private popoverCtrl :PopoverController,
     private bizFire : BizFireService,
-    private cacheService : CacheService
+    private cacheService : CacheService,
+    private alertCtrl : AlertProvider,
+    private chatService : ChatService
   ) {
+    super();
+
+    this.bizFire.userData
+      .pipe(this.takeUntil)
+      .subscribe(data => {
+        this.userCustomData = data;
+        if(this.userCustomData[this.room.cid] == null ||
+          this.userCustomData[this.room.cid]['notify'] == null){
+          this.notifications = 'notifications';
+        } else {
+          this.notifications = this.userCustomData[this.room.cid]['notify'] === true ? 'notifications' : 'notifications-off';
+        }
+      })
+  }
+
+  notificationOnOff() {
+    const noStatus = this.notifications !== 'notifications';
+    console.log(this.room.cid, 'notificationOnOff', `set to`, noStatus);
+    // get delete or add
+    this.bizFire.userDataRef.set({[this.room.cid]: { notify: noStatus }}, {merge: true});
   }
 
 
@@ -71,6 +99,12 @@ export class ChatHeaderComponent {
     if(this.room == null){
       return;
     }
+
+    this.chatService.onSelectChatRoom
+    .subscribe((chat : IChat) => {
+      if(this.room.data.title !== chat.data.title)
+        this.chatTitle = chat.data.title;
+    });
 
     this.squadChat = this.room.data.type !== 'member';
 
@@ -110,6 +144,16 @@ export class ChatHeaderComponent {
   //Chat invite Popover
   presentPopover(ev): void {
     let popover = this.popoverCtrl.create('page-member-chat-menu',{}, {cssClass: 'page-member-chat-menu'});
+
+    popover.onDidDismiss(data => {
+      if(data == 'title') {
+      //  채팅방 이름 변경 Alert
+        let prompt = this.alertCtrl.promptAlert(this.chatTitle,this._room);
+      } else {
+        return;
+      }
+    });
+
     popover.present({ev: ev});
   }
 

@@ -15,6 +15,7 @@ import { FireData } from '../../classes/fire-data';
 import { LangService } from '../lang-service';
 import {IBizGroup, INotificationData, INotificationItem, IUserData} from "../../_models";
 import {BizGroupBuilder} from "../../biz-common/biz-group";
+import DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 export interface IUserState {
   status:'init'|'signIn'|'signOut',
@@ -110,6 +111,21 @@ export class BizFireService {
     );
   }
 
+  //------------------------------------------------------------//
+  // User custom data with group gid //
+  //------------------------------------------------------------//
+  private userDataDoc: DocumentSnapshot;
+  private userDataDocSub: Subscription;
+  private userDataSubject = new BehaviorSubject<any>(null);
+  get userData(): Observable<any> {
+    return this.userDataSubject.asObservable().pipe(filter(d => d != null));
+  }
+  get userDataRef(): any{
+    return this.userDataDoc && this.userDataDoc.ref;
+  }
+  //------------------------------------------------------------//
+
+
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -120,11 +136,48 @@ export class BizFireService {
     public _app : App
     ) {
 
-        this.onUserSignOut = new Subject<boolean>();
+      this.onUserSignOut = new Subject<boolean>();
 
-        this._lang.onLangMap.subscribe( (totalLanguageMap: any) => {
-          // resolved when load lang.ts finished.
-          this._onLang.next(this._lang);
+      this._lang.onLangMap.subscribe( (totalLanguageMap: any) => {
+        // resolved when load lang.ts finished.
+        this._onLang.next(this._lang);
+      });
+
+      this.onBizGroupSelected
+        .pipe(filter(g => g!=null))
+        .subscribe((g: IBizGroup)=> {
+
+          let reload = true;
+          const userDataPath = Commons.userDataPath(g.gid, this.uid);
+          if(this.userDataDoc){
+            // is group changed?
+            if(userDataPath === this.userDataDoc.ref.path){
+            reload = false;
+            } else {
+              // clean old data
+              if(this.userDataDocSub){
+                this.userDataDocSub.unsubscribe();
+                this.userDataDocSub = null;
+              }
+            }
+          }
+          if(reload){
+            this.userDataDocSub = this.afStore.doc(userDataPath)
+              .snapshotChanges()
+              .pipe(this.takeUntilUserSignOut)
+              .subscribe( (snap: any)=>{
+                const doc: DocumentSnapshot = snap.payload;
+                if(!doc.exists){
+                  // save new doc.
+                  doc.ref.set({
+                    uid: this.uid
+                  }, {merge: true});
+                } else {
+                  this.userDataDoc = doc;
+                this.userDataSubject.next(doc.data());
+                }
+              });
+          }
         });
 
         // *

@@ -52,6 +52,11 @@ export class MemberChatMenuPage {
     popover.present({ev: ev}).then(() => this.viewCtrl.dismiss());
   }
 
+  changeTitle(ev) {
+    //클릭한 메뉴 버튼의 이름을 chat-header(채팅해더)로 전달.
+    this.viewCtrl.dismiss('title');
+  }
+
   leaveChatRoom(){
     this.viewCtrl.dismiss();
     this.alertCtrl.leaveRoomAlert(this.bizFire.uid,this.selectChatRoom.data.gid,this.selectChatRoom.cid);

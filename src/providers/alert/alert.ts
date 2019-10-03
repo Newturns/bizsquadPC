@@ -7,6 +7,8 @@ import {NotificationService} from "../notification.service";
 import {INotificationItem} from "../../_models";
 import {TokenProvider} from "../token/token";
 import {take} from "rxjs/operators";
+import {isValid} from "ionicons/dist/types/icon/utils";
+import {IChat} from "../../_models/message";
 
 @Injectable()
 export class AlertProvider {
@@ -109,7 +111,42 @@ export class AlertProvider {
           }
         }
       ]
-    })
+    });
+    alert.present();
+  }
+
+  promptAlert(title: string,chat :IChat) {
+    let alert = this.alertCtrl.create({
+      mode: 'ios',
+      title: this.langPack['change_title'],
+      inputs: [
+        {
+          name: 'title',
+          placeholder: 'Title',
+          value: title
+        },
+      ],
+      buttons: [
+        {
+          text: this.langPack['cancel'],
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: this.langPack['save'],
+          handler: data => {
+            console.log("promptAlert Data ::",data);
+            if(title !== data) {
+              chat.ref.set({ title: data.title },{merge : true});
+            } else {
+              console.log("not Changed Title ::",data);
+            }
+          }
+        }
+      ]
+    });
     alert.present();
   }
 }

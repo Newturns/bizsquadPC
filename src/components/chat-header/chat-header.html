@@ -14,8 +14,11 @@
       <h2 class="chatName">{{ chatTitle }}</h2>
       <p class="members" (click)="chatMemberList($event)"><ion-icon name="person"></ion-icon> {{ userCount }} </p>
     </div>
-    <div class="header-menu" *ngIf="!squadChat">
-      <button ion-button clear icon-only small color="dark" (tap)="presentPopover($event)">
+    <div class="header-menu">
+      <button ion-button clear icon-only small color="dark" (click)="notificationOnOff()" *ngIf="!squadChat">
+        <ion-icon name="{{ notifications }}"></ion-icon>
+      </button>
+      <button ion-button clear icon-only small color="dark" (tap)="presentPopover($event)" *ngIf="!squadChat">
         <ion-icon name="menu"></ion-icon>
       </button>
     </div>
