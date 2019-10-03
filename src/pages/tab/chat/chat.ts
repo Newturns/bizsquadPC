@@ -95,14 +95,16 @@ export class ChatPage extends TakeUntil{
     this.chatService.onChatRoomListChanged
     .pipe(filter(d=>d!=null),this.takeUntil)
     .subscribe((rooms : IChat[]) => {
-      this.chatRooms = rooms.sort(Commons.sortDataByCreated());
+      // this.chatRooms = rooms.sort(Commons.sortDataByCreated());
+      this.chatRooms = rooms.sort(Commons.sortDataByLastMessage(false));
     });
 
     // 스쿼드 채팅방
     this.squadService.onSquadListChanged
     .pipe(filter(d=>d != null),this.takeUntil)
     .subscribe((squad : IChat[]) => {
-      this.squadChatRooms = squad.sort(Commons.sortDataByCreated());
+      // this.squadChatRooms = squad.sort(Commons.sortDataByCreated());
+      this.squadChatRooms = squad.sort(Commons.sortDataByLastMessage(false));
     });
 
 

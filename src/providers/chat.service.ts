@@ -209,13 +209,15 @@ export class ChatService {
         }
         await newChatRef.set(msg);
 
-        // if(saveLastMessage === true) {
-        //   await parentRef.set({
-        //     lastMessage: msg.message,
-        //     lastMessageTime: new Date(),
-        //   }, {merge: true});
-        // }
-        return {mid: newChatRef.id, data: msg} as IMessage;;
+        const newMessage = {mid: newChatRef.id, data: msg};
+
+        if(saveLastMessage){
+          await parentRef.update({
+            lastMessage: msg,
+          });
+        }
+        return newMessage;
+
       } catch (e) {
         console.log('addMessage',e,text);
         return null;

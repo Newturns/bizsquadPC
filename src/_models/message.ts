@@ -12,9 +12,7 @@ export interface IChatData extends ISquadData{
   members: any,
   title?: string,
   gid?: string,
-  lastMessage? : { text?: string, files?: any[] },
-  lastMessageTime?: any,
-  lastMessageTo?: string,
+  lastMessage?: IMessageData
   manager?: any,
 
   read?: any,

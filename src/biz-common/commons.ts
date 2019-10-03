@@ -258,6 +258,19 @@ export class Commons {
         }
       }
 
+      static sortDataByLastMessage(asc = true){
+        return  (a: any, b: any) => {
+          let ret = 0;
+          const down = asc ? 1 : -1;
+          const up = asc ? -1 : 1;
+          const key = 'lastMessage';
+          if(a.data && a.data[key] && b && b.data && b.data[key]){
+            ret = a.data[key].created.toMillis() > b.data[key].created.toMillis() ? down : up;
+          }
+          return ret;
+        }
+      }
+
       static squadSortByName(a:ISquad, b: ISquad ): number{
         let ret = 0;
         if(a.data && a.data.name && b.data && b.data.name ){
