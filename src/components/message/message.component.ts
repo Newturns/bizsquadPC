@@ -14,6 +14,11 @@ import {Commons} from "../../biz-common/commons";
 
 export class MessageComponent implements OnInit, OnDestroy {
 
+  @Input()
+  showUnreadCount = false;
+  unreadCount: number; // read user
+  unreadUsers: string[];
+
   // show delete/edit menu
   @Input()
   menu = false;
@@ -126,6 +131,30 @@ export class MessageComponent implements OnInit, OnDestroy {
             this.displayName = 'unknown user';
           }
         });
+    }
+
+    /*
+    * Get Unread Count.
+    * 현재는 라인식 읽은이들 수
+    * */
+    this.calcUnreadCount();
+
+  }
+
+  private calcUnreadCount (){
+    if(this.showUnreadCount && this.message && this.message.data.read){
+
+      const readUserId = Object.keys(this.message.data.read)
+        .filter(uid => this.message.data.sender!== uid)
+        .filter(uid => this.message.data.read[uid].unread === false);
+
+      if(readUserId.length > 0){
+        this.cacheService.resolvedUserList(readUserId, Commons.userInfoSorter)
+          .subscribe((list: IUser[]) => {
+            this.unreadUsers = list.map(l => l.data.displayName);
+            this.unreadCount = this.unreadUsers.length;
+          });
+      }
     }
   }
 

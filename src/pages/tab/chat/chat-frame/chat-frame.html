@@ -8,7 +8,7 @@
 
 <ion-content #scrollContent (ionScroll)="scrollHandler($event)">
   <div class="message-wrap">
-    <app-message [menu]="false" [comment]="false" [message]="message" *ngFor="let message of chatContent"></app-message>
+    <app-message [menu]="false" [comment]="false" [message]="message" [showUnreadCount]=true *ngFor="let message of chatContent"></app-message>
   </div>
 </ion-content>
 

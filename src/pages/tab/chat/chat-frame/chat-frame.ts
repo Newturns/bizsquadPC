@@ -14,6 +14,7 @@ import {LangService} from "../../../../providers/lang-service";
 import {ToastProvider} from "../../../../providers/toast/toast";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TakeUntil} from "../../../../biz-common/take-until";
+import {DocumentChangeAction} from "@angular/fire/firestore";
 
 
 @IonicPage({
@@ -298,21 +299,44 @@ export class ChatFramePage extends TakeUntil{
     this.bizFire.afStore.collection(msgPath,ref => ref.orderBy('created')
       .startAt(start))
       .stateChanges()
-      .pipe(
-        map((snaps : any[]) => snaps.filter(s => s.type === 'added')),
-        filter(snaps => snaps && snaps.length > 0),
-        map(MessageBuilder.mapBuildSnapShot()))
-      .subscribe((list : IMessage[]) => {
+      .pipe(filter(snaps => snaps && snaps.length > 0))
+      .subscribe((changes : DocumentChangeAction<any>[]) => {
 
-        this.addAddedMessages(list);
+        const list: IMessage[] = changes.filter(c => c.type === 'added').map(c => MessageBuilder.buildFromSnapshot(c));
+        const modified: IMessage[] = changes.filter(c => c.type === 'modified').map(c => MessageBuilder.buildFromSnapshot(c));
 
-        list.forEach((message : IMessage) => {
-          this.chatContent.push(message);
+        if(list.length > 0){
+          list.forEach((l) => {
+            this.chatContent.push(l);
+            if(!this.chatService.scrollBottom(this.contentArea) && l.data.sender !== this.bizFire.uid) {
+              this.toastProvider.showToast(this.langPack['new_message']);
+            }
+          });
+          this.addAddedMessages(list.filter(m => m.data.sender !== this.bizFire.uid));
+        }
 
-          if(!this.chatService.scrollBottom(this.contentArea) && message.data.sender !== this.bizFire.uid) {
-            this.toastProvider.showToast(this.langPack['new_message']);
-          }
-        });
+        if(modified.length > 0){
+          let replaced = 0;
+          modified.forEach(m => {
+            const index = this.chatContent.findIndex(c => c.mid === m.mid);
+            if(index !== -1){
+              // this.chatContent[index].data = m.data;
+              this.chatContent[index] = m;
+              //console.log(m.mid, m.data.message.text, 'replaced');
+              replaced ++;
+            }
+          });
+        }
+
+        // this.addAddedMessages(list);
+        //
+        // list.forEach((message : IMessage) => {
+        //   this.chatContent.push(message);
+        //
+        //   if(!this.chatService.scrollBottom(this.contentArea) && message.data.sender !== this.bizFire.uid) {
+        //     this.toastProvider.showToast(this.langPack['new_message']);
+        //   }
+        // });
         // scroll to bottom
         if(this.chatService.scrollBottom(this.contentArea)) {
           timer(100).subscribe(() => {
@@ -330,7 +354,7 @@ export class ChatFramePage extends TakeUntil{
       Commons.chatSquadMsgPath(this.newChatRoom.data.gid,this.newChatRoom.cid);
 
     this.bizFire.afStore.collection(msgPath,ref => ref.orderBy('created','desc')
-      .startAt(this.start).limit(30)).get()
+      .startAt(this.start).limit(20)).get()
       .subscribe((snapshots) => {
         this.end = this.start;
         this.start = snapshots.docs[snapshots.docs.length - 1];
@@ -338,14 +362,29 @@ export class ChatFramePage extends TakeUntil{
         this.bizFire.afStore.collection(msgPath,ref => ref.orderBy('created')
           .startAt(this.start).endBefore(this.end))
           .stateChanges()
-          .pipe(take(1),
-            map((snaps : any[]) => snaps.filter(s => s.type === 'added')),
-            filter(snaps => snaps && snaps.length > 0),
-            map(MessageBuilder.mapBuildSnapShot()))
-          .subscribe((list : IMessage[]) => {
+          .pipe(filter(snaps => snaps && snaps.length > 0))
+          .subscribe((changes : DocumentChangeAction<any>[]) => {
 
-            this.addAddedMessages(list);
-            this.chatContent = list.concat(this.chatContent);
+            const list: IMessage[] = changes.filter(c => c.type === 'added').map(c => MessageBuilder.buildFromSnapshot(c));
+            const modified: IMessage[] = changes.filter(c => c.type === 'modified').map(c => MessageBuilder.buildFromSnapshot(c));
+
+            if(list.length > 0){
+              this.addAddedMessages(list.filter(m => m.data.sender !== this.bizFire.uid));
+              this.chatContent = list.concat(this.chatContent);
+            }
+
+            if(modified.length > 0){
+              let replaced = 0;
+              modified.forEach(m => {
+                const index = this.chatContent.findIndex(c => c.mid === m.mid);
+                if(index !== -1){
+                  // this.chatContent[index].data = m.data;
+                  this.chatContent[index] = m;
+                  //console.log(m.mid, m.data.message.text, 'replaced');
+                  replaced ++;
+                }
+              });
+            }
 
             timer(100).subscribe(() => {
               this.contentArea.scrollTo(0,this.contentArea.getContentDimensions().scrollHeight - this.oldScrollHeight,0);
@@ -392,14 +431,14 @@ export class ChatFramePage extends TakeUntil{
     if(this.addedMessages == null){
       this.addedMessages = [];
     }
-    const unreadList = list.filter((l:IMessage) => l.data.read == null
+    const unreadList = list.filter((l:IMessage) =>
+      l.data.isNotice === false && (l.data.read == null
       || l.data.read[this.bizFire.uid] == null
-      || l.data.read[this.bizFire.uid].unread === true
+      || l.data.read[this.bizFire.uid].unread === true)
     );
 
-    if(unreadList.length > 0){
-      // add to old lsit
-      this.addedMessages = this.addedMessages.concat(unreadList);
+    this.addedMessages = this.addedMessages.concat(unreadList);
+    if(this.addedMessages.length > 0){
       timer(0).subscribe(()=> this.addedMessages$.next());
     }
   }
