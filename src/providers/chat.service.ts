@@ -347,50 +347,6 @@ export class ChatService {
     }
 
 
-    makeNoticeMessage(message): string {
-
-      if(Object.keys(this.langPack).length > 0
-        && message
-        && message.data.isNotice
-        && message.data.message.notice
-      ){
-        const notice = message.data.message.notice;
-        if(notice.type === 'exit'){
-          const uid = notice.uid;
-          let text = '';
-          if(uid){
-            this.cacheService.userGetObserver(uid[0]).subscribe((user: IUser) => {
-              text = this.langPack['chat_exit_user_notice'].replace('$DISPLAYNAME',user.data.displayName);
-            });
-            return text;
-          }
-        }
-
-        if(notice.type === 'init'){
-          const text = this.langPack['create_chat_room'];
-          return text;
-        }
-        if(notice.type === 'invite'){
-          const uids = notice.uid;
-          let inviteUserNames = '';
-          for(let uid of uids) {
-            this.cacheService.userGetObserver(uid).subscribe((user : IUser) => {
-              if(user.data.displayName) {
-                if(inviteUserNames.length > 0){
-                  inviteUserNames += ',';
-                }
-                inviteUserNames += user.data.displayName;
-              }
-            })
-          }
-          const text = this.langPack['chat_invite_user_notice'].replace('$DISPLAYNAME',inviteUserNames);
-          return text;
-        }
-      }
-
-      return;
-    }
-
   findChat(cid: string): IChat| null {
     let currentChat = this.onChatRoomListChanged.getValue().find(c => c.cid === cid);
     if(currentChat == null){

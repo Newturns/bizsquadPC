@@ -8,7 +8,12 @@
 
 <ion-content #scrollContent (ionScroll)="scrollHandler($event)">
   <div class="message-wrap">
-    <app-message [menu]="false" [comment]="false" [message]="message" [showUnreadCount]=true *ngFor="let message of chatContent"></app-message>
+    <ng-container *ngFor="let message of chatContent; let i = index">
+      <div class="d-flex justify-content-center">
+        <p class="differentDay p-2 pl-3 pr-3" *ngIf="isDifferentDay(i)">{{ getMessageDate(i) }}</p>
+      </div>
+      <app-message [menu]="false" [comment]="false" [message]="message" [showUnreadCount]=true></app-message>
+    </ng-container>
   </div>
 </ion-content>
 

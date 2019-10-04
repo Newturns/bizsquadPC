@@ -14,7 +14,7 @@
       <div class="d-flex align-items-center justify-content-between textdrag"
            [ngClass]="{'font-weight-bold': isMyMessage}">
         <span class="font-14 text-facebook mr-2">{{displayName}} </span>
-        <span class="font-12 text-biz-gray"> {{message.data.created | timestampToDate | date: 'yyyy-MM-dd HH:mm'}}</span>
+        <span class="font-12 text-biz-gray"> {{message.data.created | timestampToDate | date: 'HH:mm'}}</span>
       </div>
 
       <!--TITLE-->

@@ -15,6 +15,7 @@ import {ToastProvider} from "../../../../providers/toast/toast";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TakeUntil} from "../../../../biz-common/take-until";
 import {DocumentChangeAction} from "@angular/fire/firestore";
+import {formatDate} from "@angular/common";
 
 
 @IonicPage({
@@ -397,6 +398,7 @@ export class ChatFramePage extends TakeUntil{
 
 
 
+
   async chatDataLoad(chatRoom : IChat) {
     const RoomPath = chatRoom.data.type === 'member' ? Commons.chatDocPath(chatRoom.data.gid,chatRoom.cid) : Commons.chatSquadPath(chatRoom.data.gid,chatRoom.cid);
     // 채팅방 정보 갱신. (초대,나가기)
@@ -440,6 +442,52 @@ export class ChatFramePage extends TakeUntil{
     this.addedMessages = this.addedMessages.concat(unreadList);
     if(this.addedMessages.length > 0){
       timer(0).subscribe(()=> this.addedMessages$.next());
+    }
+  }
+
+
+  isDifferentDay(messageIndex : number) {
+    if (messageIndex === 0) return true;
+
+    const d1 = new Date(this.chatContent[messageIndex - 1].data.created.toDate());
+    const d2 = new Date(this.chatContent[messageIndex].data.created.toDate());
+
+    return (
+      d1.getFullYear() !== d2.getFullYear() ||
+      d1.getMonth() !== d2.getMonth() ||
+      d1.getDate() !== d2.getDate()
+    )
+  }
+
+  getMessageDate(messageIndex: number): string {
+    const dateToday = new Date().toDateString();
+    const longDateYesterday = new Date();
+    longDateYesterday.setDate(new Date().getDate() - 1);
+    const dateYesterday = longDateYesterday.toDateString();
+    const today = dateToday.slice(0, dateToday.length - 5);
+    const yesterday = dateYesterday.slice(0, dateToday.length - 5);
+
+    const wholeDate = new Date(
+      this.chatContent[messageIndex].data.created.toDate()
+    ).toDateString();
+
+    const messageDateString = wholeDate.slice(0, wholeDate.length - 5);
+
+    if (
+      new Date(this.chatContent[messageIndex].data.created.toDate()).getFullYear() ===
+      new Date().getFullYear()
+    ) {
+      if (messageDateString === today) {
+        return this.langPack['today'];
+      } else if (messageDateString === yesterday) {
+        return this.langPack['yesterday'];
+      } else {
+        return formatDate(this.chatContent[messageIndex].data.created.toDate(),
+          `yyyy-MM-dd`,
+          'en');
+      }
+    } else {
+      return wholeDate;
     }
   }
 

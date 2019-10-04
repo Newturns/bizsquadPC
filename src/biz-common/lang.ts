@@ -580,6 +580,11 @@ export const language = {
         "en": "Today",
         "ja": "今日"
       }
+      ,"yesterday": {
+        "ko": "어제",
+        "en": "yesterday",
+        "ja": "昨日"
+      }
       ,"next": {
         "ko": "다음",
         "en": "Next",

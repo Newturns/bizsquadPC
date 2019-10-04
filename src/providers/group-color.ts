@@ -19,26 +19,26 @@ export class GroupColorProvider {
 
   makeGroupColor(string) {
     switch(string) {
-      case 'grey':
-       return 'grey';
-      case '#f44336':
-       return 'warn';
-      case '#ff4081':
-       return 'accent';
-      case '#3f51b5':
-       return 'primary';
-      case '#3b5998':
-       return 'facebook';
-      case 'green':
+      case '#324BA8':
+        return 'darkblue';
+      case '#6979F8':
+        return 'blue';
+      case '#FFCF5C':
+        return 'warn';
+      case '#FFA26B':
+        return 'accent';
+      case '#0084F4':
+        return 'primary';
+      case '#00C48C':
         return 'green';
-      case 'lightskyblue':
-       return 'lightskyblue';
+      case '#FF647C':
+        return 'warm';
+      case '#D0C9D6':
+        return 'gray';
+      case '#3b5998':
+        return 'facebook';
       case '#111111':
         return 'dark';
-      case 'forestgreen':
-        return 'forestgreen';
-      case 'blueviolet':
-        return 'blue';
       case undefined:
        return 'default';
       default:
