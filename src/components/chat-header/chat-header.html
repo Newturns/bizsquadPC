@@ -10,15 +10,15 @@
         <ion-icon class="login-top-menu" name="md-close"></ion-icon>
       </button>
     </div>
-    <div class="chatName-frame">
+    <div class="chatName-frame" *ngIf="chatTitle !== ''">
       <h2 class="chatName">{{ chatTitle }}</h2>
       <p class="members" (click)="chatMemberList($event)"><ion-icon name="person"></ion-icon> {{ userCount }} </p>
     </div>
     <div class="header-menu">
-      <button ion-button clear icon-only small color="dark" (click)="notificationOnOff()" *ngIf="!squadChat">
+      <button ion-button clear icon-only small color="dark" (click)="notificationOnOff()">
         <ion-icon name="{{ notifications }}"></ion-icon>
       </button>
-      <button ion-button clear icon-only small color="dark" (tap)="presentPopover($event)" *ngIf="!squadChat">
+      <button ion-button clear icon-only small color="dark" (tap)="presentPopover($event)" *ngIf="memberChat">
         <ion-icon name="menu"></ion-icon>
       </button>
     </div>

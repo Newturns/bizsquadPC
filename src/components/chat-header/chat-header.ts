@@ -25,7 +25,7 @@ export class ChatHeaderComponent extends TakeUntil {
 
   private langPack : any;
 
-  public squadChat: boolean;
+  public memberChat : boolean;
 
   notifications = 'notifications' || 'notifications-off';
   private userCustomData : any;
@@ -60,7 +60,7 @@ export class ChatHeaderComponent extends TakeUntil {
   public opacity = 100;
 
   //채팅방 이름,멤버수
-  public chatTitle : string = 'Loading data...';
+  public chatTitle : string = '';
   public userCount : number = 0;
 
   constructor(
@@ -106,9 +106,9 @@ export class ChatHeaderComponent extends TakeUntil {
         this.chatTitle = chat.data.title;
     });
 
-    this.squadChat = this.room.data.type !== 'member';
+    this.memberChat = this.room.data.type === 'member';
 
-    if(this.squadChat) {
+    if(!this.memberChat) {
 
       this.userCount = this.room.isPublic() ? this.bizFire.currentBizGroup.getMemberCount() : this.room.getMemberCount();
       this.chatTitle = this.room.data.name;

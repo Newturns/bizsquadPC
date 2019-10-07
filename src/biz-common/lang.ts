@@ -575,6 +575,11 @@ export const language = {
         "en": "Previous",
         "ja": "前へ"
       }
+      ,"leave_chat": {
+        "ko": "채팅방 나가기",
+        "en": "Leave Chatroom",
+        "ja": "チャットルーム脱退"
+      }
       ,"today": {
         "ko": "오늘",
         "en": "Today",
@@ -906,8 +911,8 @@ export const language = {
       }
       ,"invite": {
         "ko": "초대",
-        "en": "Send Invitation",
-        "ja": "グループに招待"
+        "en": "Invitation",
+        "ja": "招待"
       }
       ,"invite_finished": {
         "ko": "유저를 초대했습니다.",

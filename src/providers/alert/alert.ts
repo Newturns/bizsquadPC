@@ -49,7 +49,7 @@ export class AlertProvider {
       subTitle: text,
       buttons: [this.langPack['ok']]
     });
-    alert.present();
+    return alert.present();
   }
 
   groupInviteAlert(msg : INotificationItem) {
@@ -138,8 +138,12 @@ export class AlertProvider {
           text: this.langPack['save'],
           handler: data => {
             console.log("promptAlert Data ::",data);
-            if(title !== data) {
-              chat.ref.set({ title: data.title },{merge : true});
+            if(title !== data.title) {
+              if(data.title !== '') {
+                chat.ref.set({ title: data.title },{merge : true});
+              } else {
+                this.failedEditProfile('타이틀명을 공백으로 할수 없습니다.').finally(()=>this.promptAlert(title,chat));
+              }
             } else {
               console.log("not Changed Title ::",data);
             }

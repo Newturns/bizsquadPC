@@ -7,6 +7,7 @@ import {takeUntil} from "rxjs/operators";
 import {Subject} from "rxjs";
 import {ChatService} from "../../../../providers/chat.service";
 import {BizFireService} from "../../../../providers";
+import {TakeUntil} from "../../../../biz-common/take-until";
 
 @IonicPage({
   name: 'page-member-chat-menu',
@@ -17,11 +18,10 @@ import {BizFireService} from "../../../../providers";
   selector: 'page-member-chat-menu',
   templateUrl: 'member-chat-menu.html',
 })
-export class MemberChatMenuPage {
+export class MemberChatMenuPage extends TakeUntil {
 
   selectChatRoom : IChat;
-
-  private _unsubscribeAll;
+  langPack: any;
 
   constructor(
     public navCtrl: NavController,
@@ -33,14 +33,20 @@ export class MemberChatMenuPage {
     public bizFire : BizFireService,
     public alertCtrl : AlertProvider,) {
 
-    this._unsubscribeAll = new Subject<any>();
+    super();
+
+    this.bizFire.onLang
+      .pipe(this.takeUntil)
+      .subscribe((l: any) => {
+        this.langPack = l.pack();
+      });
   }
 
 
   ngOnInit(): void {
 
     this.chatService.onSelectChatRoom
-      .pipe(takeUntil(this._unsubscribeAll))
+      .pipe(this.takeUntil)
       .subscribe((chat : IChat) => {
         this.selectChatRoom = chat;
     })
@@ -63,7 +69,5 @@ export class MemberChatMenuPage {
   }
 
   ngOnDestroy(): void {
-    this._unsubscribeAll.next();
-    this._unsubscribeAll.complete();
   }
 }
