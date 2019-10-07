@@ -1,32 +1,31 @@
 <ion-content no-padding class="content-color">
     <ion-segment [(ngModel)]="defaultSegment">
-        <ion-segment-button value="chatRoom" class="d-flex justify-content-center align-items-center">
-            {{ langPack['chatroom'] }}
-            <ion-badge class="ml-2 msg-badge" *ngIf="memberUnreadTotalCount" color="danger">{{ memberUnreadTotalCount | badgeLimit: 999 }}</ion-badge>
-        </ion-segment-button>
-        <ion-segment-button value="squadChatRoom" class="d-flex justify-content-center align-items-center">
-            {{ langPack['squad_chatroom'] }}
-            <ion-badge class="ml-2 msg-badge" *ngIf="squadUnreadTotalCount" color="danger">{{ squadUnreadTotalCount | badgeLimit: 999 }}</ion-badge>
-        </ion-segment-button>
+      <ion-segment-button value="squadChatRoom" class="d-flex justify-content-center align-items-center">
+        {{ langPack['squad_chatroom'] }}
+        <ion-badge class="ml-2 msg-badge" *ngIf="squadUnreadTotalCount" color="danger">{{ squadUnreadTotalCount | badgeLimit: 999 }}</ion-badge>
+      </ion-segment-button>
+      <ion-segment-button value="chatRoom" class="d-flex justify-content-center align-items-center">
+          {{ langPack['chatroom'] }}
+          <ion-badge class="ml-2 msg-badge" *ngIf="memberUnreadTotalCount" color="danger">{{ memberUnreadTotalCount | badgeLimit: 999 }}</ion-badge>
+      </ion-segment-button>
     </ion-segment>
     <ion-scroll class="scrollable" scrollY="true">
-        <div [ngSwitch]="defaultSegment">
-            <!-- 1:1채팅 폼 -->
-            <ion-list class="marginB56" *ngSwitchCase="'chatRoom'" scrollY="true">
-              <ng-container *ngFor="let room of chatRooms">
-                <chat-room [chat]="room" (onClick)="gotoRoom(room)" (updated)="onLastMessageChanged($event)"></chat-room>
-              </ng-container>
-              <ion-fab right bottom style="opacity: 0.8">
-                  <button class="fab-button"  ion-fab [color]="groupMainColor" (tap)="presentPopover($event)"><ion-icon name="customNewRoom"></ion-icon></button>
-              </ion-fab>
-            </ion-list>
-
-            <!-- 스쿼드 채팅 폼 -->
-            <ion-list class="marginB56" *ngSwitchCase="'squadChatRoom'" scrollY="true">
-                <ng-container *ngFor="let room of squadChatRooms">
-                  <chat-room [chat]="room"  (onClick)="gotoSquadRoom(room)" (updated)="onLastMessageChanged($event)"></chat-room>
-                </ng-container>
-          </ion-list>
-        </div>
+      <div [ngSwitch]="defaultSegment">
+        <!-- 스쿼드 채팅 폼 -->
+        <ion-list class="marginB56" *ngSwitchCase="'squadChatRoom'" scrollY="true">
+          <ng-container *ngFor="let room of squadChatRooms">
+            <chat-room [chat]="room"  (onClick)="gotoSquadRoom(room)" (updated)="onLastMessageChanged($event)"></chat-room>
+          </ng-container>
+        </ion-list>
+        <!-- 1:1채팅 폼 -->
+        <ion-list class="marginB56" *ngSwitchCase="'chatRoom'" scrollY="true">
+          <ng-container *ngFor="let room of chatRooms">
+            <chat-room [chat]="room" (onClick)="gotoRoom(room)" (updated)="onLastMessageChanged($event)"></chat-room>
+          </ng-container>
+          <ion-fab right bottom style="opacity: 0.8">
+              <button class="fab-button"  ion-fab [color]="groupMainColor" (tap)="presentPopover($event)"><ion-icon name="customNewRoom"></ion-icon></button>
+          </ion-fab>
+        </ion-list>
+      </div>
     </ion-scroll>
 </ion-content>

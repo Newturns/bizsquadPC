@@ -23,7 +23,7 @@ import {Commons} from "../../../biz-common/commons";
 })
 export class ChatPage extends TakeUntil{
 
-  defaultSegment : string = "chatRoom";
+  defaultSegment : string = "squadChatRoom";
   chatRooms : IChat[];
   squadChatRooms: IChat[];
   members = [];
