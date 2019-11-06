@@ -4,16 +4,32 @@ app-avatar-button{
       color: white;
     }
     .avatar-photo-image {
-      width: 40px;
-      height: 40px;
       border-radius: 50%;
-      &.smallIcon {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        font-size: 11px;
-      }
     }
   }
-}
 
+  .avatar-displayName {
+
+    //height: 20px;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: #0d1c2e;
+    cursor: pointer;
+
+    //padding-bottom: 6px;
+  }
+
+  .avatar-displayName:hover {
+    text-decoration: underline;
+    color: #2a8bf2;
+  }
+
+  ::ng-deep p {
+    word-wrap: break-word;
+    margin: 0 !important;
+  }
+}

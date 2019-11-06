@@ -1,85 +1,129 @@
 page-member {
-    ion-avatar{
-        border-radius: 100%;
-        cursor: pointer;
-    }
-    .statusBadge {
-        position: absolute;
-        border-radius: 100%;
-        padding:0;
-        width: 13px;
-        height: 13px;
-        left:45px;
-        bottom: 10px;
-        color: transparent;
-        font-size: 7px;
-        line-height: 1.5;
-        border: 2px solid white;
-        cursor: pointer;
-        display: inherit;
-    }
 
-    // scroll bar
-    .scrollable{
-        height: 100%;
-        overflow: auto !important;
-    }
-    ::-webkit-scrollbar,
-    *::-webkit-scrollbar {
-        display: inherit;
-    }
-    ::-webkit-scrollbar-track {
-        // -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3) !important;
-        // border-radius: 8px!important;
-        background-color: #f6f6f6!important;
-        margin-bottom: 45px;
-    }
-    ::-webkit-scrollbar {
-        width: 12px!important;
-        background-color: #f6f6f6!important;
-    }
-    ::-webkit-scrollbar-thumb {
-        // border-radius: 8px!important;
-        // -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,.3)!important;
-        border: 2px solid #f6f6f6 !important;
-        background-color: #BEBEBE!important;
-        opacity: 0.7;
-        border-radius: 7px !important;
-    }
+  ion-avatar{
+    border-radius: 100%;
+    cursor: pointer;
+  }
+
+  .user-name{
+    line-height: 2;
+    font-size: 14px;
+  }
+  .listBorder{
+    border-bottom: 1px solid #e0e0e0 !important;
+  }
+
+  .statusBadge {
+    position: absolute;
+    border-radius: 100%;
+    padding:0;
+    width: 8px;
+    height: 8px;
+    left:38px;
+    bottom: 15px;
+    color: transparent;
+    font-size: 7px;
+    line-height: 1.5;
+    border: 2px solid white;
+    cursor: pointer;
+    display: inherit;
+  }
+  .userList {
+    height: 64px;
+    border-bottom: 1px solid #e3e7f2;
+    position: relative;
+  }
+  .userList:hover{
+    background-color: rgba(91, 156, 237, 0.1);
+  }
+  .notPhoto{
+    text-align: center;
+  }
+  .displayName{
+    font-weight: bold;
+    color:white;
+    line-height: 2.5;
+  }
 
 
-    .list{
-        font-weight: bold;
-        font-size: 14px;
-        color: #333;
+  // search input design
+  .search-frame {
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid rgba(0,0,0, 0.25);
+    .search-group {
+      border: 1px solid #e3e7f2;
+      border-radius: 6px;
+      .input-field{
+        width: 100%;
+        height: 40px;
+        border-top-left-radius: 2px;
+        border-bottom-left-radius: 2px;
+        border-left: solid 1px rgba(255,255,255,0.1);
+        border-top: solid 1px rgba(255,255,255,0.1);
+        border-bottom: solid 1px rgba(255,255,255,0.1);
+        border-right: 0px;
+        outline: none;
+        padding: 5px;
+      }
+      .input-icon{
+        height: 30px;
+        border-top-left-radius: 2px;
+        border-bottom-left-radius: 2px;
+        border-left: solid 1px rgba(255,255,255,0.1);
+        border-top: solid 1px rgba(255,255,255,0.1);
+        border-bottom: solid 1px rgba(255,255,255,0.1);
+        img{
+          margin-left: 7px;
+        }
+      }
     }
-    .notPhoto{
-        text-align: center;
-    }
-    .displayName{
-        font-weight: bold;
-        color:white;
-        line-height: 2.5;
-    }
-    .user-name{
-        line-height: 2;
-        font-size: 14px;
-    }
-    .userList:hover{
-        background-color: rgba(91, 156, 237, 0.1);
-    }
-    .member-count{
-        color:#999;
-    }
-    .listBorder{
-        border-bottom: 1px solid #e0e0e0 !important;
-    }
+  }
 
-    .ion-md-customCrown {
-      background: url(../../www/imgs/crown.svg) 50% 50% no-repeat;
-      height: 16px;
-      width: 16px;
-      float: right;
 
-    }
+  //custom search input placeholder //
+  ::-webkit-input-placeholder { /* Edge */
+    text-align: center;
+    font-size: 13px;
+    color: #b4b9cc;
+  }
+
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    text-align: center;
+    font-size: 13px;
+    color: #b4b9cc;
+  }
+
+  ::placeholder {
+    text-align: center;
+    font-size: 13px;
+    color: #b4b9cc;
+  }
+
+  // scroll bar
+  .scrollable{
+    height: 90%;
+    overflow: auto !important;
+  }
+  ::-webkit-scrollbar,
+  *::-webkit-scrollbar {
+    display: inherit;
+  }
+  ::-webkit-scrollbar-track {
+    // -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3) !important;
+    // border-radius: 8px!important;
+    background-color: #f6f6f6!important;
+    margin-bottom: 45px;
+  }
+  ::-webkit-scrollbar {
+    width: 12px!important;
+    background-color: #f6f6f6!important;
+  }
+  ::-webkit-scrollbar-thumb {
+    // border-radius: 8px!important;
+    // -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,.3)!important;
+    border: 2px solid #f6f6f6 !important;
+    background-color: #BEBEBE!important;
+    opacity: 0.7;
+    border-radius: 7px !important;
+  }
 }

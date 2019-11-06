@@ -1,42 +1,32 @@
-import {Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {IBizGroup, IUser, IUserData} from '../../_models';
-import {filter, takeUntil} from 'rxjs/operators';
+import {
+  Component, ContentChild, ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 import {TakeUntil} from "../../biz-common/take-until";
+import {IUser, IUserData} from "../../_models";
 import {BizFireService} from "../../providers";
 import {CacheService} from "../../providers/cache/cache";
-import {Commons} from "../../biz-common/commons";
 
 @Component({
   selector: 'app-avatar-button',
-  templateUrl: 'avatar-button.component.html'
+  templateUrl: './avatar-button.component.html',
 })
-
 export class AvatarButtonComponent extends TakeUntil implements OnInit {
 
-  @Input()
-  displayNameOn = true;
 
+  //default size = 40px;
   @Input()
-  emailOn = true;
-
-  @Input()
-  set team_color(color: string){
-    if(color){
-      this._team_color = color;
-    }
-  }
-  get team_color(): string {
-    return this._team_color;
-  }
+  size: 20 | 30 | 32 | 36 | 40 | 64 | 80 = 40;
 
   @Input()
-  smallIcon = false;
+  displayNameOn = false;
 
-  _team_color;
+  @Input()
+  tooltip = false;
 
-  defaultMyColor = 'dodgerblue';
-
-  userData: IUserData;
 
   @Input()
   set uid(uid: string){
@@ -45,8 +35,6 @@ export class AvatarButtonComponent extends TakeUntil implements OnInit {
     }
   }
 
-  private currentUserId: string;
-
   @Input()
   set user(user: IUser) {
     if (user != null) {
@@ -54,15 +42,45 @@ export class AvatarButtonComponent extends TakeUntil implements OnInit {
     }
   }
 
+  get padding(): string {
+    return this._padding;
+  }
+
+  @Input()
+  set padding(value: string) {
+    if(value && value.indexOf('px') === -1){
+      value = `${value}px`;
+    }
+    this._padding = value;
+  }
+  private _padding = null; // padding from avatar to displayName
+
+  @Input()
+  set noPadding(no: boolean){
+    if(no === true){
+      this._padding = null;
+    }
+  }
+
+  @Input()
+  textColor = '#707c97';
+
+  @Input()
+  textDecoration = 'none';
+
+  public userData: IUserData;
+
+  private currentUserId: string;
+
   @Output()
   onClick = new EventEmitter<IUserData>();
 
   isMyMessage = false;
-  shortName: string;
   photoURL: string;
 
-  // thumbUrl 이 있으면 표시. 없으면 photoURL 표시.
-  thumbUrl: string;
+  // padding from displayName to child ng-content
+  @Input()
+  childContentPadding = '0px';
 
   constructor(private bizFire: BizFireService,
               private cacheService: CacheService
@@ -98,16 +116,20 @@ export class AvatarButtonComponent extends TakeUntil implements OnInit {
   private setUser(userData: IUserData){
     this.userData = userData;
     if(userData != null){
-      this.photoURL = userData.photoURL;
-      if(this.photoURL){
-        if(this.photoURL.indexOf('profile.jpeg') !== -1){
+      const photoURL = userData.photoURL;
+      if(photoURL){
+        /*
+        // 아바타 이름은 profile.jpeg 에서 자유형식으로 수정.
+        // thumbnail 도 사용안함.
+        if(photoURL.indexOf('profile.jpeg') !== -1){
           //photoURL 을 그대로 쓰지않고 썸네일을 표시한다.
-          this.thumbUrl = this.photoURL.replace('profile.jpeg', 'thumb_512_profile.jpeg');
-        }
+          this.thumbUrl = photoURL.replace('profile.jpeg', 'thumb_512_profile.jpeg');
+          this.photoURL = this.thumbUrl;
+        }*/
+        this.photoURL = photoURL;
+
       }
-      if (this.photoURL == null || this.photoURL.length === 0) {
-        this.shortName = Commons.initialChars(userData);
-      }
+
     } else {
 
       // deleted user.
@@ -117,18 +139,9 @@ export class AvatarButtonComponent extends TakeUntil implements OnInit {
 
   ngOnInit() {
 
-    /*
-    * team_color 를 설정안해줬을때
-    * 현재 그룹에서 자동으로 가져온다.
-    * */
-    if(this._team_color == null) {
-      this.bizFire.onBizGroupSelected
-        .pipe(filter(g => g != null),
-          takeUntil(this.unsubscribeAll))
-        .subscribe((g: IBizGroup) => {
-          // default team color is blue
-          this._team_color = g.data.team_color || 'dodgerblue';
-        });
+    if(this.displayNameOn === true && this.padding == null){
+      // set to default padding
+      this._padding = '16px';
     }
   }
 
@@ -142,10 +155,8 @@ export class AvatarButtonComponent extends TakeUntil implements OnInit {
 
   /*
   * 썸네일이 없을시 에러.
-  */
-
+  * */
   onError(e){
-    console.error('아바타버튼 썸네일 로딩 실패',this.userData.displayName, this.thumbUrl);
-    this.thumbUrl = this.userData.photoURL;
+
   }
 }

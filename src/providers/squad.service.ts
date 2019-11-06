@@ -235,6 +235,7 @@ export class SquadService extends TakeUntil{
     if(this.userCustomData[sid] == null){
       this.userCustomData[sid] = { bookmark: false };
     }
+
     this.userCustomData[sid]['bookmark'] = bookmark;
     this.bizFire.afStore.doc(path).set(this.userCustomData, {merge: true});
   }

@@ -127,29 +127,29 @@
 
   <ion-scroll class="scrollable" scrollY="true">
     <!-- 북마크 스쿼드  -->
-    <div class="px-4 mb-4 squad-list-group">
+    <div class="px-4 mb-4 squad-list-group" *ngIf="bookmark.length > 0 && squadfilterValue === null || squadfilterValue === 'bookmark'">
       <div class="squad-list-title mb-3">{{langPack['bookmark']}}</div>
-      <ng-container *ngFor="let squad of filteredBookmark">
+      <ng-container *ngFor="let squad of bookmark">
         <div class="mb-1">
-          <biz-squad-item class="w-100" [squad]="squad" [star]="isFavoriteSquad(userCustomData, squad.sid)"></biz-squad-item>
+          <biz-squad-item class="w-100" [squad]="squad" [star]="true"></biz-squad-item>
         </div>
       </ng-container>
     </div>
     <!-- 제네럴 스쿼드  -->
-    <div class="px-4 mb-4 squad-list-group">
+    <div class="px-4 mb-4 squad-list-group" *ngIf="publicSquads.length > 0 && squadfilterValue === null || squadfilterValue === 'general'">
       <div class="squad-list-title mb-3">{{langPack['squad_count_label']}}</div>
-      <ng-container *ngFor="let squad of filteredGeneralSquads">
+      <ng-container *ngFor="let squad of publicSquads">
         <div class="mb-1">
-          <biz-squad-item class="w-100" [squad]="squad" [star]="isFavoriteSquad(userCustomData, squad.sid)"></biz-squad-item>
+          <biz-squad-item class="w-100" [squad]="squad" [star]="false"></biz-squad-item>
         </div>
       </ng-container>
     </div>
     <!-- 에자일 스쿼드  -->
-    <div class="px-4 squad-list-group">
+    <div class="px-4 squad-list-group" *ngIf="privateSquads.length > 0 && squadfilterValue === null || squadfilterValue === 'agile'">
       <div class="squad-list-title mb-3">{{langPack['my_squad_count_label']}}</div>
-      <ng-container *ngFor="let squad of filteredAgileSquads">
+      <ng-container *ngFor="let squad of privateSquads">
         <div class="mb-1">
-          <biz-squad-item class="w-100" [squad]="squad" [star]="isFavoriteSquad(userCustomData, squad.sid)"></biz-squad-item>
+          <biz-squad-item class="w-100" [squad]="squad" [star]="false"></biz-squad-item>
         </div>
       </ng-container>
     </div>

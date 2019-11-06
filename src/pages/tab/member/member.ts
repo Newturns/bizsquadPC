@@ -81,10 +81,9 @@ export class MemberPage {
     });
   }
   // 자신 프로필 사진 클릭시 프로필보기.
-  clickAvatar(ev,target) {
+  clickAvatar(target) {
     this.Partner = this.isPartner(target.uid);
     // 이벤트 버블링 중지
-    ev.stopPropagation();
     console.log("show my profile");
 
     let popover = this.popoverCtrl.create('page-profile',{target : target,group : this.currentGroup}, {cssClass: 'page-profile'});

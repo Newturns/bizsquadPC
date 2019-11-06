@@ -4,6 +4,7 @@ import {ISquad, SquadService} from "../../providers/squad.service";
 import {IBizGroup} from "../../_models";
 import {BizFireService} from "../../providers";
 import {COLORS} from "../../biz-common/colors";
+import {IChat} from "../../_models/message";
 
 @Component({
   selector: 'biz-squad-item',
@@ -12,12 +13,12 @@ import {COLORS} from "../../biz-common/colors";
 
 export class SquadItemComponent extends TakeUntil implements OnInit {
 
-  squadBox: ISquad;
+  squadBox: IChat;
 
   memberCount;
 
   @Input()
-  set squad(s: ISquad){
+  set squad(s: IChat){
     this.loadSquad(s);
   }
 
@@ -58,11 +59,7 @@ export class SquadItemComponent extends TakeUntil implements OnInit {
     });
   }
 
-  onOverFunc(){
-    this.clickedFunc.emit(this.squadBox.sid);
-  }
-
-  private loadSquad(s: ISquad){
+  private loadSquad(s: IChat){
     if(s != null){
       this.squadBox = s;
       this.memberCount = s.isPublic() ? Object.keys(this.bizFire.currentBizGroup.data.members).length : s.getMemberCount();
@@ -71,7 +68,8 @@ export class SquadItemComponent extends TakeUntil implements OnInit {
 
   onFavoritesSelect(e){
     e.stopPropagation();
+    console.log('onFavoritesSelect !!',this.squadBox);
 
-    this.squadService.setFavorite(this.squadBox.sid, !this.star);
+    this.squadService.setFavorite(this.squadBox.cid, !this.star);
   }
 }

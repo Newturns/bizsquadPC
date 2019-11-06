@@ -1,27 +1,26 @@
-<!--new member page-->
-<ion-content no-padding class="content-color" overflow-scroll ="true">
+
+<ion-content no-padding class="content-color">
+
+  <div class="search-frame px-4 py-3">
+    <div class="search-group d-flex align-items-center justify-content-start">
+      <div class="input-icon d-flex justify-content-start align-items-center">
+        <img src="imgs/renewal/Icon_Outline_search.svg">
+      </div>
+      <input [(ngModel)]="serachValue" class="input-field" type="text" placeholder="{{langPack['search']}}">
+    </div>
+  </div>
+
   <ion-scroll class="scrollable" scrollY="true">
-    <ion-searchbar no-padding [(ngModel)]="serachValue" style="padding-bottom:5px;"></ion-searchbar>
     <ion-list style="margin-bottom:56px;">
       <ng-container *ngFor="let uid of filteredList">
         <ng-container *ngIf="getUserObserver(uid) | async as user">
-          <ion-item class="userList listBorder" no-lines *ngIf="!serachValue || user.data.displayName.indexOf(serachValue.trim())>-1">
-            <ion-avatar item-start *ngIf="user.data.photoURL" (click)="clickAvatar($event,user)">
-              <img class="photoURL" src="{{ user.data.photoURL }}">
-              <div class="statusBadge" [style.background-color]="makeUserStatus(user.data)"></div>
-            </ion-avatar>
-            <ion-avatar [style.background-color]="currentGroup.data.team_color" class="notPhoto" item-start *ngIf="!user.data.photoURL" (click)="clickAvatar($event,user)">
-              <span class="displayName">{{ setUserName(user.data) }}</span>
-              <div class="statusBadge" [style.background-color]="makeUserStatus(user.data)"></div>
-            </ion-avatar>
-            <h2 class="user-name d-flex align-items-center" (click)="sss(user)">
-              <div class="mr-auto" *ngIf="user.data.displayName">{{ user.data.displayName }}</div>
-              <div class="mr-auto" *ngIf="!user.data.displayName">{{ user.data.email }}</div>
-              <ion-icon *ngIf="isManagerUser(user)" class="chat-count" name="customCrown"></ion-icon>
-            </h2>
-          </ion-item>
+          <div class="userList d-flex flex-column justify-content-center px-4">
+            <app-avatar-button [size]="32" [user]="user" [displayNameOn]="true" (onClick)="clickAvatar(user)"></app-avatar-button>
+            <div class="statusBadge" [style.background-color]="makeUserStatus(user.data)"></div>
+          </div>
         </ng-container>
       </ng-container>
     </ion-list>
   </ion-scroll>
+
 </ion-content>

@@ -48,15 +48,15 @@ export class SquadPage {
   private userDataMargin: Subscription;
 
 
-  public squadfilterValue : string;
+  public squadfilterValue : string = null;
 
   // ngFor filtered array
-  filteredGeneralSquads: IChat[];
-  filteredAgileSquads: IChat[];
-  filteredBookmark: IChat[];
-
-  //아직 안씀
   folders: Array<IFolderItem> = [];
+  privateFolders: Array<IFolderItem> = [];
+
+  publicSquads: IChat[] = [];
+  privateSquads: IChat[] = [];
+  bookmark : IChat[] = [];
 
   langPack : any;
 
@@ -148,9 +148,17 @@ export class SquadPage {
   private filterBroadCast(userData: any,squadList: IChat[]) {
     // create broad cast data
 
-    this.filteredGeneralSquads = squadList.filter(s => s.data.general === true && this.isFavoriteSquad(userData,s.sid) === false);
-    this.filteredAgileSquads = squadList.filter(s => s.data.agile === true && this.isFavoriteSquad(userData,s.sid) === false);
-    this.filteredBookmark = squadList.filter(s => this.isFavoriteSquad(userData,s.sid) === true);
+    this.folders = []; // my folders
+    this.privateSquads = [];
+    this.publicSquads = [];
+    this.bookmark = [];
+
+    const {folders,privateFolders,privateSquads,publicSquads,bookmark} = this.squadService.makeSquadMenuWith(userData.data, squadList);
+
+
+    this.publicSquads = publicSquads;
+    this.privateSquads = privateSquads;
+    this.bookmark = bookmark;
   }
 
 

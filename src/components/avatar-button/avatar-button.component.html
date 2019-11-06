@@ -1,32 +1,46 @@
-<div class="d-flex flex-row align-items-center" *ngIf="userData">
+<div class="d-flex flex-row align-items-top" *ngIf="userData">
 
   <div class="flex-shrink-0">
     <!--AVATAR IMAGE -->
-    <div class="avatar-button mr-2" *ngIf="photoURL">
-      <img class="avatar-photo-image" src="{{thumbUrl}}" [ngClass]="{'smallIcon': smallIcon}" (error)="onError($event)">
+    <div class="avatar-button" *ngIf="photoURL">
+      <img [width]="size"
+           [height]="size"
+           class="avatar-photo-image"
+           src="{{photoURL}}">
     </div>
     <!--ROUND TEXT NAME -->
-    <div class="avatar-button mr-2" *ngIf="!photoURL">
-      <div class="text-white font-14 mat-elevation-z avatar-photo-image d-flex justify-content-center align-items-center"
-              [ngClass]="{'smallIcon': smallIcon}"
-              [ngStyle]="{'background-color': isMyMessage? defaultMyColor : team_color}">
-        {{shortName}}
+    <div class="avatar-button" *ngIf="!photoURL">
+      <div class="font-14 mat-elevation-z avatar-photo-image d-flex justify-content-center align-items-center"
+           [style.font-size]="size / 3 + 'px'"
+           [style.width]="size + 'px'"
+           [style.height]="size + 'px'" bizGroupColor>
+        {{userData.displayName || userData.email | slice:0:2}}
       </div>
     </div>
   </div>
 
-  <div *ngIf="displayNameOn && userData.displayName" class="d-flex flex-column justify-content-around">
+  <div class="d-flex flex-column justify-content-around" *ngIf="displayNameOn || padding">
 
-    <!--DISPLAY NAME-->
-    <div class="font-14" *ngIf="userData.displayName">
-      <span class="avatar-displayName " (click)="onNameClick()">{{userData.displayName}}</span>
+    <div [style.padding-left]="padding" >
+      <!--DISPLAY NAME-->
+      <div *ngIf="displayNameOn"
+           [style.padding-bottom]="childContentPadding"
+           [style.color]="textColor"
+           [style.text-decoration]="textDecoration">
+        <div class="avatar-displayName" (click)="onNameClick()">
+          {{userData.displayName || userData.email}}
+        </div>
+      </div>
+
+      <!-- message balloon -->
+      <div #childContent>
+        <ng-content></ng-content>
+      </div>
+
     </div>
 
-    <!--EMAIL-->
-    <div class="d-flex text-biz-gray font-12" *ngIf="userData.email && emailOn">
-      <div>{{userData.email}}</div>
-    </div>
   </div>
 
 </div>
+
 
