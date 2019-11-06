@@ -372,4 +372,10 @@ export class CacheService {
     const path = new Path(Commons.groupPath(gid), 'valueChange');
     return this.getObserver(path, ref => ref.map(data => ({gid: gid, data: data} as IBizGroup)), true);
   }
+
+  getPromise(path: string): Promise<any>{
+    return new Promise<any>(resolve => {
+      this.getObserver(path).pipe(take(1)).subscribe( data => resolve(data));
+    });
+  }
 }

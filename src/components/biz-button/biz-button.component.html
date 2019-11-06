@@ -1,0 +1,17 @@
+<button [class]="class" [disabled]="disabled"
+        [ngClass]="{'text-danger': warn, 'no-group-primary':primary}"
+        [style.background-color]="teamColor ? group?.data.team_color : 'white'"
+        [style.color]="teamColor ?  'white' : '0d1c2e'"
+        [ngStyle]="{ 'border': teamColor ? 'none': 'solid 1px #e3e7f2'}"
+        class="d-flex align-items-center justify-content-center"
+>
+  <ng-container *ngIf="icon">
+    <img src="../../../assets/images/icon/{{iconImgName}}" class="mr-1">
+  </ng-container>
+  <ng-container *ngIf="title">
+    {{title}}
+  </ng-container>
+  <ng-container *ngIf="!title">
+    <ng-content></ng-content>
+  </ng-container>
+</button>

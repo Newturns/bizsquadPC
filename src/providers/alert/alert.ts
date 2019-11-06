@@ -153,4 +153,24 @@ export class AlertProvider {
     });
     alert.present();
   }
+
+
+  deleteCheckAlert(title:string, message : string) {
+    const alert = this.alertCtrl.create({
+      title: title,
+      message: message,
+      buttons: [
+        {
+          text: this.langPack['cancel'],
+          role: 'cancel',
+        }, {
+          text: this.langPack['delete'],
+          handler: () => {
+
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
 }

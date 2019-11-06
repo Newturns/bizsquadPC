@@ -69,11 +69,11 @@ export class TabsPage {
     public electron: Electron,
     private bizFire: BizFireService,
     public popoverCtrl :PopoverController,
-    private noticeService: NotificationService,
     public chatService: ChatService,
     private squadService: SquadService,
     public groupColorProvider : GroupColorProvider,
     private tokenService: TokenProvider,
+    private noticeService : NotificationService,
     private langService: LangService,
     ) {
       // test notification count
@@ -101,6 +101,14 @@ export class TabsPage {
       .subscribe((l: any) => {
         this.langPack = l;
     });
+
+    this.noticeService.onNotifications
+      .pipe(takeUntil(this._unsubscribeAll),filter(m=> m!=null))
+      .subscribe(async (m: INotification[]) => {
+        const unreadNotify = m.filter(n => n.data.statusInfo.done === false);
+        console.log("unreadNotify :::",unreadNotify);
+        this.notifyCount = unreadNotify.length;
+      });
 
     this.bizFire.onBizGroupSelected
     .pipe(filter(d=>d!=null),takeUntil(this._unsubscribeAll),
@@ -160,18 +168,6 @@ export class TabsPage {
           this.electron.setAppBadge(this.chatCount);
       }
     });
-
-    this.noticeService.onNotifications
-    .pipe(
-      filter(n=>n != null),takeUntil(this._unsubscribeAll))
-    .subscribe((msgs: INotification[]) => {
-      if(msgs){
-        // get unfinished notification count.
-        const unreadNotify = msgs.filter(m => m.data.statusInfo.done !== true).length;
-        this.notifyCount = unreadNotify;
-      }
-    });
-
 
     this.bizFire.afStore.collection(Commons.chatPath(this.group.gid),ref =>{
         return ref.where('status', '==' ,true).where(`members.${this.bizFire.currentUID}`, '==', true);

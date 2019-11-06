@@ -7,7 +7,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { Subject,combineLatest, BehaviorSubject } from 'rxjs';
 import { NotificationService } from '../../../providers/notification.service';
 import { AlertProvider } from '../../../providers/alert/alert';
-import {IBizGroup, INotification, INotificationItem, IUserData} from "../../../_models";
+import {IBizGroup, INotification, IUserData} from "../../../_models";
 @IonicPage({
   name: 'page-menu',
   segment: 'menu',
@@ -123,16 +123,16 @@ export class MenuPage {
     this.filterGroup$.next(null);
   }
 
-  makeHtml(notification: INotification) {
-    return this.noticeService.makeHtml(notification);
-  }
+  // makeHtml(notification: INotification) {
+  //   return this.noticeService.makeHtml(notification);
+  // }
 
-  onClickNotifyContents(msg : INotificationItem){
-    //그룹초대 알람일경우 그룹인바이트 함수로. groupInvite(msg)
-    if(msg.data.groupInvite !== true) {
-      this.noticeService.onClickNotifyContents(msg);
-    }
-  }
+  // onClickNotifyContents(msg : INotificationItem){
+  //   //그룹초대 알람일경우 그룹인바이트 함수로. groupInvite(msg)
+  //   if(msg.data.groupInvite !== true) {
+  //     this.noticeService.onClickNotifyContents(msg);
+  //   }
+  // }
 
   groupInvite(msg) {
     this.alertCtrl.groupInviteAlert(msg);

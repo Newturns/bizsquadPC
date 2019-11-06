@@ -1,0 +1,23 @@
+biz-button {
+
+  .biz-button-frame {
+
+    border: none;
+    min-width: 100px;
+    height: 40px;
+    font-size: 13px;
+
+    outline: none !important;
+
+    /*
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    */
+
+  }
+  .no-group-primary {
+    background-color: #324ca8 !important;
+    color: white;
+  }
+}

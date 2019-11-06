@@ -23,8 +23,62 @@ export const STRINGS = {
   }
 };
 
+export declare type ProcessChangeUpdater = (oldItem: any, newItem: any, change: any) => void;
 
 export class Commons {
+
+  static processChange(change: any, chatList: any[], key: string, builder: (change: any)=>any, updater?:ProcessChangeUpdater,
+                       push = true){
+
+    if(change.payload.doc.exists === false) {
+      console.error('processChange found null data. id:', change.payload.doc.id, change.payload.doc.ref.path);
+      return;
+    }
+
+    const mid = change.payload.doc.id;
+    if(change.type === 'added'){
+
+      // add new message to top
+      const item = builder(change);
+
+      if(push){
+        chatList.push(item);
+      } else {
+        chatList.unshift(item);
+      }
+
+    } else if (change.type === 'modified') {
+
+      // replace old one
+      for(let index = 0 ; index < chatList.length; index ++){
+        if(chatList[index][key] === mid ){
+          // find replacement
+
+          //---------- 껌벅임 테스트 -------------//
+          //chatList[index].data = change.payload.doc.data(); // data 만 경신 한다.
+          //-----------------------------------//
+          const item = builder(change);
+          if(updater){
+
+            updater(chatList[index], item, change);
+          } else {
+            // full replace
+            chatList[index] = item;
+          }
+          break;
+        }
+      }
+    } else if (change.type === 'removed') {
+      for (let index = 0; index < chatList.length; index++) {
+        if (chatList[index][key] === mid) {
+          // remove from array
+          chatList.splice(index, 1);
+          break;
+        }
+      }
+    } // end if
+
+  }
 
     static noWhitespaceValidator(control: FormControl): any {
         const isWhitespace = (control.value || '').trim().length === 0;

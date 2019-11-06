@@ -1,8 +1,71 @@
 page-notify {
 
+  .notify-title-frame {
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    background-color: white;
+    .notify-title {
+      font-family: Roboto;
+      font-size: 17px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: #4d4f5c;
+    }
+  }
+  .notify-scroll-con {
+    height: calc(100vh - 300px);
+    overflow: auto;
+  }
+
+  .select-div {
+    border-radius: 4px;
+    border: solid 1px #e3e7f2;
+  }
+  select {
+    width: 110px;
+    background-color: white;
+    border: none;
+    -webkit-appearance: none; /* 네이티브 외형 감추기 */
+    -moz-appearance: none;
+    appearance: none;
+    background: url("../../www/imgs/renewal/Icon_Outline_down.svg") no-repeat 95% 50%; /* 화살표 모양의 이미지 */
+    outline: none;
+  }
+  select::-ms-expand { display: none; }
+
+  a.notice-button {
+    color: #707c97 !important;
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 1.08;
+    padding-left: 20px;
+    cursor: pointer;
+    &:hover {
+      color: #2a8bf2;
+    }
+  }
+
+
+  .notify-footer {
+    height: 45px;
+    font-size: 11px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.45;
+    letter-spacing: 0.4px;
+    color: #b4b9cc;
+    .link-newturns {
+      color: #707c97;
+      font-weight: bold;
+    }
+  }
+
     // scroll bar
     .scrollable{
-        height: 100%;
+        height: 90%;
         overflow: auto !important;
     }
     ::-webkit-scrollbar,
@@ -13,7 +76,6 @@ page-notify {
         // -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3) !important;
         // border-radius: 8px!important;
         background-color: #f6f6f6!important;
-        margin-bottom: 45px;
     }
     ::-webkit-scrollbar {
         width: 12px!important;
@@ -26,308 +88,5 @@ page-notify {
         background-color: #BEBEBE!important;
         opacity: 0.7;
         border-radius: 7px !important;
-    }
-
-    .noNotify {
-        margin: auto;
-        vertical-align: middle;
-        display: inline-block;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        position: absolute;
-        width: 200px;
-        height: 100px;
-        text-align: center;
-    }
-    .notify-type {
-      display: inline-block;
-      margin-right: 3px;
-      font-weight: 500;
-      text-transform: capitalize;
-    }
-    .noNotify img {
-        width: 65px;
-        height: 80px;
-    }
-    .noNotify p{
-        color: #C7C7C7;
-        font-size: 15px;
-    }
-    .content .scroll-content {
-        margin-bottom: 23px;
-    }
-
-    .notifyType {
-        color: cornflowerblue;
-        font-weight: 500;
-        text-transform: capitalize;
-    }
-    .from {
-        font-weight: 600;
-        text-transform: capitalize;
-    }
-    .created{
-        font-size: 11px;
-        float: right;
-    }
-    .new-notify {
-      color : #3f51b5;
-    }
-    /* --------------------------------
-
-    timeLine Design
-
-    Paddings and margins
-
-    -------------------------------- */
-
-    .displayName{
-        font-weight: bold;
-        color:white;
-        line-height: 2.8;
-    }
-    ion-avatar{
-        border-radius: 100%;
-    }
-    .notPhoto{
-        text-align: center;
-    }
-
-    .marginBottom0 {
-        margin-bottom: 0;
-    }
-    .marginTop0 {
-        margin-top: 0;
-    }
-    .marginTop5 {
-        margin-top: 5px !important;
-    }
-    .marginBottom5{
-        margin-bottom: 5px !important;
-    }
-    /* --------------------------------
-
-    Modules - reusable parts of our design
-
-    -------------------------------- */
-    .cd-container {
-        /* this class is used to give a max-width to the element it is applied to, and center it horizontally when it reaches that max-width */
-        width: 93%;
-        max-width: 1170px;
-        margin: 0 auto;
-    }
-    .cd-container::after {
-        /* clearfix */
-        content: '';
-        display: table;
-        clear: both;
-    }
-
-    /* --------------------------------
-
-    Main components
-
-    -------------------------------- */
-    .timelineText {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        color: black;
-    }
-    .timelineIcon {
-        font-size: 25px;
-        color: white;
-    }
-    .cd-author {
-        color:gray;
-        font-weight: 400;
-    }
-    #cd-timeline {
-        position: relative;
-        margin-top: 2em;
-        margin-bottom: 2em;
-        margin-left: 10px !important;
-    }
-    #cd-timeline::before {
-        /* this is the vertical line */
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 18px;
-        height: 100%;
-        width: 3px;
-        background: #aaa;
-    }
-
-    .cd-timeline-block {
-        position: relative;
-        margin: 2em 0;
-    }
-    .cd-timeline-block:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-    .cd-timeline-block:first-child {
-        margin-top: 0;
-    }
-    .cd-timeline-block:last-child {
-        margin-bottom: 0;
-    }
-
-    .cd-timeline-icon {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        border-color: #4a87ee;
-        border-style: solid;
-        border-width: 1px;
-        padding-top:5px;
-        background: white;
-    }
-    .cd-timeline-icon i {
-        color: #4a87ee;
-    }
-
-    .cd-timeline-picture {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        // border-color: #4a87ee;
-        // border-style: solid;
-        // border-width: 1px;
-        // background: white;
-    }
-    .cd-timeline-picture img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        border-radius: 50%;
-    }
-
-    .cd-timeline-content {
-        position: relative;
-        margin-left: 60px;
-        background: white;
-        border-radius: 0.25em;
-        margin-bottom: 10px;
-        box-shadow: 1px 1px 9px 2px #eeeeee;
-        padding:7px;
-    }
-    .cd-timeline-content:hover{
-        cursor: pointer;
-    }
-    .cd-timeline-content:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-    .cd-timeline-content h2 {
-        color: #303e49;
-    }
-    .cd-timeline-content p, .cd-timeline-content .cd-read-more, .cd-timeline-content .cd-date {
-        font-size: 13px;
-        // font-size: 0.8125rem;
-    }
-    .cd-timeline-content .cd-read-more, .cd-timeline-content .cd-date {
-        display: inline-block;
-    }
-    .cd-timeline-content p {
-        margin: 1em 0;
-        line-height: 1.6;
-    }
-
-
-    .cd-timeline-content::before {
-        content: '';
-        position: absolute;
-        right: 100%;
-        height: 0;
-        width: 0;
-        border: 7px solid transparent;
-        border-right: 7px solid white;
-        border-right-color: inherit;
-    }
-
-    /*COLORS*/
-    /*POSITIVE*/
-    .positive {
-        border-color: #4a87ee;
-    }
-    .positive i {
-        color: #4a87ee;
-    }
-    /*CALM*/
-    .calm {
-        border-color: #43cee6;
-    }
-    .calm i {
-        color: #43cee6;
-    }
-    /*BALANCED*/
-    .balanced {
-        border-color: #66cc33;
-    }
-    .balanced i {
-        color: #66cc33;
-    }
-    /*ENERGIZED*/
-    .energized {
-        border-color: #f0b840;
-    }
-    .energized i {
-        color: #f0b840;
-    }
-    /*ASSERTIVE*/
-    .assertive {
-        border-color: #ef4e3a;
-    }
-    .assertive i {
-        color: #ef4e3a;
-    }
-    /*ROYAL*/
-    .royal {
-        border-color: #8a6de9;
-    }
-    .royal i {
-        color: #8a6de9;
-    }
-    /*DARK*/
-    .dark {
-        border-color: #444;
-    }
-    .dark i {
-        color: #444;
-    }
-    /*WHITE*/
-    .white {
-        border-color: #fff;
-    }
-    .white i {
-        color: #fff;
-    }
-
-    @media only screen and (min-width: 768px) {
-        .cd-timeline-content h2 {
-        font-size: 20px;
-        font-size: 1.25rem;
-        }
-        .cd-timeline-content p {
-        font-size: 16px;
-        font-size: 1rem;
-        }
-        .cd-timeline-content .cd-read-more, .cd-timeline-content .cd-date {
-        font-size: 14px;
-        font-size: 0.875rem;
-        }
     }
 }

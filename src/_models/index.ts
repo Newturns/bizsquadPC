@@ -33,6 +33,16 @@ export interface IUserData {
   lastPcGid?:string
 }
 
+export interface ICustomMenu {
+  id: string,
+  title: string,
+  icon?: string,
+  color?: string,
+  url?: string,
+  backGroundColor?: string,
+  data?: any
+}
+
 export interface IAlarmConfig {
 
   /* 필수 항목들 */
@@ -56,45 +66,64 @@ export interface IAlarmConfig {
 
 }
 
-export interface INotification{
+export interface ICustomMenu {
+  id: string,
+  title: string,
+  icon?: string,
+  color?: string,
+  url?: string,
+  backGroundColor?: string,
+  data?: any
+}
+
+export interface INotificationItem extends INotification {
+
+}
+
+export interface INotification extends IFirestoreDoc{
   mid: string,
   data: INotificationData,
 }
 
-export interface INotificationItem extends INotification {
-  html?: {
-    header: string[],
-    content: string[],
-    link?:string[],
-    user?: IUser,
-    groupColor?: string
-  }
-}
-
-export type NotificationType = 'invitation' | 'notify' | 'reply';
-export type NotifyType = 'post'|'comment'| 'join'| 'exit'| 'delete';
+export type NotificationType = 'post' | 'bbs' | 'comment' | 'schedule' | 'video'| 'groupInvite' ;
 
 export interface INotificationData extends IAlarmConfig {
 
   from: string, // uid
   to?: string, // uid
   gid: string,
-  info?: {
-    type?: string,
-    sid?: string,
-    mid?: string,
-    vid?: string,
-    title?: string,
-    comment?: string,
-    cid?: string,
-    eid?: string,
-    join?: any,
-    auth?: string // 'member', 'manager', 'partner'
-    message?: any
-  }
+  sid?: string,
+  type: NotificationType, //IAlarmConfig 값으로 수정. (알람종류 확장시 대응)
+  info?: NotificationInfo,
   created: any,
-  statusInfo: {done: boolean}
+  statusInfo: {done: boolean},
 
+  // added. force send alarm option to server
+  forceAlarm?: boolean,
+  // server will send push automatically.
+  // set to false to stop that.
+  // 서버는 push 를 자동으로 보낸다.
+  skipPushToMobile?: boolean,
+  deviceTokens: any
+
+}
+
+export interface NotificationInfo {
+  type?: string,
+  sid?: string,
+  mid?: string,
+  title?: string,
+  path?: string,
+  cid?: string,
+  vid?: string,
+  data?: any // custom data,
+  // custom push용 데이터
+  // 설정할 경우, 서버는 payload.notification 에 아래값을 설정한다.
+  push?: {
+    title: string, // [Bizsquad] 등 타이틀
+    body: string // 본문 한줄.
+  }
+  auth?: string,
 }
 
 

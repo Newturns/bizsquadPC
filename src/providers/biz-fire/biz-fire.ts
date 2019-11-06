@@ -93,6 +93,13 @@ export class BizFireService {
     return this.currentUID;
   }
 
+  get gid(): string {
+    if(this.currentBizGroup == null){
+      throw new Error('bizFire.gid called but currentBizGroup is null.');
+    }
+    return this.currentBizGroup && this.currentBizGroup.gid;
+  }
+
   onBizGroupSelected = new BehaviorSubject<IBizGroup>(null);
   onBizGroups = new BehaviorSubject<IBizGroup[]>(null);
   generalMembers = new BehaviorSubject<number>(null);

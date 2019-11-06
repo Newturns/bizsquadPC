@@ -29,7 +29,6 @@ export class LoginPage implements OnInit {
   loginForm: FormGroup;
   version: any;
   hideForm = false;
-  imgPath = "imgs/main512.png";
   userEmail = '';
 
   // 새 창으로 열기위해..

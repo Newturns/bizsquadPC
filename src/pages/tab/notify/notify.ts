@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { NotificationService } from '../../../providers/notification.service';
-import { Subject } from 'rxjs';
+import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
 import { BizFireService } from '../../../providers/biz-fire/biz-fire';
 import { Electron } from './../../../providers/electron/electron';
-import { takeUntil } from 'rxjs/operators';
-import { GroupColorProvider } from '../../../providers/group-color';
-import {INotification, INotificationItem} from "../../../_models";
+import {filter, take, takeUntil} from 'rxjs/operators';
+import {IBizGroupData, ICustomMenu, INotification, INotificationItem} from "../../../_models";
+import {LangService} from "../../../providers/lang-service";
+import {Commons} from "../../../biz-common/commons";
+import {TakeUntil} from "../../../biz-common/take-until";
+import {CacheService} from "../../../providers/cache/cache";
+import {AlertProvider} from "../../../providers/alert/alert";
 
 @IonicPage({
   name: 'page-notify',
@@ -17,20 +21,32 @@ import {INotification, INotificationItem} from "../../../_models";
   selector: 'page-notify',
   templateUrl: 'notify.html',
 })
-export class NotifyPage {
 
-  private _unsubscribeAll;
-
-  messages: INotification[];
-  newMessages: INotification[];
+export class NotifyPage extends TakeUntil{
 
   ipc: any;
 
   jumpPath = '';
 
-  noNotify: boolean = false;
+  langPack = {};
 
-  groupMainColor: string;
+  messages: INotification[];
+
+  // filter gid
+  currentFilteredGid$ = new BehaviorSubject<string>(null);
+
+  // filter type
+  filterNoticeType$ = new BehaviorSubject<ICustomMenu>(null);
+
+  // full original list
+  originalList$ = new BehaviorSubject<INotification[]>(null);
+
+  noticeTypes: ICustomMenu[];
+
+  noticeGidFilter: ICustomMenu[];
+
+  // DELETE READ button show/hide
+  hasFinished = false;
 
   constructor(
     public navCtrl: NavController,
@@ -38,45 +54,168 @@ export class NotifyPage {
     public electron : Electron,
     private noticeService: NotificationService,
     private bizFire: BizFireService,
-    private groupColorProvider : GroupColorProvider
+    private langService : LangService,
+    private cacheService : CacheService,
+    private alertService : AlertProvider,
     ) {
+    super();
 
       this.ipc = electron.ipc;
-      this._unsubscribeAll = new Subject<any>();
   }
 
   ngOnInit(): void {
 
-    this.noticeService.onNotifications
-    .pipe(takeUntil(this._unsubscribeAll))
-    .subscribe(msgs => {
+    this.langService.onLangMap
+    .pipe(this.takeUntil)
+    .subscribe((l: any) => {
+      this.langPack = l;
+    });
 
-      if(msgs !== null) {
-        this.noNotify = msgs.length === 0;
 
-        this.messages = msgs.filter(m => m.data.gid === this.bizFire.onBizGroupSelected.getValue().gid);
-
-        console.log("messages",this.messages);
+    combineLatest(this.originalList$, this.filterNoticeType$, this.currentFilteredGid$)
+    .pipe(this.takeUntil)
+    .subscribe(([list, type, gid])=>{
+      if(type == null || type.id === 'all'){
+        // set to new received full list.
+        this.messages = list;
+      } else {
+        const menu = this.noticeTypes.find(m => m.id === type.id);
+        // noticeTypes already has a filtered array
+        this.messages = menu.data;
       }
+
+      // show only some gid.
+      if(gid != null){
+        this.messages = this.messages.filter(item => item.data.gid === gid);
+      }
+    });
+
+    this.noticeService.onNotifications
+    .pipe(this.takeUntil,filter(m=> m!=null))
+    .subscribe(async (m: INotification[]) => {
+
+      this.noticeTypes = [];
+
+      if(m.length > 0){
+        // add 'add' first.
+        this.noticeTypes.push({id: 'all', title: 'All', data: null});
+      }
+
+      const gidList = {}; // gid 리스트를 담는다.
+      m.forEach(item => {
+
+        // noticeTypes 에 각각 type 별 data로 배열을 복사해둔다.
+        // 필터링 시 사용
+        this.tempMakeTypeFilter(item, item.data.type, this.noticeTypes);
+
+        gidList[item.data.gid] = true;
+
+      });
+
+      // make gid filter list
+      if(Object.keys(gidList).length > 1){
+        // gid has more than 2
+        const promiseMap =  Object.keys(gidList).map( async (gid: string)=> {
+          return new Promise<ICustomMenu>(resolve => {
+            this.cacheService.getObserver(Commons.groupPath(gid))
+              .pipe(take(1))
+              .subscribe((groupValue: IBizGroupData)=> resolve({
+                id: gid,
+                title: groupValue.team_name,
+                data: groupValue
+              }));
+          });
+        });
+        this.noticeGidFilter = await Promise.all(promiseMap);
+      }
+
+      // save original list and
+      // trigger original list arrived
+      this.originalList$.next(m);
+
     });
 
   }
 
-  makeHtml(notification: INotification) {
-    return this.noticeService.makeHtml(notification);
+  onAccept(msg: INotification) {
+
   }
 
+    // onClickNotifyContents(msg : INotificationItem){
+  //   this.noticeService.onClickNotifyContents(msg);
+  // }
+  async onDeleteFinished(){
 
-  onClickNotifyContents(msg : INotificationItem){
-    this.noticeService.onClickNotifyContents(msg);
+    // const ok = true;
+    //
+    // const ok = await this.dialogService.openConfirmDialog(this.langPack['alarm_read_delete_confirm'],
+    //   true, null, null,this.langPack['alarm_delete_read_only'],'orangered');
+    //
+    // if(ok){
+    //   const done = this.messages.filter(m => m.data.statusInfo.done === true);
+    //   if(done.length > 0) {
+    //     const batch = this.bizFire.afStore.firestore.batch();
+    //     done.forEach(m => {
+    //       //return this.noticeService.deleteNotification(m);
+    //       const ref = this.bizFire.afStore.firestore.collection(Commons.notificationPath(this.bizFire.currentUID)).doc(m.mid);
+    //       batch.delete(ref);
+    //     });
+    //
+    //     batch.commit().then(()=>{
+    //       this.hasFinished = this.messages.filter(m => m.data.statusInfo.done === true).length > 0;
+    //     });
+    //   }
+    // }
+
   }
 
-  ngOnDestroy(): void {
-    this._unsubscribeAll.next();
-    this._unsubscribeAll.complete();
+  onDeleteAll(){
+    //console.log('onDeleteAll()');
+
+    // const data = {
+    //   // default only ok button
+    //   title: `${this.langPack['delete']}`,
+    //   text: this.langPack['notice_delete_confirm_test'].replace('?', ' all ?'),
+    //   noCancelButton: false,
+    //   ok_text: this.langPack['delete'],
+    //   okColor: 'dodgerblue'
+    // } as IConfirmData;
+    // this.dialogService.openConfirmDialogWithData(data)
+    //   .subscribe(ok => {
+    //     if(ok){
+    //       const batch = this.bizFire.afStore.firestore.batch();
+    //       this.messages.forEach(msg => {
+    //         const ref = this.bizFire.afStore.firestore.collection(Commons.notificationPath(this.bizFire.currentUID)).doc(msg.mid);
+    //         batch.delete(ref);
+    //       });
+    //       batch.commit().then(()=>{
+    //         this.hasFinished = this.messages.filter(m => m.data.statusInfo.done === true).length > 0;
+    //       }).catch(e => console.error(e));
+    //     }
+    //   });
+
   }
 
-  msginfo(msg,item){
-    console.log(msg,item);
+  selectTypeSelected(type: string){
+    const typeFilter : ICustomMenu = {id : type,title: ''};
+    console.log(typeFilter);
+    this.filterNoticeType$.next(typeFilter);
+  }
+
+  protected tempMakeTypeFilter(item: INotificationItem, type: string, noticeTypes: ICustomMenu[]){
+    const index = noticeTypes.findIndex(item => item.id === type);
+    if(index === -1){
+      noticeTypes.push({
+        id: type,
+        title: type, // 대문자로?
+        data:[item]
+      });
+    } else {
+      noticeTypes[index].data.push(item);
+    }
+  }
+
+  back() {
+    this.navCtrl.setRoot('page-home');
   }
 }

@@ -151,27 +151,6 @@ export class HomePage implements OnInit {
       console.log("userCustomLinks",this.userCustomLinks);
     });
 
-    this.noticeService.onNotifications
-    .pipe(
-      filter(n=>n != null),takeUntil(this._unsubscribeAll))
-    .subscribe((msgs: INotification[]) => {
-
-      if(msgs){
-        // get unfinished notification count.
-        this.badgeCount = msgs.filter(m => {
-          let ret : boolean;
-          if(m.data.statusInfo.done !== true) {
-            ret = m.data.gid === this.group.gid;
-          } else {
-            ret = false;
-          }
-          return ret;
-        }).length;
-
-        if(this.badgeCount > 99){ this.badgeCount = 99; }
-      }
-    });
-
     if(this.bizFire.currentBizGroup) {
       const path = Commons.bbsPath(this.bizFire.currentBizGroup.gid);
       this.bizFire.afStore.collection(path,ref => ref.orderBy('created','desc').limit(4))
@@ -184,6 +163,26 @@ export class HomePage implements OnInit {
           this.latelyNotice = noticeList;
         });
     }
+
+    this.noticeService.onNotifications
+      .pipe(filter(n=>n != null),takeUntil(this._unsubscribeAll))
+      .subscribe((msgs: INotification[]) => {
+
+        if(msgs){
+          // get unfinished notification count.
+          this.badgeCount = msgs.filter(m => {
+            let ret : boolean;
+            if(m.data.statusInfo.done !== true) {
+              ret = m.data.gid === this.group.gid;
+            } else {
+              ret = false;
+            }
+            return ret;
+          }).length;
+
+          if(this.badgeCount > 99){ this.badgeCount = 99; }
+        }
+      });
 }
 
   // profile menu toggle

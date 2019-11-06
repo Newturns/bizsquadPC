@@ -16,6 +16,8 @@ import {SquadFilterComponent} from "./squad-filter/squad-filter.component";
 import {SquadItemComponent} from "./squad-item/squad-item.component";
 import {TeamIconComponent} from "./team-icon/team-icon.component";
 import {GroupColorDirective} from "../biz-common/directives/group-color.directive";
+import {BizButtonComponent} from "./biz-button/biz-button.component";
+import {NoticeItemComponent} from "./notice-item/notice-item.component";
 
 @NgModule({
 	declarations: [
@@ -30,6 +32,8 @@ import {GroupColorDirective} from "../biz-common/directives/group-color.directiv
     SquadFilterComponent,
     SquadItemComponent,
     TeamIconComponent,
+    BizButtonComponent,
+    NoticeItemComponent,
     GroupColorDirective
   ],
   imports: [
@@ -54,11 +58,13 @@ import {GroupColorDirective} from "../biz-common/directives/group-color.directiv
     SquadFilterComponent,
     SquadItemComponent,
     TeamIconComponent,
+    BizButtonComponent,
+    NoticeItemComponent,
     GroupColorDirective
   ],
   entryComponents: [
     ChatHeaderComponent,
-    MembersPopoverComponent
+    MembersPopoverComponent,
   ]
 })
 export class ComponentsModule { }

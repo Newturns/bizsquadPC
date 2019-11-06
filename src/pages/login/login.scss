@@ -6,15 +6,10 @@ page-login {
             padding: 0;
         }
     }
-    .login-content{
-        // background-color: #f6f6f6;
-        -webkit-app-region: drag
-    }
-    
     #wrapper {
-        margin: 110px 45px 0 45px;
-        text-align: center;
-      }
+      margin-top: 177px;
+      text-align: center;
+    }
     .login-top-menu{
         -webkit-app-region: no-drag;
         color: #757272;
@@ -37,7 +32,7 @@ page-login {
         padding-left: 12px;
         font-size: 13px;
       }
-      
+
     #password {
         -webkit-app-region: no-drag;
         width: 95%;
@@ -63,12 +58,12 @@ page-login {
         display: inline-block;
         width: 100%;
       }
-      
+
     .left {
         float: left;
         display: block;
     }
-    
+
     .right {
         float: right;
         display: block;
@@ -88,7 +83,7 @@ page-login {
         margin-top: 45px;
         text-align: left;
     }
-      
+
     #footer button {
         -webkit-app-region: no-drag;
         width: 65px;
@@ -98,7 +93,7 @@ page-login {
         background-color: white;
         margin-top: -5px;
     }
-    
+
     #footer button a {
         -webkit-app-region: no-drag;
         color: #5B9CED;
@@ -112,4 +107,104 @@ page-login {
         font-size: 12px;
         font-weight: bold;
     }
+
+
+
+  //new design
+  .login-content{
+    // background-color: #f6f6f6;
+    -webkit-app-region: drag
+  }
+  .login-btn {
+    border-radius: 6px;
+    text-transform: capitalize;
+    height: 48px;
+    background-color: #0c5899;
+  }
+  .login-btn:hover {
+    background-color: #0c5899;
+  }
+  .inputTitle {
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: -0.05px;
+    color: #acb5bd;
+  }
+
+  .input-text{
+    -webkit-app-region: no-drag;
+    height: 48px;
+    border-radius: 8px;
+    border: solid 1px #e3e7f2;
+    background-color: #ffffff;
+
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #495057;
+
+    padding: 16px 15px 16px 15px;
+    &.disabled{
+      background-color: #fdfcfc;
+    }
+  }
+
+  .logo-text {
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 0.67;
+    letter-spacing: 0.4px;
+    color: #184e93;
+  }
+  .app-version {
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #707c97;
+  }
+
+  .sign-up-text {
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.23;
+    letter-spacing: 0.4px;
+    color: #707c97;
+  }
+  .sign-up-btn{
+    width: 100px;
+    height: 40px;
+  }
+
+  .login-footer {
+    height: 45px;
+    font-size: 11px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.45;
+    letter-spacing: 0.4px;
+    color: #b4b9cc;
+    .link-newturns {
+      color: #707c97;
+      font-weight: bold;
+    }
+  }
+
 }

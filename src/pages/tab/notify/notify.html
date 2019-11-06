@@ -1,43 +1,38 @@
 <ion-content no-padding class="content-color">
-    <ion-scroll class="scrollable" scrollY="true">
-        <section id="cd-timeline" class="cd-container">
-          <div *ngFor="let msg of messages">
-              <ng-container *ngIf="makeHtml(msg) | async as noticeItem">
-                  <div class="cd-timeline-block">
-                      <ng-container *ngIf="noticeItem.html.user">
-                        <div *ngIf="noticeItem.html.user.data.photoURL" class="cd-timeline-picture text-center white">
-                            <img src="{{ noticeItem.html.user.data.photoURL }}">
-                        </div>
-                        <ion-avatar *ngIf="!noticeItem.html.user.data.photoURL" [style.background-color]="noticeItem.html.groupColor" class="cd-timeline-picture text-center notPhoto" item-start>
-                            <span class="displayName">{{ noticeItem.html.user.data.displayName | slice:0:2 }}</span>
-                        </ion-avatar>
-                      </ng-container>
-                      <ng-container *ngIf="!noticeItem.html.user">
-                          <div class="cd-timeline-picture text-center white">
-                             <img src="imgs/btn_close.svg">
-                          </div>
-                      </ng-container>
-                      <div class="cd-timeline-content padding white" (click)="onClickNotifyContents(noticeItem)">
-                          <p class="cd-author marginTop5 marginBottom5">
-                              <span class="from" *ngIf="noticeItem.html.user" [style.color]="noticeItem.html.groupColor">{{noticeItem.html.user.data.displayName}}</span>
-                              <span class="from" *ngIf="!noticeItem.html.user" [style.color]="noticeItem.html.groupColor">{{noticeItem.html.header[1]}}</span>
-                              <span class="created" [ngClass]="{'new-notify': noticeItem.data.statusInfo.done !== true}">
-                                {{noticeItem.data.created | timestampToDate | date: 'MM/dd HH:mm'}}
-                              </span>
-                          </p>
-                          <p class="timelineText marginBottom5 marginTop5">
-                            <span class="notify-type" [style.color]="noticeItem.html.groupColor">{{noticeItem.html.header[0]}}</span>
-                            {{noticeItem.html.header[2]}}
-                          </p>
-                      </div>
-                  </div>
-              </ng-container>
-          </div>
-        </section>
-    </ion-scroll>
-</ion-content>
 
-<div class="noNotify" *ngIf="noNotify">
-  <img src="imgs/none_alarm.svg">
-  <p>No new notifications</p>
-</div>
+  <div class="notify-title-frame px-5 py-4 d-flex justify-content-between align-items-center">
+    <div class="notify-title">{{langPack['notification']}}</div>
+    <div class="pointer" (click)="back()"><img src="imgs/renewal/Icon_Outline_close.svg"></div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center px-5 pt-5 pb-3">
+    <div class="d-flex select-div p-1 pl-2">
+      <select (change)="selectTypeSelected($event.target.value)">
+        <option *ngFor="let t of noticeTypes" value="{{t.id}}">{{t.title}}</option>
+      </select>
+    </div>
+    <div>
+      <a class="notice-button" (click)="onDeleteFinished()">
+        {{langPack['delete_finished']}}
+      </a>
+      <a class="notice-button" (click)="onDeleteAll()">
+        {{langPack['delete_all']}}
+      </a>
+    </div>
+  </div>
+
+  <div class="notify-scroll-con px-5">
+
+    <!--  알람 내용  -->
+    <biz-notice-item *ngFor="let item of messages"
+                     [item]="item"
+                     (onAccept)="onAccept($event)">
+    </biz-notice-item>
+
+
+  </div>
+
+  <div class="notify-footer bg-white d-flex justify-content-center align-items-center">
+    Bizsquad is powered by<span class="link-newturns pointer" (click)="ipc.send('loadGH','https://www.bizsquad.net/')">&nbsp;Newturns&nbsp;</span>Inc.
+  </div>
+</ion-content>

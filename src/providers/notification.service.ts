@@ -13,9 +13,18 @@ import { DocumentChangeAction } from '@angular/fire/firestore';
 import { CacheService } from './cache/cache';
 import {environment} from "../environments/environments";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {IAlarmConfig, IBizGroup, INotification, INotificationData, INotificationItem} from "../_models";
+import {
+  IAlarmConfig,
+  IBizGroup,
+  INotification,
+  INotificationData,
+  INotificationItem,
+  NotificationInfo,
+  NotificationType
+} from "../_models";
 import {Token} from "@angular/compiler";
 import {LoadingProvider} from "./loading/loading";
+
 
 export interface IAlarm {
     all: boolean,
@@ -56,6 +65,8 @@ export class NotificationService {
 
     customToken: any;
 
+    notificationItems: INotificationItem[];
+
     constructor(
         private bizFire: BizFireService,
         private tokenService : TokenProvider,
@@ -85,73 +96,78 @@ export class NotificationService {
             // allTime alarm monitor.
             this.bizFire.currentUser.subscribe(user => {
 
-                console.log("this.notifyKey",this.notifyKey);
+              // start new alarm ONLY first time.
+              if(this.notifySub == null){
+                // empty array
+                this.notificationItems = [];
 
-                // start register at first time. ONLY first time.
-                if(this.notifyKey == null){
-                    this.notifyKey = new FireDataKey('notify', this.bizFire.currentUID);
-                }
-                if(this.notifySub == null){
-                    this.notificationData = [];
+                this.notifySub = this.bizFire.afStore.collection(Commons.notificationPath(this.bizFire.uid),
+                  ref => ref.orderBy('created', 'asc'))
+                  .stateChanges()
+                  .pipe(
+                    takeUntil(this.bizFire.onUserSignOut),
+                  )
+                  .subscribe(async (changes:DocumentChangeAction<any>[]) => {
 
-                    this.notifySub = this.bizFire.afStore.collection(Commons.notificationPath(this.bizFire.currentUID),
-                    ref => {
-                        let query : firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
-                        query = query.orderBy('created', 'asc');
-                        return query;
-                    }).stateChanges()
-                    .pipe(takeUntil(this.bizFire.onUserSignOut))
-                    .subscribe((changes : DocumentChangeAction<any>[]) => {
+                    // save new value
+                    changes.forEach( (change: DocumentChangeAction<any>) => {
 
-                        //save new value
-                        changes.forEach(change => {
-                            const data = change.payload.doc.data();
-                            const mid = change.payload.doc.id;
+                      Commons.processChange(change, this.notificationItems, 'mid', (c: any)=>{
+                        const item = {mid: c.payload.doc.id, data: c.payload.doc.data(), ref: c.payload.doc.ref} as INotification;
+                        //----------- 호환성 유지 -----------------//
+                        if(item.data.type == null){
+                          if(item.data.bbs === true){
+                            item.data.type = 'bbs';
+                          }
+                          if(item.data.post === true){
+                            item.data.type = 'post';
+                          }
+                          if(item.data.groupInvite === true){
+                            item.data.type = 'groupInvite';
+                          }
+                          if(item.data.video === true){
+                            item.data.type = 'video';
+                          }
+                          if(item.data.comment === true){
+                            item.data.type = 'comment';
+                          }
+                        }
+                        //----------- 호환성 유지 -----------------//
+                        return item;
+                      }, null, false);
 
-                            if(change.type === 'added') {
+                    });// end of forEach
 
-                                // add new message to top
-                                this.notificationData.unshift({mid: mid, data: data} as INotification);
+                    // filter 'comment' and 'chat'.
+                    this.onNotifications.next(this.notificationItems);
 
-                            } else if (change.type === 'modified') {
+                  });
 
-                                for(let index = 0; index < this.notificationData.length; index++) {
-                                    if(this.notificationData[index].mid === mid) {
-                                        this.notificationData[index] = {mid : mid, data: data} as INotification;
-                                    }
-                                }
-                            } else if (change.type === 'removed') {
+              }
 
-                                for(let index = 0; index < this.notificationData.length; index++) {
-                                    if(this.notificationData[index].mid === mid) {
+              // find alarm from /user/<>.alarm
+              let alarm: IAlarmConfig = user.alarm;
 
-                                        // remove from array
-                                        this.notificationData.splice(index,1);
-                                        break;
-                                    }
-                                }
-                            }
-                        });
-                        // broadcast new value.
-                        this.onNotifications.next(this.notificationData);
-                    })
-                }
+              if(alarm == null){
+                // set to default
+                /*
+                * 디폴트는 그룹 초대 메시지, 채팅 알람.
+                * */
+                alarm = {
+                  post: true,
+                  bbs: true,
+                  comment: true,
+                  groupInvite: true,
+                  version: this.bizFire.buildNo
+                };
 
-                let alarm : IAlarmConfig = user.alarm;
+                // and update firebase
+                this.updateAlarmStatus(alarm);
 
-                if(alarm == null) {
-
-                    alarm = {
-                        groupInvite: true,
-                        post: true,
-                        bbs: true
-                    };
-                    // and update firebase
-                    this.updateAlarmStatus(alarm);
-                } else {
-                    // alarm info changed.
-                    this.onAlarmChanged.next(alarm);
-                }
+              } else {
+                // alarm info changed.
+                this.onAlarmChanged.next(alarm);
+              }
 
             });
     }
@@ -171,11 +187,11 @@ export class NotificationService {
         const token = await this.tokenService.getToken(this.bizFire.uid);
 
         //invite 알림은 업데이트없이 바로삭제.
-        if(msg.html.link[0] !== 'invite') {
-          await this.bizFire.setReadNotify(msg);
-        }
-
-        await this.makeWebJumpNotify(token,msg.html.link[0],msg.html.link[1],msg.html.link[2]);
+        // if(msg.html.link[0] !== 'invite') {
+        //   await this.bizFire.setReadNotify(msg);
+        // }
+        //
+        // await this.makeWebJumpNotify(token,msg.html.link[0],msg.html.link[1],msg.html.link[2]);
 
         this.loading.hide();
 
@@ -212,324 +228,90 @@ export class NotificationService {
         }
     }
 
-    makeHtml(notification: INotification) : Observable<INotificationItem>{
+  acceptInvitation(notificationData: INotificationData): Promise<any> {
 
-        const data = notification.data;
-        if (data.groupInvite === true) {
+    console.log('acceptInvitation.', notificationData);
 
-            return this.makeHtmlInvite(notification);
+    return new Promise<any>( resolve => {
+      // get type
+      let path;
+      if(notificationData.info.type !== 'squad'){
+        // this is a group invitation
+        path = Commons.groupPath(notificationData.gid);
 
-        } else if(data.post === true || data.bbs === true || data.video === true){
+      } else if(notificationData.info.type === 'squad'){
+        // squad
+        path = Commons.squadDocPath(notificationData.gid, notificationData.info.sid);
+      }
 
-            return this.makeHtmlPost(notification);
+      // get group data
+      this.cacheService.groupValueObserver(notificationData.gid)
+        .pipe(take(1))
+        .subscribe((g: IBizGroup)=>{
 
-        } else if(data.groupInOut === true){
+          const data = g.data;
 
-            return this.makeHtmlInOutNotify(notification);
+          // set me
+          data.members[this.bizFire.currentUID] = true;
 
-        }
-
-    }
-
-    private makeHtmlInvite(notification: INotification): Observable<INotificationItem>{
-
-        return new Observable<INotificationItem>( resolve => {
-
-            const data = notification.data;
-            // get user info
-            const userObserver = this.cacheService.userGetObserver(data.from);
-            // get group info
-            const groupObserver = this.cacheService.getObserver(Commons.groupPath(data.gid));
-            const info = data.info;
-
-            // convert
-            const item: INotificationItem = notification;
-            item.html = { header: null, content: null, link: null, user:null,groupColor: null };
-
-            // to where?
-            if (info.type === 'group') {
-                // 누가 어느 그룹에
-                zip(userObserver, groupObserver)
-                .subscribe(([u, g]) => {
-
-                  let team_name;
-                  let userName;
-                  if(u != null ){
-                    userName = u.data['displayName'] || u.data['email'];
-                    item.html.user = u;
-                  } else {
-                    userName = `deleted user`;
-                  }
-                  if( g != null){
-                    team_name = g['team_name'];
-                    item.html.groupColor = g['team_color'];
-                  } else {
-                    team_name = `deleted BizGroup`;
-                  }
-
-                  // set content
-                  item.html.header = ['[invite]',`${userName}`,`${team_name}`];
-                  item.html.content = [`Invitation to ${team_name}`];
-                  item.html.link = ['invite',data.gid];
-                  // item.html.link = [`${this.webUrl}${this.customToken}&url=home/${data.gid}`];
-
-                  resolve.next(item);
-                });
-            }
-        });
-
-    }
-
-    private makeHtmlPost(notification: INotification): Observable<INotificationItem>{
-
-        return new Observable<INotificationItem>( resolve => {
-
-            const data = notification.data;
-            // get user info
-            const userObserver = this.cacheService.userGetObserver(data.from);
-            // get group info
-            const groupObserver = this.cacheService.getObserver(Commons.groupPath(data.gid));
-            const info = data.info;
-            const gid = data.gid;
-
-            // convert
-            const item: INotificationItem = notification;
-            item.html = { header: null, content: null, link: null, user: null,groupColor: null};
-
-            if (data.post === true) {
-
-              // get squad info
-              const squadObserver = this.cacheService.getObserver(Commons.squadDocPath(gid, info.sid));
-
-              zip(userObserver, groupObserver, squadObserver)
-                  .subscribe(([u, g, s]) => {
-
-                    let team_name;
-                    let userName;
-                    if(u != null ){
-                      userName = u.data['displayName'] || u.data['email'];
-                      item.html.user = u;
-                    } else {
-                      userName = `deleted user`;
-                    }
-                    if( g != null){
-                      team_name = g['team_name'];
-                      item.html.groupColor = g['team_color'];
-                    } else {
-                      team_name = `deleted BizGroup`;
-                    }
-
-                    // set content
-                    item.html.header = ['[post]',`${userName}`, `${info.title}`];
-                    item.html.content = [`${info.title}`];
-                    item.html.link = ['post',data.gid,info.sid];
-                    // item.html.link = [`${this.webUrl}${this.customToken}&url=squad/${data.gid}/${info.sid}/post`];
-
-                    resolve.next(item);
-
-                  });
-            }
-
-            // is a bbs post ?
-            else if (data.bbs === true) {
-
-                zip(userObserver, groupObserver)
-                    .subscribe(([u, g]) => {
-
-                    const title = info.title || '';
-                    let userName;
-
-                    if(u != null ){
-                      userName = u.data['displayName'] || u.data['email'];
-                      item.html.user = u;
-                    } else {
-                      userName = `deleted user`;
-                    }
-
-                    if( g != null){
-                      item.html.groupColor = g['team_color'];
-                    }
-
-                    // set content
-                    item.html.header = ['[notice]',`${userName}`, `${title}`];
-                    item.html.content = [`${userName} 씨가 새 게시글 등록했다. 보려면 밑에 링크를 클릭하라.`];
-                    item.html.link = ['bbs',data.gid,data.info.mid];
-                    // second array is a routerLink !
-                    // item.html.link = [`${this.webUrl}${this.customToken}&url=bbs/${data.gid}/${data.info.mid}/read`];
-
-                    resolve.next(item);
-
-                    });
-            }
-
-            else if (data.video === true) {
-              zip(userObserver, groupObserver)
-                .subscribe(([u, g]) => {
-
-                  const title = info.message.data.title || '';
-                  let userName;
-
-                  if(u != null ){
-                    userName = u.data['displayName'] || u.data['email'];
-                    item.html.user = u;
-                  } else {
-                    userName = `<span class="text-danger">deleted user</span>`;
-                  }
-
-                  if( g != null){
-                    item.html.groupColor = g['team_color'];
-                  }
-
-                  // set content
-                  item.html.header = [`[video]`,`${userName}`,`${title}`];
-                  item.html.content = [`${userName}님께서 화상채팅을 시작하였습니다.<br>아래 링크를 클릭하면 화상채팅에 참여할 수 있습니다.`];
-
-                  // second array is a routerLink !
-                  item.html.link = ['video',data.gid,data.info.vid];
-
-
-                  resolve.next(item);
-
-                });
-            }
-
-        });
-
-    }
-
-    private makeHtmlInOutNotify(notification: INotification): Observable<INotificationItem>{
-
-        return new Observable<INotificationItem>( resolve => {
-
-            const data = notification.data;
-            // get user info
-            const userObserver = this.cacheService.userGetObserver(data.from);
-            // get group info
-            const groupObserver = this.cacheService.getObserver(Commons.groupPath(data.gid));
-
-            // convert
-            const item: INotificationItem = notification;
-            item.html = { header: null, content: null, link: null,user : null,groupColor : null};
-
-
-            zip(userObserver, groupObserver)
-                .subscribe(([u, g])=>{
-
-                  let team_name;
-                  let userName;
-                  let type;
-                  if(u != null ){
-                    userName = u.data['displayName'] || u.data['email'];
-                    item.html.user = u;
-                  } else {
-                    userName = `deleted user`;
-                  }
-                  if( g != null){
-                    team_name = g['team_name'];
-                    item.html.groupColor = g['team_color'];
-                  } else {
-                    team_name = `deleted BizGroup`;
-                  }
-
-                  // user joined a group.
-                  item.html.header = ['[InOut]',`${userName}`, `${team_name} - ${userName}`];
-                  item.html.content = [`${userName} joined BizGroup ${team_name}`];
-                  item.html.link = ['inOut',data.gid];
-                  // item.html.link = [`${this.webUrl}${this.customToken}&url=home/${data.gid}`];
-
-                  resolve.next(item);
-
-                  });
-
-        });
-
-    }
-
-    acceptInvitation(notificationData: INotificationData): Promise<any> {
-
-
-        return new Promise<any>( resolve => {
-          // get type
-          let path;
-          if(notificationData.info.type !== 'squad'){
-            // this is a group invitation
-            path = Commons.groupPath(notificationData.gid);
-
-          } else if(notificationData.info.type === 'squad'){
-            // squad
-            path = Commons.squadDocPath(notificationData.gid, notificationData.info.sid);
+          // is ths user a manager?
+          if(notificationData.info.auth === STRINGS.FIELD.MANAGER){
+            // yes.
+            // add to partner
+            data[STRINGS.FIELD.MANAGER][this.bizFire.currentUID] = true;
           }
 
-          // get group data
-          this.cacheService.groupValueObserver(notificationData.gid)
-            .pipe(take(1))
-            .subscribe((g: IBizGroup)=>{
+          // is ths user a partner?
+          if(notificationData.info.auth === STRINGS.FIELD.PARTNER){
+            // yes.
+            // add to partner
+            data[STRINGS.FIELD.PARTNER][this.bizFire.currentUID] = true;
+          }
 
-              const data = g.data;
+          // update group member
+          this.bizFire.afStore.doc(path).update(data);
 
-              // set me
-              data.members[this.bizFire.currentUID] = true;
+          // send someone joined alarm
+          const membersId = Object.keys(data.members).filter(uid=> uid !== this.bizFire.uid && data.members[uid] === true);
 
-              // is ths user a manager?
-              if(notificationData.info.auth === STRINGS.FIELD.MANAGER){
-                // yes.
-                // add to partner
-                data[STRINGS.FIELD.MANAGER][this.bizFire.currentUID] = true;
-              }
+          const notifyData = this.buildData('groupInvite');
 
-              // is ths user a partner?
-              if(notificationData.info.auth === STRINGS.FIELD.PARTNER){
-                // yes.
-                // add to partner
-                data[STRINGS.FIELD.PARTNER][this.bizFire.currentUID] = true;
-              }
+          notifyData.gid = notificationData.gid;
+          notifyData.info.auth = notificationData.info.auth;
 
-              // update group member
-              this.bizFire.afStore.doc(path).update(data);
+          this.sendTo(membersId, notifyData);
 
-              // send someone joined alarm
-              const membersId = Object.keys(data.members).filter(uid=> uid !== this.bizFire.currentUID && data.members[uid] === true);
+          resolve(true);
 
-              const notifyData = this.buildData();
-
-              notifyData.gid = notificationData.gid;
-              notifyData.groupInOut = true;
-              notifyData.info.join = this.bizFire.currentUID;
-              notifyData.info.auth = notificationData.info.auth;
-
-              this.sendTo(membersId, notifyData);
-
-              resolve(true);
-
-            });
         });
+
+    });
+  }
+
+
+
+  buildData(type: NotificationType, info?: NotificationInfo, sid?: string): INotificationData {
+
+    const data = {
+      type: type,
+      gid: this.bizFire.currentBizGroup.gid,
+      to: null,
+      from: this.bizFire.uid,
+      created: null, // biz-server will set date here.
+      info: info || {} as NotificationInfo,
+      statusInfo:{ done: false }
+    } as INotificationData;
+
+    // set data.bbs = true if type is 'type'.
+    data[type] = true;
+
+    // set sid if it exists.
+    if(sid){
+      data.sid = sid;
     }
 
-
-    buildData():INotificationData {
-
-        if(this.bizFire.currentUserValue == null){
-          throw new Error('어라라. 로그인안한건가?');
-        }
-
-        const data = {
-
-          groupInvite: false,
-          bbs: false,
-          post: false,
-
-          gid: null,
-
-          to: null,
-
-          from: this.bizFire.currentUID,
-          created: null, // biz-server set date.
-          info: {},
-          statusInfo:{ done: false }
-
-        } as INotificationData;
-        return data;
-    }
+    return data;
+  }
 
     async sendTo(uids: string[], notificationConfig: INotificationData) {
 

@@ -1,0 +1,80 @@
+<div class="notice-item-frame d-flex">
+
+  <!--AVATAR-->
+  <div class="notice-avatar d-flex flex-column flex-shrink-0">
+
+    <div class="notice-avatar-background d-flex justify-content-center align-items-center" (click)="onAvatarClick($event)">
+      <ng-container  *ngIf="!done">
+        <app-avatar-button [uid]="item?.data.from" [size]="32"></app-avatar-button>
+      </ng-container>
+      <ng-container *ngIf="done">
+        <div class="notice-avatar-button d-flex justify-content-center align-items-center" bizGroupColor [useSubColor]="true" >
+          <i class="fa fa-check"></i>
+        </div>
+      </ng-container>
+    </div>
+
+    <!--세로 실선 frame-->
+    <div class="d-flex justify-content-center flex-grow-1">
+
+      <!--세로 실선-->
+      <div class="notice-avatar-vertical-line" [ngStyle]="{'background-color': done !== true ? subColor : '#ecebed'}">
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!--ITEM-->
+  <div class="pb-4 flex-grow-1 ">
+    <div class="notice-item p-3 d-flex flex-column" [ngClass]="done == true ? 'read-notice-item' : 'notice-item'">
+
+      <!--NAME-->
+      <div class="item-user-name flex-shrink-0 d-flex justify-content-between align-items-center"
+           bizGroupColor [useTextColor]="item.data.statusInfo.done !== true" [useSubColor]="true"  >
+        <div class="d-flex">
+          <ng-container *ngIf="getUserObserver(item.data.from) | async as user">
+            {{user.data.displayName || user.data.email}}
+          </ng-container>
+          <div class="fromWhere">
+            {{fromWhere(item.data.type)}}
+          </div>
+        </div>
+
+        <!--DELETE BUTTON-->
+        <div (click)="onDelete()" class="pointer">
+          <img src="imgs/renewal/Icon_Outline_trash.svg">
+        </div>
+      </div>
+
+      <!--TITLE ? -->
+      <div class="item-info word-break-all text-wrap text-ellipsis flex-grow-1 flex-shrink-1 d-flex align-items-center">
+        {{item.data.info?.title}}
+      </div>
+
+      <div class="flex-shrink-0 d-flex align-items-center">
+
+        <ng-container *ngIf="item.data.groupInvite">
+          <div class="notice-item-link text-danger mr-3"  (click)="onAcceptClicked()">
+            {{langPack['accept']}}
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="!item.data.groupInvite">
+          <div class="notice-item-link mr-3" (click)="onLinkClicked(item)">
+            <ng-container *ngIf="link$ | async as link">
+              {{link}}
+            </ng-container>
+          </div>
+        </ng-container>
+
+        <div class="notice-item-time">
+          {{item.data.created | timestampToDate | date: 'MM-dd hh:mm'}}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

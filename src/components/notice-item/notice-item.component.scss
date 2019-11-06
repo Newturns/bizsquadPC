@@ -1,0 +1,96 @@
+biz-notice-item {
+  .notice-item-frame{
+
+    .notice-avatar {
+      width: 56px;
+
+      padding-right: 20px;
+
+      .notice-avatar-background {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: white;
+
+        cursor: pointer;
+
+        .notice-avatar-button {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          color: white;
+        }
+
+      }
+
+
+
+      .notice-avatar-vertical-line {
+        width: 4px;
+      }
+    }
+
+    .notice-item {
+      height: 115px;
+      border-radius: 8px;
+      box-shadow: 0 7px 20px 0 rgba(0, 0, 0, 0.07);
+      background-color: #ffffff;
+      border: 1px solid white;
+
+      &.read-notice-item {
+        box-shadow: none;
+        background-color: #fcfcfc;
+        border: 1px solid #e3e7f2;
+      }
+    }
+
+
+
+    .notice-item,read-notice-item {
+      //user displayname
+      .item-user-name{
+        font-size: 14px;
+        line-height: 20px;
+        padding-bottom: 4px;
+        color: #1a051d;
+
+        .fromWhere{
+          margin-left: 7px;
+          color: #707c97;
+        }
+      }
+
+      .item-info{
+
+        height: 35px;
+        padding-bottom: 7px;
+        font-size: 13px;
+        color: #707c97;
+        line-height: 1.38;
+
+      }
+
+      .notice-item-link{
+
+        max-width: 245px;
+
+        // --- 점점점 -----------//
+        /*overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;*/
+        //----------------------- appEllipsis 로 대체.
+
+        font-size: 11px;
+        color: #2a8bf2;
+        cursor: pointer;
+      }
+
+      .notice-item-time{
+        color: #b4b9cc;
+        font-size: 11px;
+      }
+
+    }
+
+  }
+}

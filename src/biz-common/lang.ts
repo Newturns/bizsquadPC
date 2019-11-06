@@ -18,7 +18,7 @@ export const language = {
       },
       "notification": {
         "ko": "알람",
-        "en": "Notification",
+        "en": "Notifications",
         "ja": "アラーム"
       }
       ,"settings": {
@@ -1228,7 +1228,7 @@ export const language = {
       }
       ,"delete_finished": {
         "ko": "확인목록 삭제",
-        "en": "Delete read",
+        "en": "Delete read Only",
         "ja": "既読項目を削除"
       }
       ,"unfinished": {
