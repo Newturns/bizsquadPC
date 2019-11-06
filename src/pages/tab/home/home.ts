@@ -3,7 +3,7 @@ import { Electron } from './../../../providers/electron/electron';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams,App, PopoverController } from 'ionic-angular';
 import { AngularFireAuth } from '@angular/fire/auth';
-import {Subject, Subscription, timer} from 'rxjs';
+import {BehaviorSubject, Subject, Subscription, timer} from 'rxjs';
 import { filter, takeUntil, map } from 'rxjs/operators';
 import { BizFireService, userLinks } from '../../../providers/biz-fire/biz-fire';
 import { TokenProvider } from '../../../providers/token/token';
@@ -11,7 +11,9 @@ import { NotificationService } from '../../../providers/notification.service';
 import {LangService} from "../../../providers/lang-service";
 import {IBizGroup, INotification, IUser, IUserData} from "../../../_models";
 import {UserStatusProvider} from "../../../providers/user-status";
-
+import {IMessage} from "../../../_models/message";
+import {Commons, STRINGS} from "../../../biz-common/commons";
+import {Message} from "../../../biz-common/message";
 
 @IonicPage({
   name: 'page-home',
@@ -64,6 +66,10 @@ export class HomePage implements OnInit {
 
   webUrl = 'https://product.bizsquad.net//auth?token=';
 
+
+  //최신 공지사항 4개.
+  latelyNotice : IMessage[] = [];
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -92,7 +98,16 @@ export class HomePage implements OnInit {
 
     this.bizFire.onBizGroupSelected
     .pipe(takeUntil(this._unsubscribeAll))
-    .subscribe((group :IBizGroup) => this.group = group);
+    .subscribe((group :IBizGroup) => {
+
+      this.group = group;
+
+      if(this.group){
+        this.isPartner = this.bizFire.isPartner(this.group);
+        this.manager = this.group.data.manager != null && this.group.data.manager[this.bizFire.currentUID] === true;
+      }
+
+    });
 
     // * current User for RIGHT MENU
     this.bizFire.currentUser
@@ -118,8 +133,6 @@ export class HomePage implements OnInit {
         this.fullName = user.displayName;
     });
 
-
-
     this.bizFire.userCustomLinks.pipe(filter(g=>g!=null),takeUntil(this._unsubscribeAll))
     .subscribe((links : userLinks[]) => {
       links.forEach(link => {
@@ -137,11 +150,6 @@ export class HomePage implements OnInit {
       });
       console.log("userCustomLinks",this.userCustomLinks);
     });
-
-    if(this.group){
-      this.isPartner = this.bizFire.isPartner(this.group);
-      this.manager = this.group.data.manager != null && this.group.data.manager[this.bizFire.currentUID] === true;
-    }
 
     this.noticeService.onNotifications
     .pipe(
@@ -162,8 +170,20 @@ export class HomePage implements OnInit {
 
         if(this.badgeCount > 99){ this.badgeCount = 99; }
       }
-
     });
+
+    if(this.bizFire.currentBizGroup) {
+      const path = Commons.bbsPath(this.bizFire.currentBizGroup.gid);
+      this.bizFire.afStore.collection(path,ref => ref.orderBy('created','desc').limit(4))
+        .snapshotChanges()
+        .pipe(takeUntil(this._unsubscribeAll),
+          map((docs: any[]) => {
+            return docs.map(s => new Message(s.payload.doc.id, s.payload.doc.data(), s.payload.doc.ref));
+          })
+        ).subscribe((noticeList: IMessage[]) => {
+          this.latelyNotice = noticeList;
+        });
+    }
 }
 
   // profile menu toggle

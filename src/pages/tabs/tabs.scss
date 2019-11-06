@@ -3,20 +3,41 @@ page-tabs {
         -webkit-app-region: no-drag;
     }
     ion-navbar{
-        -webkit-app-region: drag;
+      height: 56px;
+      -webkit-app-region: drag;
+      .toolbar-background {
+        background-color: white;
+      }
     }
-    #badge {
-        position: absolute;
-        left: 14px;
-        top: 1px;
-        border-radius: 100%;
-        padding: 0;
-        width: 17px;
-        height: 17px;
-        font-size: 12px;
-        line-height: 1.4;
-        background-color: red;
+    ion-tabs {
+      margin-top:56px;
+      margin-bottom: 45px;
+      .tabbar{
+        background-color: white !important;
+        color: inherit !important;
+        padding: 10px;
+      }
+      a {
+        .tab-button-text {
+          font-size: 15px;
+          font-weight: bold;
+        }
+        ion-icon {
+          color: inherit;
+        }
+      }
+      .tabbar a[aria-selected=false] {
+        color: #707c97;
+      }
+      .tabbar a[aria-selected=true] {
+        color: inherit !important;
+      }
+      path {
+        fill: red !important;
+        stroke: red !important;
+      }
     }
+
     .tab-button ion-badge{
         border-radius: 100%;
     }
@@ -24,8 +45,14 @@ page-tabs {
       min-width: 16px;
     }
     .groupName{
-        text-transform: none;
-        font-weight: bold;
+      text-transform: none;
+      font-size: 18px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 2.67;
+      letter-spacing: normal;
+      color: #0d1c2e;
     }
 
     .header-md::after,
@@ -40,25 +67,35 @@ page-tabs {
       text-decoration: none;
     }
 
+    .new-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 12px;
+      background-color: #ff3366;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
     // custom tabs icon
     .ion-md-customHome {
-        background: url(../../www/imgs/md-home.svg) 50% 50% no-repeat;
-        height: 27px;
-        width: 27px;
+        background: url(../../www/imgs/renewal/Icon_Fill_home.svg) 50% 50% no-repeat;
+        height: 30px;
+        width: 30px;
     }
+
     .ion-md-customChat {
-        background: url(../../www/imgs/menu_chat.svg) 50% 50% no-repeat;
-        height: 27px;
-        width: 27px;
+        background: url(../../www/imgs/renewal/Icon_Outline_chat.svg) 50% 50% no-repeat;
+        height: 30px;
+        width: 30px;
     }
     .ion-md-customSquad {
-        background: url(../../www/imgs/menu_board.svg) 50% 50% no-repeat;
-        height: 27px;
-        width: 27px;
+        background: url(../../www/imgs/renewal/Icon_Outline_squad.svg) 50% 50% no-repeat;
+        height: 30px;
+        width: 30px;
     }
     .ion-md-customMember {
-        background: url(../../www/imgs/menu_user.svg) 50% 50% no-repeat;
-        height: 27px;
-        width: 27px;
+        background: url(../../www/imgs/renewal/Icon_Outline_member.svg) 50% 50% no-repeat;
+        height: 30px;
+        width: 30px;
     }
 }

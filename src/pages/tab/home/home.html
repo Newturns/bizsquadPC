@@ -1,118 +1,255 @@
+<!--<ion-content no-padding class="content-color">-->
+<!--  <ion-item no-lines style="margin-top: 1px">-->
+<!--    &lt;!&ndash; 프로필 사진이 있으면 &ndash;&gt;-->
+<!--    <ion-avatar item-start *ngIf="currentUser && currentUser.photoURL">-->
+<!--        <img class="photoURL" src="{{currentUser.photoURL}}">-->
+<!--        <div class="statusBadge" (click)="showStatus()" [style.background-color]="myStatus">V</div>-->
+<!--    </ion-avatar>-->
+<!--    &lt;!&ndash; 프로필 사진이 없으면 &ndash;&gt;-->
+<!--    <ion-avatar class="notPhoto" [style.background-color]=group.data.team_color item-start *ngIf="currentUser && currentUser.photoURL == null && displayName != null">-->
+<!--        <span class="displayName">{{ displayName }}</span>-->
+<!--        <div class="statusBadge" (click)="showStatus()" [style.background-color]="myStatus">V</div>-->
+<!--    </ion-avatar>-->
+
+<!--    <div *ngIf="badgeCount" class="notifiBadge" (click)="showNotify()"></div>-->
+
+<!--    <h2 class="user-name">-->
+<!--      <span *ngIf="currentUser.displayName != null">{{ fullName }}</span>-->
+<!--      <span *ngIf="currentUser.displayName == null">{{ currentUser.email }}</span>-->
+<!--        <button end ion-button icon-only clear color="dark" style="float: right" (click)="showMenu()">-->
+<!--            <ion-icon name="more"></ion-icon>-->
+<!--        </button>-->
+<!--        <button end ion-button icon-only clear color="dark" style="float: right;margin-right: 7px;color:#999" (click)="showNotify()">-->
+<!--            <ion-icon name="list-box"></ion-icon>-->
+<!--        </button>-->
+<!--    </h2>-->
+<!--  </ion-item>-->
+
+<!--  <div class="popup" *ngIf="menuShow">-->
+<!--    <ul>-->
+<!--        <li id="profileSetting" (click)="tokenService.makeWebJump('mypage')">{{ langPack['myaccount'] }}</li>-->
+<!--        <li id="signoutBtn" (click)="logout()">{{ langPack['logout'] }}</li>-->
+<!--        <li id="exitBtn" (click)="windowClose()">{{ langPack['shutdown'] }}</li>-->
+<!--    </ul>-->
+<!--  </div>-->
+<!--  <div class="statusMenu popup" *ngIf="statusMenu">-->
+<!--    <ul>-->
+<!--        <ion-badge class="selectBadge" color="secondary"></ion-badge><li (click)="changedStatus('online')">{{ langPack['online'] }}</li>-->
+<!--        <ion-badge class="selectBadge" color="yellow"></ion-badge><li (click)="changedStatus('wait')">{{ langPack['wait'] }}</li>-->
+<!--        <ion-badge class="selectBadge" color="danger"></ion-badge><li (click)="changedStatus('busy')">{{ langPack['busy'] }}</li>-->
+<!--    </ul>-->
+<!--  </div>-->
+<!--  <div class="appSelectArea">-->
+<!--    <span>{{ langPack['taskbox'] }}</span>-->
+<!--        <ul>-->
+<!--            &lt;!&ndash; 현재 없는 기능이므로 기능 추가시 주석 해제 후 추가 &ndash;&gt;-->
+<!--            <li>-->
+<!--              <button (click)="tokenService.makeWebJump('serviceinfo',group.gid)">-->
+<!--                <img src="imgs/translate.svg">-->
+<!--                <span class="title">{{ langPack['translate'] }}</span>-->
+<!--              </button>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <button (click)="tokenService.makeWebJump('serviceinfo',group.gid)">-->
+<!--                <img class="circle_icon circle_meeting" src="imgs/meeting_room.svg">-->
+<!--                <span class="title">{{ langPack['conference'] }}</span>-->
+<!--              </button>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <button (click)="tokenService.makeWebJump('serviceinfo',group.gid)">-->
+<!--                <img class="circle_icon circle_work" src="imgs/work.svg">-->
+<!--                <span class="title">{{ langPack['task'] }}</span>-->
+<!--              </button>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <button (click)="tokenService.makeWebJump('serviceinfo',group.gid)">-->
+<!--                <img class="circle_icon circle_workflow" src="imgs/insert_drive_file.svg">-->
+<!--                <span class="title long-title">{{ langPack['workflow'] }}</span>-->
+<!--              </button>-->
+<!--            </li>-->
+
+<!--            <li>-->
+<!--              <button (click)="tokenService.makeWebJump('member',group.gid)">-->
+<!--                <img src="imgs/member.svg">-->
+<!--                <span class="title">{{ langPack['members'] }}</span>-->
+<!--              </button>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <button [disabled]="isPartner" (click)="tokenService.makeWebJump('bbs',group.gid)">-->
+<!--                <img src="imgs/notice.svg">-->
+<!--                <span class="title">{{ langPack['BBS'] }}</span>-->
+<!--              </button>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <button [disabled]="!manager" (click)="tokenService.makeWebJump('property',group.gid)">-->
+<!--                <img src="imgs/setting.svg">-->
+<!--                <span class="title">{{ langPack['property'] }}</span>-->
+<!--              </button>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--    <div class="appSelectArea selectApps">-->
+<!--        <div>-->
+<!--            <span>{{ langPack['apps'] }}</span>-->
+<!--            <ion-icon *ngIf="8 > userCustomLinks.length" class="addLinkButton" style="float:right" name="add" (click)="presentPopover($event)"></ion-icon>-->
+<!--        </div>-->
+<!--        <ul>-->
+<!--            <ng-container *ngFor="let link of userCustomLinks">-->
+<!--                <li>-->
+<!--                    <button (mouseenter)="link.data.hidden=false" (mouseleave)="link.data.hidden=true" style="cursor: default;">-->
+<!--                        <ion-icon name="remove-circle" class="link-remove"-->
+<!--                        (click)="removeLink($event,link)" [hidden]="link.data.hidden"></ion-icon>-->
+<!--                        <img (click)="goLink($event,link)" *ngIf="link.data.img" style="width: 40px;  height: 40px;" src="{{ link.data.img }}" style="cursor: pointer;">-->
+<!--                        <img (click)="goLink($event,link)" *ngIf="!link.data.img" style="width: 28px;  height: 28px;" src="{{ getFavicons + link.data.url }}" style="cursor: pointer;">-->
+<!--                        <span (click)="goLink($event,link)" class="title" style="cursor: pointer;">{{ link.data.title }}</span>-->
+<!--                    </button>-->
+<!--                </li>-->
+<!--            </ng-container>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--</ion-content>-->
+<!--<ion-footer no-padding>-->
+<!--    <p style="margin-left: 10px">Bizsquad is powered by <span class="newturens" (click)="ipc.send('loadGH','https://www.bizsquad.net/')">Newturns</span> Inc.</p>-->
+<!--</ion-footer>-->
+
+
 <ion-content no-padding class="content-color">
-  <ion-item no-lines>
+  <ion-item no-lines style="margin-top: 1px">
     <!-- 프로필 사진이 있으면 -->
     <ion-avatar item-start *ngIf="currentUser && currentUser.photoURL">
-        <img class="photoURL" src="{{currentUser.photoURL}}">
-        <div class="statusBadge" (click)="showStatus()" [style.background-color]="myStatus">V</div>
+      <img class="photoURL" src="{{currentUser.photoURL}}">
+      <div class="statusBadge" (click)="showStatus()" [style.background-color]="myStatus">V</div>
     </ion-avatar>
     <!-- 프로필 사진이 없으면 -->
     <ion-avatar class="notPhoto" [style.background-color]=group.data.team_color item-start *ngIf="currentUser && currentUser.photoURL == null && displayName != null">
-        <span class="displayName">{{ displayName }}</span>
-        <div class="statusBadge" (click)="showStatus()" [style.background-color]="myStatus">V</div>
+      <span class="displayName">{{ displayName }}</span>
+      <div class="statusBadge" (click)="showStatus()" [style.background-color]="myStatus">V</div>
     </ion-avatar>
-    <div *ngIf="badgeCount" class="notifiBadge" (click)="showNotify()">&nbsp;</div>
-    <h2 class="user-name" *ngIf="currentUser.displayName != null">{{ fullName }}
-        <button end ion-button icon-only clear color="dark" style="float: right" (click)="showMenu()">
-            <ion-icon name="more"></ion-icon>
+
+    <div class="d-flex align-items-center">
+      <div class="">
+        <span *ngIf="currentUser.displayName != null">{{ fullName }}</span>
+        <span *ngIf="currentUser.displayName == null">{{ currentUser.email }}</span>
+      </div>
+
+      <div class="badge-btn d-flex flex-grow-1 justify-content-end align-items-center">
+        <button end ion-button icon-only clear (click)="tokenService.makeWebJump('property',group.gid)" [hidden]="!manager">
+          <ion-icon name="customSetting"></ion-icon>
         </button>
-        <button end ion-button icon-only clear color="dark" style="float: right;margin-right: 7px;color:#999" (click)="showNotify()">
-            <ion-icon name="list-box"></ion-icon>
+        <button end ion-button icon-only clear class="badge-btn" (click)="showNotify()">
+          <ion-icon name="customBell"></ion-icon>
         </button>
-    </h2>
-    <h2 class="user-name" *ngIf="currentUser.displayName == null">{{ currentUser.email }}
-        <button end ion-button icon-only clear color="dark" style="float: right" (click)="showMenu()">
-            <ion-icon name="more"></ion-icon>
+        <button end ion-button icon-only clear (click)="showMenu()" class="p-2">
+          <ion-icon name="more" style="color: #707c97"></ion-icon>
         </button>
-        <button end ion-button icon-only clear color="dark" style="float: right;margin-right: 7px;color:#999" (click)="showNotify()">
-            <ion-icon name="list-box"></ion-icon>
-        </button>
-    </h2>
+        <div *ngIf="badgeCount" class="notifiBadge d-flex justify-content-center align-items-center" (click)="showNotify()">
+          {{badgeCount}}
+        </div>
+      </div>
+    </div>
   </ion-item>
+
   <div class="popup" *ngIf="menuShow">
     <ul>
-        <li id="profileSetting" (click)="tokenService.makeWebJump('mypage')">{{ langPack['myaccount'] }}</li>
-        <li id="signoutBtn" (click)="logout()">{{ langPack['logout'] }}</li>
-        <li id="exitBtn" (click)="windowClose()">{{ langPack['shutdown'] }}</li>
+      <li id="profileSetting" (click)="tokenService.makeWebJump('mypage')">{{ langPack['myaccount'] }}</li>
+      <li id="signoutBtn" (click)="logout()">{{ langPack['logout'] }}</li>
+      <li id="exitBtn" (click)="windowClose()">{{ langPack['shutdown'] }}</li>
     </ul>
   </div>
   <div class="statusMenu popup" *ngIf="statusMenu">
     <ul>
-        <ion-badge class="selectBadge" color="secondary"></ion-badge><li (click)="changedStatus('online')">{{ langPack['online'] }}</li>
-        <ion-badge class="selectBadge" color="yellow"></ion-badge><li (click)="changedStatus('wait')">{{ langPack['wait'] }}</li>
-        <ion-badge class="selectBadge" color="danger"></ion-badge><li (click)="changedStatus('busy')">{{ langPack['busy'] }}</li>
+      <ion-badge class="selectBadge" color="secondary"></ion-badge><li (click)="changedStatus('online')">{{ langPack['online'] }}</li>
+      <ion-badge class="selectBadge" color="yellow"></ion-badge><li (click)="changedStatus('wait')">{{ langPack['wait'] }}</li>
+      <ion-badge class="selectBadge" color="danger"></ion-badge><li (click)="changedStatus('busy')">{{ langPack['busy'] }}</li>
     </ul>
   </div>
-  <div class="appSelectArea">
-    <span>{{ langPack['taskbox'] }}</span>
-        <ul>
-            <!-- 현재 없는 기능이므로 기능 추가시 주석 해제 후 추가 -->
-            <li>
-              <button (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
-                <img src="imgs/translate.svg">
-                <span class="title">{{ langPack['translate'] }}</span>
-              </button>
-            </li>
-            <li>
-              <button (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
-                <img class="circle_icon circle_meeting" src="imgs/meeting_room.svg">
-                <span class="title">{{ langPack['conference'] }}</span>
-              </button>
-            </li>
-            <li>
-              <button (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
-                <img class="circle_icon circle_work" src="imgs/work.svg">
-                <span class="title">{{ langPack['task'] }}</span>
-              </button>
-            </li>
-            <li>
-              <button (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
-                <img class="circle_icon circle_workflow" src="imgs/insert_drive_file.svg">
-                <span class="title long-title">{{ langPack['workflow'] }}</span>
-              </button>
-            </li>
-
-            <li>
-              <button (click)="tokenService.makeWebJump('member',group.gid)">
-                <img src="imgs/member.svg">
-                <span class="title">{{ langPack['members'] }}</span>
-              </button>
-            </li>
-            <li>
-              <button [disabled]="isPartner" (click)="tokenService.makeWebJump('bbs',group.gid)">
-                <img src="imgs/notice.svg">
-                <span class="title">{{ langPack['BBS'] }}</span>
-              </button>
-            </li>
-            <li>
-              <button [disabled]="!manager" (click)="tokenService.makeWebJump('property',group.gid)">
-                <img src="imgs/setting.svg">
-                <span class="title">{{ langPack['property'] }}</span>
-              </button>
-            </li>
-            <li>
-            </li>
-        </ul>
-    </div>
-    <div class="appSelectArea selectApps">
-        <div>
-            <span>{{ langPack['apps'] }}</span>
-            <ion-icon *ngIf="8 > userCustomLinks.length" class="addLinkButton" style="float:right" name="add" (click)="presentPopover($event)"></ion-icon>
+  <div class="frame-con bg-white d-flex flex-column justify-content-center">
+    <div class="menu-title pl-4 pb-4">{{ langPack['taskbox'] }}</div>
+    <div class="menu-con d-flex justify-content-between align-items-center">
+      <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
+        <div class="menu-box d-flex align-items-center justify-content-center">
+          <img src="imgs/renewal/Icon_translate.svg">
         </div>
-        <ul>
-            <ng-container *ngFor="let link of userCustomLinks">
-                <li>
-                    <button (mouseenter)="link.data.hidden=false" (mouseleave)="link.data.hidden=true" style="cursor: default;">
-                        <ion-icon name="remove-circle" class="link-remove"
-                        (click)="removeLink($event,link)" [hidden]="link.data.hidden"></ion-icon>
-                        <img (click)="goLink($event,link)" *ngIf="link.data.img" style="width: 40px;  height: 40px;" src="{{ link.data.img }}" style="cursor: pointer;">
-                        <img (click)="goLink($event,link)" *ngIf="!link.data.img" style="width: 28px;  height: 28px;" src="{{ getFavicons + link.data.url }}" style="cursor: pointer;">
-                        <span (click)="goLink($event,link)" class="title" style="cursor: pointer;">{{ link.data.title }}</span>
-                    </button>
-                </li>
-            </ng-container>
-        </ul>
+        <div class="menu-text mt-3">{{ langPack['translate'] }}</div>
+      </div>
+      <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
+        <div class="menu-box d-flex align-items-center justify-content-center">
+          <img src="imgs/renewal/Icon_board.svg">
+        </div>
+        <div class="menu-text mt-3">{{ langPack['conference'] }}</div>
+      </div>
+      <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
+        <div class="menu-box d-flex align-items-center justify-content-center">
+          <img src="imgs/renewal/Icon_task.svg">
+        </div>
+        <div class="menu-text mt-3">{{ langPack['task'] }}</div>
+      </div>
+      <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
+        <div class="menu-box d-flex align-items-center justify-content-center">
+          <img src="imgs/renewal/Icon_workflow.svg">
+        </div>
+        <div class="menu-text mt-3">{{ langPack['workflow'] }}</div>
+      </div>
     </div>
+  </div>
+
+  <div class="biz-border-line"></div>
+
+  <div class="frame-con bg-white d-flex flex-column justify-content-center">
+    <div class="menu-title pl-4 pb-4">{{ langPack['apps'] }}</div>
+    <div class="menu-con d-flex align-items-center">
+      <!--  추가되는 링크 for  -->
+      <ng-container *ngFor="let link of userCustomLinks">
+        <div class="d-flex flex-column align-items-center" style="margin-right: 50px"
+             *ngIf="5 > userCustomLinks.length">
+          <div class="menu-box d-flex align-items-center justify-content-center" (mouseenter)="link.data.hidden=false" (mouseleave)="link.data.hidden=true">
+            <div class="white-circle d-flex align-items-center justify-content-center">
+              <img class="favicon-img pointer" (click)="goLink($event,link)" *ngIf="link.data.img" src="{{ link.data.img }}">
+              <img class="favicon-img pointer" (click)="goLink($event,link)" *ngIf="!link.data.img" src="{{ getFavicons + link.data.url }}">
+            </div>
+            <ion-icon name="remove-circle" class="link-remove" (click)="removeLink($event,link)" [hidden]="link.data.hidden"></ion-icon>
+          </div>
+          <div class="menu-text mt-3 pointer">{{ link.data.title }}</div>
+        </div>
+      </ng-container>
+
+      <div class="d-flex flex-column align-items-center" *ngIf="5 > userCustomLinks.length" (click)="presentPopover($event)">
+        <div class="menu-box d-flex align-items-center justify-content-center">
+          <div class="white-circle d-flex align-items-center justify-content-center">
+            <img src="imgs/renewal/Icon_plus.svg">
+          </div>
+        </div>
+        <div class="menu-text mt-3">{{ langPack['add'] }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="biz-border-line"></div>
+
+  <!-- 최신 공지사항 4개까지 보여줌. -->
+  <div class="notice-con bg-white">
+    <div class="d-flex flex-column">
+      <div class="px-4 py-3 menu-title d-flex justify-content-between align-items-center">
+        <div>{{ langPack['BBS'] }}</div>
+        <div class="pointer p-1" (click)="tokenService.makeWebJump('bbs',group.gid)" [hidden]="isPartner">
+          <ion-icon name="ios-arrow-forward" class="font-20 biz-color-default"></ion-icon>
+        </div>
+      </div>
+      <div class="px-4 notice-msg-con d-flex justify-content-between align-items-center" *ngFor="let notice of latelyNotice">
+        <div class="notice-title d-flex flex-grow-1 flex-shrink-1 align-items-center">
+          <span>{{notice.data.title}}</span>
+        </div>
+        <div class="notice-time d-flex flex-shrink-0 align-items-center">{{notice.data.created | timestampToDate | date:'yyyy-MM-dd hh:mm:ss a'}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="biz-border-line"></div>
+
+  <div class="home-footer bg-white d-flex justify-content-center align-items-center">
+    Bizsquad is powered by<span class="link-newturns pointer" (click)="ipc.send('loadGH','https://www.bizsquad.net/')">&nbsp;Newturns&nbsp;</span>Inc.
+  </div>
+
 </ion-content>
-<ion-footer no-padding>
-    <p style="margin-left: 10px">Bizsquad is powered by <span class="newturens" (click)="ipc.send('loadGH','https://www.bizsquad.net/')">Newturns</span> Inc.</p>
-</ion-footer>

@@ -30,7 +30,7 @@ button.focus,button:active.focus,button.active.focus {
 }
 
 .content-color{
-    background-color: #f6f6f6;
+    background-color: #e3e7f2;
   }
 
 .squadList-button{
@@ -167,26 +167,32 @@ ion-item:hover a {
 
   }
 }
+.biz-color-default {
+  color: #707c97;
+}
 
+.font-20{
+  font-size: 20px !important;
+}
 .font-16{
-  font-size: 16px;
+  font-size: 16px !important;
 }
 .font-15{
-  font-size: 15px;
+  font-size: 15px !important;
 }
 .font-14{
-  font-size: 14px;
+  font-size: 14px !important;
 }
 
 .font-13{
-  font-size: 13px;
+  font-size: 13px !important;
 }
 
 .font-12{
-  font-size: 12px;
+  font-size: 12px !important;
 }
 .font-11{
-  font-size: 11px;
+  font-size: 11px !important;
 }
 
 .bg-biz-blue {
@@ -230,4 +236,27 @@ ion-item:hover a {
 
 .ql-editor-custom .ql-editor{
   padding: 0px !important;
+}
+
+.biz-border-line {
+  width: 100%;
+  height: 8px;
+  border: solid 1px #e3e7f2;
+  background-color: #fcfcfc;
+}
+
+
+.ion-md-customBell {
+  background: url(../../www/imgs/renewal/Icon_Outline_bell.svg) 50% 50% no-repeat;
+  height: 30px;
+  width: 30px;
+}
+.ion-md-customSetting {
+  background: url(../../www/imgs/renewal/Icon_Outline_settings.svg) 50% 50% no-repeat;
+  height: 30px;
+  width: 30px;
+}
+
+.pointer {
+  cursor: pointer;
 }

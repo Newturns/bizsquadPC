@@ -30,6 +30,7 @@ export interface userLinks {
         img : string,
         title : string,
         url : string,
+        hidden?: boolean
     }
 }
 

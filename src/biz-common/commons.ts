@@ -8,6 +8,7 @@ export const STRINGS = {
   USERS: 'users',
   WORKS: 'works',
   COMPANY: 'company',
+  BBS:'bbs',
 
   FIELD:{
     MEMBER: 'members',

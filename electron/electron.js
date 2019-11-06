@@ -24,7 +24,7 @@ let win;
 let history;
 let selectChatRoom;
 let testRooms = {};
-let devMode = false;
+let devMode = true;
 
 const mainMenuTemplate = defaultMenu(app,shell);
 // Add custom menu
@@ -102,10 +102,10 @@ function createWindow() {
         'width': mainWindowState.width,
         'height': mainWindowState.height,
         frame: false,
-        minWidth:350,
-        minHeight:600,
+        minWidth:460,
+        minHeight:874,
         maxWidth:600,
-        maxHeight:750,
+        maxHeight:874,
         titleBarStyle: 'hidden-inset',
     });
 
