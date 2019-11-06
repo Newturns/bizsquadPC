@@ -157,6 +157,7 @@ export interface IBizGroupData {
   created?: number,
   photoURL?: string,
   team_icon?: string,
+  team_subColor?: string,
   group_members?: number,
   general_squad_count?: number,
   agile_squad_count?: number,

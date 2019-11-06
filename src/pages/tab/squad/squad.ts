@@ -1,8 +1,8 @@
 import { GroupColorProvider } from './../../../providers/group-color';
 import { Electron } from './../../../providers/electron/electron';
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
-import { Subject, Subscription, combineLatest } from 'rxjs';
+import {Subject, Subscription, combineLatest, BehaviorSubject} from 'rxjs';
 import { BizFireService } from '../../../providers/biz-fire/biz-fire';
 import { ISquad, SquadService } from '../../../providers/squad.service';
 import { filter, takeUntil, map } from 'rxjs/operators';
@@ -33,10 +33,7 @@ export class SquadPage {
 
   private _unsubscribeAll;
 
-  currentSquad: ISquad;
   currentBizGroup: IBizGroup;
-  generalMembers: number;
-  groupMainColor: string;
 
   ipc: any;
 
@@ -44,20 +41,22 @@ export class SquadPage {
 
   userCustomData: any;
 
-  defaultSegment : string = "generalSquad";
   isAndroid: boolean = false;
 
-  folders: Array<IFolderItem> = [];
-  privateFolders: Array<IFolderItem> = [];
-  publicSquads: IChat[] = [];
-  privateSquads: IChat[] = [];
-  bookmark : IChat[] = [];
 
-  public_shownGroup = null;
-  private_shownGroup = null;
-
-  private userDataChanged = new Subject<any>() ; // userData monitor.
+  private userDataChanged = new Subject<any>(); // userData monitor.
   private userDataMargin: Subscription;
+
+
+  public squadfilterValue : string;
+
+  // ngFor filtered array
+  filteredGeneralSquads: IChat[];
+  filteredAgileSquads: IChat[];
+  filteredBookmark: IChat[];
+
+  //아직 안씀
+  folders: Array<IFolderItem> = [];
 
   langPack : any;
 
@@ -91,11 +90,6 @@ export class SquadPage {
     .pipe(filter(g=>g!=null), takeUntil(this._unsubscribeAll))
     .subscribe(group => {
 
-        this.generalMembers = Object.keys(group.data.members).length;
-        this.groupMainColor = this.groupColorProvider.makeGroupColor(group.data.team_color);
-        if(group.data.partners != null){
-            this.generalMembers = Object.keys(group.data.members).length - Object.keys(group.data.partners).length;
-        }
         // if current group changed,
         // select my squad.
         if( this.currentBizGroup != null) {
@@ -128,7 +122,7 @@ export class SquadPage {
         takeUntil(this._unsubscribeAll))
     .subscribe(([userData, squadList]) => {
         if(userData.gid === this.currentBizGroup.gid){
-            this.updateShelf(userData, squadList);
+            this.filterBroadCast(userData, squadList);
         }
     });
   }
@@ -151,54 +145,14 @@ export class SquadPage {
         });
   }
 
-  // * load left folders.
-  /*
-  * 실제 존재하는 폴더를 위주로
-  * 사이드바에 표시해 리얼타임 갱신이 가능하게 한다.
-  * */
-  private updateShelf(userData: any, originalSquadList: IChat[]) {
-    //console.log('updateShelf with userData', userData, originalSquadList);
-    // clear old ones.
-    console.log("originalsquadlist",originalSquadList);
-    this.folders = []; // my folders
-    this.privateSquads = [];
-    this.publicSquads = [];
-    this.bookmark = [];
+  private filterBroadCast(userData: any,squadList: IChat[]) {
+    // create broad cast data
 
-
-    const {folders,privateFolders,privateSquads,publicSquads,bookmark} = this.squadService.makeSquadMenuWith(userData.data, originalSquadList);
-
-    // console.log(folders, privateSquads, publicSquads);
-
-    this.folders = folders;
-    this.privateFolders = privateFolders;
-
-    this.publicSquads = publicSquads;
-    this.privateSquads = privateSquads;
-    this.bookmark = bookmark;
-
+    this.filteredGeneralSquads = squadList.filter(s => s.data.general === true && this.isFavoriteSquad(userData,s.sid) === false);
+    this.filteredAgileSquads = squadList.filter(s => s.data.agile === true && this.isFavoriteSquad(userData,s.sid) === false);
+    this.filteredBookmark = squadList.filter(s => this.isFavoriteSquad(userData,s.sid) === true);
   }
 
-  toggleGroup(group) {
-    if (this.isGroupShown(group)) {
-        this.public_shownGroup = null;
-    } else {
-        this.public_shownGroup = group;
-    }
-  };
-  isGroupShown(group) {
-      return this.public_shownGroup === group;
-  };
-  togglePrivateGroup(group) {
-    if (this.isPrivateGroupShown(group)) {
-        this.private_shownGroup = null;
-    } else {
-        this.private_shownGroup = group;
-    }
-  };
-  isPrivateGroupShown(group) {
-      return this.private_shownGroup === group;
-  };
 
   onSquadChat(ev,squad : IChat) {
     ev.stopPropagation();
@@ -206,37 +160,31 @@ export class SquadPage {
     console.log(squad);
     this.electron.openChatRoom(cutRefValue);
   }
-  onFavoritesSelect(ev,sid){
-    ev.stopPropagation();
-    console.log("sidsid",sid);
 
-    const gid = this.bizFire.onBizGroupSelected.getValue().gid;
-    const path = Commons.userDataPath(gid, this.bizFire.currentUID);
-    console.log("this.userCustomData",this.userCustomData);
-    // get delete or add
-    if(this.userCustomData.data == null) {
-      this.userCustomData.data = {[sid]: {}};
+  private filterText(squad: ISquad, searchText: string | null): boolean {
+    let textIncluded = true;
+    if(searchText){
+      searchText = searchText.toLowerCase();
+      textIncluded = squad.data.name.toLowerCase().indexOf(searchText) !== -1;
+      if(!textIncluded){
+        textIncluded = squad.data.type.toLowerCase().indexOf(searchText) !== -1;
+      }
     }
-
-    if(this.userCustomData.data[sid] == null || !this.userCustomData.data[sid]['bookmark']){
-      this.userCustomData.data[sid] = { bookmark: true };
-    } else if (this.userCustomData.data[sid]['bookmark']){
-      this.userCustomData.data[sid] = { bookmark: false };
-    }
-
-    console.log("this.userCustomData.data",this.userCustomData.data);
-
-    this.bizFire.afStore.doc(path).set(this.userCustomData.data, {merge: true});
-
+    return textIncluded;
   }
 
-  memberCount(squad : IChat) : number {
-    if(squad.data.agile) {
-      return Object.keys(squad.data.members).length;
+  isFavoriteSquad(userData: any, sid: string): boolean {
+    let ret = false;
+    if(userData){
+      ret = userData[sid] && userData[sid]['bookmark'] === true;
     }
-    if(squad.data.general) {
-      return squad.isPublic() ? this.generalMembers : Object.keys(squad.data.members).length;
-    }
+    return  ret;
+  }
+
+  // renwal new code
+  onSquadTypeFilter(type: string) {
+    this.squadfilterValue = type;
+    console.log(type);
   }
 
   ngOnDestroy(): void {
@@ -246,13 +194,9 @@ export class SquadPage {
     this._unsubscribeAll.complete();
 
     if(this.userDataMargin){
-        this.userDataMargin.unsubscribe();
-        this.userDataChanged = null;
+      this.userDataMargin.unsubscribe();
+      this.userDataChanged = null;
     }
-  }
-
-  groupData(s) {
-    console.log(this.currentBizGroup.gid,s);
   }
 
 }

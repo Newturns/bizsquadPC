@@ -1,0 +1,31 @@
+<div class="squad-filter-frame">
+
+  <button type="button" class="btn {{'btn-'+size}}"
+          (click)="onClickFilter(null)"
+          [ngStyle]="{'background-color': filterButtonText === null ? subcolor : 'inherit'}"
+          [ngClass]="{'select-button': filterButtonText === null}">All</button>
+
+  <button type="button" class="btn {{'btn-'+size}}"
+          (click)="onClickFilter('general')"
+          [ngStyle]="{'background-color': filterButtonText === 'general' ? subcolor :'inherit'}"
+          [ngClass]="{'select-button': filterButtonText === 'general'}">General</button>
+
+  <button type="button" class="btn {{'btn-'+size}}"
+          (click)="onClickFilter('agile')"
+          [ngStyle]="{'background-color': filterButtonText === 'agile' ? subcolor :'inherit'}"
+          [ngClass]="{'select-button': filterButtonText === 'agile'}">Agile</button>
+
+  <button type="button" class="btn {{'btn-'+size}}"
+          (click)="onClickFilter('bookmark')"
+          [ngStyle]="{'background-color': filterButtonText === 'bookmark' ? subcolor :'inherit'}"
+          [ngClass]="{'select-button': filterButtonText === 'bookmark'}">
+    <i class="fa fa-star"></i>
+  </button>
+
+</div>
+
+
+
+<!--[ngStyle]="{'background-color': isMyMessage ? defaultMyColor : team_color}">-->
+
+<!--#c4c4c4-->

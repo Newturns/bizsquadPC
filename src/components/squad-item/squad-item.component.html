@@ -1,0 +1,48 @@
+<div class="squad-btn d-flex justify-content-center align-items-center" [ngClass]="{'squadSelected': squadSelected === true}">
+  <div class="squad-item w-100 d-flex align-items-center" (mouseover)="squadSelected = true" (mouseleave)="squadSelected = false">
+      <div class="squad-image d-flex justify-content-center align-items-center">
+
+        <biz-team-icon [teamData]="squadBox?.data"  [size]="32"></biz-team-icon>
+
+      </div>
+      <div class="h-100 flex-grow-1 d-flex  flex-column justify-content-center">
+        <div class="d-flex justify-content-between align-items-center">
+
+          <div class="squad-name" appEllipsis [style.color]="!squadSelected ? 'white': null">
+            {{squadBox.data.title || squadBox.data.name}}
+          </div>
+          <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center" *ngIf="squadBox && !squadBox.isPublic()">
+<!--              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" [ngStyle]="{'fill': squadSelected? '#707C97' : '#707C97'}">-->
+<!--                <path d="M0 0h24v24H0z" fill="none"/>-->
+<!--                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>-->
+<!--              </svg>-->
+
+              <!--outline lock icon-->
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" [ngStyle]="{'fill': squadSelected? '#707C97' : '#707C97'}">
+                <path d="M13.456 5.457h-1.14V3.096A3.1 3.1 0 0 0 9.22 0H6.78a3.1 3.1 0 0 0-3.096 3.096v2.36h-1.14a.58.58 0 0 0-.58.581v5.671A4.297 4.297 0 0 0 6.256 16h3.488a4.297 4.297 0 0 0 4.292-4.292v-5.67a.58.58 0 0 0-.58-.581zm-8.61-2.361c0-1.067.867-1.935 1.934-1.935h2.44c1.067 0 1.935.868 1.935 1.935v2.36h-6.31v-2.36zm8.029 8.612a3.134 3.134 0 0 1-3.13 3.13h-3.49a3.134 3.134 0 0 1-3.13-3.13v-5.09h9.75v5.09z"/>
+                <path d="M7.42 11.911a.58.58 0 1 0 1.161 0v-1.657a.58.58 0 0 0-.47-.92h-.22a.58.58 0 0 0-.471.92v1.657z"/>
+              </svg>
+
+            </div>
+
+            <div class="d-flex align-content-center ml-1">
+              <i class="fa fa-star favorite-icon no-favorite" *ngIf="!star; else favoriteSquad" (click)="onFavoritesSelect($event)"></i>
+              <ng-template #favoriteSquad>
+                <i class="fa fa-star favorite-icon selected" (click)="onFavoritesSelect($event)"></i>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center squad-member">
+          <div class="mr-1">
+            member
+          </div>
+          <div>
+            {{memberCount}}
+          </div>
+        </div>
+      </div>
+  </div>
+</div>

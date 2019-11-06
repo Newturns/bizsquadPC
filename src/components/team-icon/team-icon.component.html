@@ -1,0 +1,14 @@
+<div *ngIf="teamData">
+  <div class="d-flex custom-avatar justify-content-center"
+       *ngIf="teamData.photoURL == null"
+       [style.background-color]="teamData.team_color ? teamData.team_color : defaultColor"
+       [style.width]="size + 'px'" [style.height]="size + 'px'">
+    <div class="not-photo align-self-center" [style.font-size]="size / 3 + 'px'">
+      {{ teamData.name || teamData.team_name || '--' | slice:0:2 }}
+    </div>
+  </div>
+  <img class="d-flex custom-avatar justify-content-center"
+       *ngIf="teamData.photoURL"
+       src="{{ teamData.photoURL }}"
+       [style.width]="size + 'px'" [style.height]="size + 'px'">
+</div>

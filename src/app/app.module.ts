@@ -22,8 +22,6 @@ import { CacheService } from '../providers/cache/cache';
 import { ToastProvider } from '../providers/toast/toast';
 import {UserStatusProvider} from "../providers/user-status";
 
-import {ComponentsModule} from "../components/components.module";
-
 @NgModule({
   declarations: [
     MyApp,
@@ -36,7 +34,6 @@ import {ComponentsModule} from "../components/components.module";
     AngularFireStorageModule,
     AngularFireAuthModule,
     HttpClientModule,
-    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -12,6 +12,9 @@ import {QuillModule} from 'ngx-quill';
 import {AvatarButtonComponent} from "./avatar-button/avatar-button.component";
 import {ImgComponent} from "./img/img.component";
 import { MembersPopoverComponent } from './members-popover/members-popover';
+import {SquadFilterComponent} from "./squad-filter/squad-filter.component";
+import {SquadItemComponent} from "./squad-item/squad-item.component";
+import {TeamIconComponent} from "./team-icon/team-icon.component";
 
 @NgModule({
 	declarations: [
@@ -22,7 +25,10 @@ import { MembersPopoverComponent } from './members-popover/members-popover';
     MessageComponent,
     AvatarButtonComponent,
     ImgComponent,
-    MembersPopoverComponent
+    MembersPopoverComponent,
+    SquadFilterComponent,
+    SquadItemComponent,
+    TeamIconComponent,
   ],
   imports: [
     CommonModule,
@@ -42,7 +48,10 @@ import { MembersPopoverComponent } from './members-popover/members-popover';
     MessageComponent,
     AvatarButtonComponent,
     ImgComponent,
-    MembersPopoverComponent
+    MembersPopoverComponent,
+    SquadFilterComponent,
+    SquadItemComponent,
+    TeamIconComponent
   ],
   entryComponents: [
     ChatHeaderComponent,

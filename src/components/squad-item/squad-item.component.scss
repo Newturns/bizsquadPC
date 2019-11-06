@@ -1,0 +1,132 @@
+biz-squad-item {
+  .squad-btn{
+    .squad-item{
+      cursor: pointer;
+      height: 56px;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 13px 13px 13px 15px;
+
+      .squad-image{
+        margin-right: 12px;
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+      }
+
+      svg{
+        width: 16px;
+        height: 20px;
+      }
+
+      .squad-name{
+        font-size: 14px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        /*      line-height: 1.14;
+              letter-spacing: 0.4px;*/
+        max-width: 125px;
+      }
+
+      .squad-member{
+        font-size: 11px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        /*
+        아래 삭제. 센터가 안맞음.
+        line-height: 1.45;
+        letter-spacing: 0.4px;*/
+        color: rgba(255, 255, 255, 0.65);
+      }
+
+      .favorite-icon{
+        font-size: 14px;
+        border-radius: 5px;
+        border: 1px solid transparent;
+        padding: 2px;
+
+        color: rgba(255, 255, 255, 0.65);
+
+        &.selected {
+          color: #f2c94c;
+          &:hover{
+            //border: 1px solid #f2c94c;
+            padding: 2px;
+          }
+        }
+
+        &:hover{
+          //border: 1px solid rgba(255, 255, 255, 0.65);
+          padding: 2px;
+        }
+      }
+      .no-favorite:hover {
+        background-color: #b4b9cc;
+      }
+    }
+  }
+
+  .squadSelected{
+    margin-left: 0px;
+    background-color: white !important;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+    height: 56px;
+    padding: 13px 13px 13px 15px;
+    border-radius: 8px;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+
+    .squad-name{
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 500;
+      font-style: normal;
+      font-stretch: normal;
+
+      color: #231f20;
+      /*
+      아래 지정하면 align-item-center 가 안맞는듯 하여 삭제
+      line-height: 1.14;
+      letter-spacing: 0.4px;*/
+
+      //color: var(--dusk-blue); directive 로 변경.
+      max-width: 125px;
+    }
+
+    .squad-item{
+      padding: 0px;
+
+      .squad-member{
+        color: #979797;
+
+      }
+      .favorite-icon{
+        font-size: 14px;
+        border-radius: 5px;
+        border: 1px solid transparent;
+        padding: 2px;
+
+        color: rgba(255, 255, 255, 0.65);
+
+        &.selected {
+          color: #f2c94c;
+          &:hover{
+            border: 1px solid #f2c94c;
+            padding: 2px;
+          }
+        }
+
+        &:hover{
+          border: 1px solid rgba(255, 255, 255, 0.65);
+          padding: 2px;
+        }
+      }
+      .no-favorite {
+        color: silver;
+      }
+    }
+  }
+}
