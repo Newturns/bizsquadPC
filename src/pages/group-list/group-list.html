@@ -1,52 +1,37 @@
-<ion-header>
-  <ion-navbar color="default" style="min-height: 30px;">
+<ion-header class="px-2">
+  <ion-navbar color="white" style="height: 56px">
     <ion-buttons left class="login-top-menu">
-      <button ion-button clear small color="light" class="titleButton">
+      <button ion-button clear small class="titleButton">
         Bizgroup List
       </button>
-      <!-- <button ion-button icon-only clear small color="light">
-          <ion-icon name="settings" style="font-size: 18px;"></ion-icon>
-      </button> -->
     </ion-buttons>
     <ion-buttons end class="login-top-menu">
       <button ion-button icon-only clear small color="light" (click)="windowMimimize()">
-        <ion-icon name="md-remove" style="font-size: 20px;padding-top: 8px;"></ion-icon>
+        <img src="imgs/renewal/Icon_Outline_minimize.svg">
       </button>
       <button ion-button icon-only clear small color="light" (click)="windowHide()">
-        <ion-icon name="md-close" style="font-size: 20px;"></ion-icon>
+        <img src="imgs/renewal/Icon_Outline_close.svg">
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content no-padding>
-  <ion-scroll class="scrollable" scrollY="true">
-    <ion-list no-margin *ngFor="let group of groups" (click)="gotoTeam(group)">
-      <ion-item class="groupListItem" no-lines>
-        <ion-avatar *ngIf="!group.data.photoURL" item-start [style.background-color]="group.data.team_color">
-          {{ group.data.team_icon }}
-        </ion-avatar>
-        <ion-avatar *ngIf="group.data.photoURL" item-start>
-          <img style="border-radius: 15%;" src="{{ group.data.photoURL }}">
-        </ion-avatar>
-        <h2 class="groupName">{{ group.data.team_name }}</h2>
-      </ion-item>
-<!--      <ion-grid class="groupInfo" *ngIf="langPack">-->
-<!--        <ion-row>-->
-<!--          <ion-col>-->
-<!--              <div class="InfoTitle">{{langPack['members']}}</div>-->
-<!--              {{ group.data.group_members }}-->
-<!--          </ion-col>-->
-<!--          <ion-col>-->
-<!--              <div class="InfoTitle">{{langPack['agile']}}</div>-->
-<!--              {{ group.data.agile_squad_count }}-->
-<!--          </ion-col>-->
-<!--          <ion-col>-->
-<!--              <div class="InfoTitle">{{langPack['general']}}</div>-->
-<!--              {{ group.data.general_squad_count }}-->
-<!--          </ion-col>-->
-<!--        </ion-row>-->
-<!--      </ion-grid>-->
-    </ion-list>
-  </ion-scroll>
+<ion-content no-padding class="content-color">
+  <div class="groupList-scroll-con py-4">
+    <div class="group-card d-flex mx-4 my-3" *ngFor="let group of groups" (click)="gotoTeam(group)">
+      <div class="d-flex align-items-center flex-shrink-0">
+        <div class="d-flex mx-4">
+          <biz-group-logo [group]="group"></biz-group-logo>
+        </div>
+      </div>
+      <div class="group-detail d-flex flex-column justify-content-center flex-grow-1 flex-shrink-1 mr-4">
+        <div class="d-flex group-name py-2">
+          <div>{{ group.data.team_name }}</div>
+        </div>
+        <div class="d-flex group-description">
+          <div>{{ group.data.team_description }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>

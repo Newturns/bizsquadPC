@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { InvitePage } from './invite';
 import { AccountService } from './../../../../providers/account/account';
+import {ComponentsModule} from "../../../../components/components.module";
 
 @NgModule({
   declarations: [
@@ -9,9 +10,10 @@ import { AccountService } from './../../../../providers/account/account';
   ],
   imports: [
     IonicPageModule.forChild(InvitePage),
+    ComponentsModule
   ],
   providers: [
-    AccountService
+    AccountService,
   ]
 })
 export class InvitePageModule {}

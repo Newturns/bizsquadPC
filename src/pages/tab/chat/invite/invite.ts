@@ -25,10 +25,9 @@ export class InvitePage {
 
   private _unsubscribeAll;
 
-  serachValue : string;
   currentGroup: IBizGroup;
   isChecked : IUser[] = [];
-  groupMainColor: string;
+  groupSubColor: string;
 
   langPack: any;
 
@@ -58,18 +57,10 @@ export class InvitePage {
     .pipe(filter(g=>g!=null),takeUntil(this._unsubscribeAll))
     .subscribe((group) => {
       this.currentGroup = group;
-      this.groupMainColor = this.groupColorProvider.makeGroupColor(group.data.team_color);
+      this.groupSubColor = group.data.team_subColor;
       this.userList$ = this.cacheService.resolvedUserList(this.currentGroup.getMemberIds(false), Commons.userInfoSorter);
     });
 
-  }
-
-  setUserName(userData : IUserData) : string {
-    return Commons.initialChars(userData);
-  }
-
-  makeUserStatus(userData : IUserData) {
-    return Commons.makeUserStatus(userData);
   }
 
   invite(){
@@ -107,22 +98,24 @@ export class InvitePage {
     }
   }
 
-  selectedUser(users : IUser[]) {
-    this.isChecked = users.filter(u => u.data.isChecked == true);
-    console.log(this.isChecked)
+  checkedUsers(user : IUser) {
+    if(user['checked']) {
+      user['checked'] = false;
+    } else {
+      user['checked'] = true;
+      this.isChecked.push(user);
+    }
+    this.isChecked = this.isChecked.filter(user => user['checked'] === true);
+    console.log(this.isChecked);
   }
-  badgeMember(user : IUser) {
-    user.data.isChecked = false;
-    this.isChecked = this.isChecked.filter(u => u.data.isChecked == true);
-    console.log(this.isChecked)
-  }
+
 
   closePopup(){
     this.viewCtrl.dismiss();
   }
 
   ngOnDestroy(): void {
-    this.isChecked.forEach(u => u.data.isChecked = false);
+    this.isChecked.forEach(u => u['checked'] = false);
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }

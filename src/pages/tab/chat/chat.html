@@ -21,19 +21,29 @@
     </div>
   </div>
 
-  <div class="chat-scroll-con px-4">
+  <div class="chat-scroll-con">
     <div [ngSwitch]="defaultSegment">
       <div *ngSwitchCase="'chatRoom'">
         <ng-container *ngFor="let room of chatRooms">
           <ng-container *ngIf="!serachValue || room.data.title.indexOf(serachValue.trim())>-1;">
-            <biz-chat-item  (clickedFunc)="gotoRoom($event)" [chat]="room"></biz-chat-item>
+            <div class="px-4 chat-item-frame" bizGroupColor [hover]="true" [selected]="false">
+              <biz-chat-item  (clickedFunc)="gotoRoom($event)" [chat]="room"></biz-chat-item>
+            </div>
           </ng-container>
         </ng-container>
+        <ion-fab right bottom>
+          <button class="fab-button"  ion-fab [color]="groupMainColor" (tap)="presentPopover($event)">
+<!--            <ion-icon name="customNewRoom"></ion-icon>-->
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </ion-fab>
       </div>
       <div *ngSwitchCase="'squadChatRoom'">
         <ng-container *ngFor="let room of squadChatRooms">
           <ng-container *ngIf="!serachValue || room.data.name.indexOf(serachValue.trim())>-1;">
-            <biz-chat-item  (clickedFunc)="gotoRoom($event)" [chat]="room"></biz-chat-item>
+            <div class="px-4 chat-item-frame" bizGroupColor [hover]="true" [selected]="false">
+              <biz-chat-item  (clickedFunc)="gotoRoom($event)" [chat]="room" bizGroupColor [hover]="true" [selected]="false"></biz-chat-item>
+            </div>
           </ng-container>
         </ng-container>
       </div>

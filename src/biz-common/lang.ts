@@ -277,9 +277,9 @@ export const language = {
         "ja": "チャットするメンバーがいません"
       }
       ,"select_member_invite": {
-        "ko": "초대 하고싶은<br> 멤버를 선택해 주세요",
-        "en": "Select the member<br> you want to chat with in the list.",
-        "ja": "招待したいメンバーを<br> 選択してください"
+        "ko": "멤버를 선택해 주세요.",
+        "en": "Select the Members",
+        "ja": "メンバーを選択してください"
       }
       ,"chat_room_title": {
         "ko": "방 제목을 입력해 주세요.",

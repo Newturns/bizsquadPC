@@ -1,0 +1,21 @@
+
+<div class="group-logo-frame">
+  <ng-container *ngIf="!textMode || group.data.photoURL; else textLogo">
+    <span class="pointer" (click)="clickLogo.emit('click logo')">
+      <img class="custom-avatar" *ngIf="group.data.photoURL" mat-card-avatar src="{{ group.data.photoURL }}">
+      <div class="d-flex not-photo custom-avatar justify-content-center align-items-center"
+           [style.background-color]="group.data.team_color"
+           *ngIf="!group.data.photoURL">
+        {{ group.data.team_name | slice:0:2 }}
+      </div>
+    </span>
+  </ng-container>
+
+  <ng-template #textLogo>
+    <div class="team_name pointer text-ellipsis" style="width: 250px" (click)="clickLogo.emit('click logo')">
+      {{group.data.team_name}}
+    </div>
+    <span *ngIf="group && group.isPartner()" class="font-12 text-danger">Partner</span>
+  </ng-template>
+</div>
+

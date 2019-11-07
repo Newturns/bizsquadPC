@@ -76,12 +76,11 @@ page-chat {
       position: fixed;
       bottom: 30px;
       right: 20px;
-      opacity: 0.9;
 
   }
   .fab-button{
-      width: 45px;
-      height: 45px;
+      width: 40px;
+      height: 40px;
   }
   .triangle{
       width: 0;
@@ -150,6 +149,10 @@ page-chat {
   .chat-scroll-con {
     height: calc(100vh - 283px);
     overflow: auto;
+
+    .chat-item-frame {
+      background-color: white;
+    }
   }
 
 }

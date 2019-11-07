@@ -19,6 +19,8 @@ import {GroupColorDirective} from "../biz-common/directives/group-color.directiv
 import {BizButtonComponent} from "./biz-button/biz-button.component";
 import {NoticeItemComponent} from "./notice-item/notice-item.component";
 import {ChatItemComponent} from "./chat-item/chat-item.component";
+import {GroupLogoComponent} from "./group-logo/group-logo.component";
+import {BizCheckBtnComponent} from "./biz-check-btn/biz-check-btn.component";
 
 @NgModule({
 	declarations: [
@@ -36,6 +38,8 @@ import {ChatItemComponent} from "./chat-item/chat-item.component";
     BizButtonComponent,
     NoticeItemComponent,
     ChatItemComponent,
+    GroupLogoComponent,
+    BizCheckBtnComponent,
     GroupColorDirective
   ],
   imports: [
@@ -64,6 +68,8 @@ import {ChatItemComponent} from "./chat-item/chat-item.component";
     BizButtonComponent,
     NoticeItemComponent,
     ChatItemComponent,
+    GroupLogoComponent,
+    BizCheckBtnComponent,
     GroupColorDirective,
 
   ],

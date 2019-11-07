@@ -19,30 +19,24 @@ export class GroupColorProvider {
 
   makeGroupColor(string) {
     switch(string) {
-      case '#324BA8':
-        return 'darkblue';
-      case '#6979F8':
-        return 'blue';
-      case '#FFCF5C':
-        return 'warn';
-      case '#FFA26B':
-        return 'accent';
-      case '#0084F4':
-        return 'primary';
-      case '#00C48C':
+      case '#324ca8':
+        return 'duskblue';
+      case '#eb5757':
+        return 'red';
+      case '#ffc107':
+        return 'orange';
+      case '#219653':
         return 'green';
-      case '#FF647C':
-        return 'warm';
-      case '#D0C9D6':
-        return 'gray';
-      case '#3b5998':
-        return 'facebook';
-      case '#111111':
+      case '#2f80ed':
+        return 'blue';
+      case '#9b51e0':
+        return 'purple';
+      case '#4f4f4f':
         return 'dark';
       case undefined:
-       return 'default';
+       return 'duskblue';
       default:
-       return 'default';
+       return 'duskblue';
     }
   }
 

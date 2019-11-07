@@ -35,18 +35,24 @@ $colors: (
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  default: #BE52F2,
   darkblue: #324BA8,
-  blue: #6979F8,
   warn: #FFCF5C,
   accent: #FFA26B,
   primary: #0084F4,
-  green: #00C48C,
   warm: #FF647C,
   gray: #D0C9D6,
   facebook: #3b5998,
-  dark: #111111,
-  white: #ffffff
+  white: #ffffff,
+
+//  new group colors
+  duskblue : #324ca8,
+  red : #eb5757,
+  orange : #ffc107,
+  green : #219653,
+  blue : #2f80ed,
+  purple : #9b51e0,
+  dark : #4f4f4f,
+  default: #324ca8,
 );
 
 ::-webkit-scrollbar { display: none; }

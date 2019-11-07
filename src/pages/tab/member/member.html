@@ -14,7 +14,7 @@
     <ng-container *ngFor="let uid of filteredList">
       <ng-container *ngIf="getUserObserver(uid) | async as user">
         <ng-container *ngIf="!serachValue || user.data.displayName.indexOf(serachValue.trim())>-1;">
-          <div class="userList bg-white d-flex flex-column justify-content-center px-4">
+          <div class="userList d-flex flex-column justify-content-center px-4" bizGroupColor [hover]="true" [selected]="false">
             <app-avatar-button [user]="user" [displayNameOn]="true" (onClick)="clickAvatar(user)"></app-avatar-button>
             <div class="statusBadge" [style.background-color]="makeUserStatus(user.data)"></div>
           </div>

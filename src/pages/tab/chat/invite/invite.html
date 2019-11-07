@@ -1,41 +1,69 @@
-<ion-header>
-  <!-- 선택된 멤버가 없으면 텍스트 출력 -->
-  <p *ngIf="isChecked.length == 0" class="title" [style.background-color]="currentGroup.data.team_color" no-margin [innerHTML]="langPack['select_member_invite']" ></p>
-  <ion-scroll class="scrollable" scrollY="true">
-    <div *ngIf="isChecked && isChecked.length > 0" class="badge-memberCon" [style.background-color]="currentGroup.data.team_color">
-      <ng-container *ngFor="let user of isChecked;">
-        <button *ngIf="user.data.isChecked" class="memberList-button" ion-button icon-end round color="light" (click)="badgeMember(user)">
-            {{ user.data.displayName }}
-            <ion-icon name="close"></ion-icon>
-        </button>
-      </ng-container>
-    </div>
-  </ion-scroll>
-  <ion-searchbar [style.background-color]="currentGroup.data.team_color" [(ngModel)]="serachValue" mode="ios" placeholder="{{langPack['search']}}"></ion-searchbar>
-</ion-header>
+<!--<ion-header>-->
+<!--  &lt;!&ndash; 선택된 멤버가 없으면 텍스트 출력 &ndash;&gt;-->
+<!--  <p *ngIf="isChecked.length == 0" class="title" [style.background-color]="currentGroup.data.team_color" no-margin [innerHTML]="langPack['select_member_invite']" ></p>-->
+<!--  <ion-scroll class="scrollable" scrollY="true">-->
+<!--    <div *ngIf="isChecked && isChecked.length > 0" class="badge-memberCon" [style.background-color]="currentGroup.data.team_color">-->
+<!--      <ng-container *ngFor="let user of isChecked;">-->
+<!--        <button *ngIf="user.data.isChecked" class="memberList-button" ion-button icon-end round color="light" (click)="badgeMember(user)">-->
+<!--            {{ user.data.displayName }}-->
+<!--            <ion-icon name="close"></ion-icon>-->
+<!--        </button>-->
+<!--      </ng-container>-->
+<!--    </div>-->
+<!--  </ion-scroll>-->
+<!--  <ion-searchbar [style.background-color]="currentGroup.data.team_color" [(ngModel)]="serachValue" mode="ios" placeholder="{{langPack['search']}}"></ion-searchbar>-->
+<!--</ion-header>-->
 
-<ion-content no-padding>
-  <ion-scroll class="scrollable" scrollY="true">
-    <ion-list no-margin *ngIf="userList$ | async as userList">
+<!--<ion-content no-padding>-->
+<!--  <ion-scroll class="scrollable" scrollY="true">-->
+<!--    <ion-list no-margin *ngIf="userList$ | async as userList">-->
+<!--      <ng-container *ngFor="let user of userList">-->
+<!--        <ion-item class="userList" no-lines *ngIf="!serachValue || user.data.displayName.indexOf(serachValue.trim())>-1;">-->
+<!--            <ion-avatar item-start *ngIf="user && user.data.photoURL">-->
+<!--              <img class="photoURL" src="{{ user.data.photoURL }}">-->
+<!--              <div class="statusBadge" [style.background-color]="makeUserStatus(user.data)"></div>-->
+<!--            </ion-avatar>-->
+<!--            <ion-avatar [style.background-color]="currentGroup.data.team_color" class="notPhoto" item-start *ngIf="user && user.data.photoURL == null">-->
+<!--              <span class="displayName">{{ setUserName(user.data) }}</span>-->
+<!--              <div class="statusBadge" [style.background-color]="makeUserStatus(user.data)"></div>-->
+<!--            </ion-avatar>-->
+<!--            <ion-label *ngIf="user.data.displayName != null">{{ user.data.displayName }}</ion-label>-->
+<!--            <ion-label *ngIf="user.data.displayName == null">{{ user.data.email }}</ion-label>-->
+<!--            <ion-checkbox [color]="groupMainColor" slot="end" [(ngModel)]="user.data.isChecked" mode="ios" (click)="selectedUser(userList)"></ion-checkbox>-->
+<!--        </ion-item>-->
+<!--      </ng-container>-->
+<!--    </ion-list>-->
+<!--  </ion-scroll>-->
+<!--</ion-content>-->
+<!--<ion-footer>-->
+<!--    <button class="footer-button" ion-button round small color="light" (click)="closePopup()">{{langPack['cancel']}}</button>-->
+<!--    <button ion-button round small [color]="groupMainColor" (click)="invite()">{{langPack['invite']}}</button>-->
+<!--</ion-footer>-->
+<div class="create-chat-header d-flex justify-content-between align-items-center">
+  <div class="header-text">
+    {{langPack['select_member_invite']}}
+    <span *ngIf="isChecked.length > 0" [ngStyle]="{'color': groupSubColor ? groupSubColor : '#2a8bf2'}">{{isChecked.length}}</span>
+  </div>
+  <div>
+    <button ion-button icon-only clear small color="light" (click)="closePopup()">
+      <img src="imgs/renewal/Icon_Outline_close.svg">
+    </button>
+  </div>
+</div>
+<ion-content>
+  <div class="invite-scroll-con">
+    <ng-container *ngIf="userList$ | async as userList">
       <ng-container *ngFor="let user of userList">
-        <ion-item class="userList" no-lines *ngIf="!serachValue || user.data.displayName.indexOf(serachValue.trim())>-1;">
-            <ion-avatar item-start *ngIf="user && user.data.photoURL">
-              <img class="photoURL" src="{{ user.data.photoURL }}">
-              <div class="statusBadge" [style.background-color]="makeUserStatus(user.data)"></div>
-            </ion-avatar>
-            <ion-avatar [style.background-color]="currentGroup.data.team_color" class="notPhoto" item-start *ngIf="user && user.data.photoURL == null">
-              <span class="displayName">{{ setUserName(user.data) }}</span>
-              <div class="statusBadge" [style.background-color]="makeUserStatus(user.data)"></div>
-            </ion-avatar>
-            <ion-label *ngIf="user.data.displayName != null">{{ user.data.displayName }}</ion-label>
-            <ion-label *ngIf="user.data.displayName == null">{{ user.data.email }}</ion-label>
-            <ion-checkbox [color]="groupMainColor" slot="end" [(ngModel)]="user.data.isChecked" mode="ios" (click)="selectedUser(userList)"></ion-checkbox>
-        </ion-item>
+        <div class="user-frame d-flex align-items-center justify-content-between px-4 py-3" bizGroupColor [hover]="true" [selected]="false">
+          <app-avatar-button class="mr-2" [user]="user" [displayNameOn]="true" [textColor]="'#333333'"></app-avatar-button>
+          <biz-check-btn [checked]="user['checked']" (click)="checkedUsers(user)"></biz-check-btn>
+        </div>
       </ng-container>
-    </ion-list>
-  </ion-scroll>
+    </ng-container>
+  </div>
 </ion-content>
-<ion-footer>
-    <button class="footer-button" ion-button round small color="light" (click)="closePopup()">{{langPack['cancel']}}</button>
-    <button ion-button round small [color]="groupMainColor" (click)="invite()">{{langPack['invite']}}</button>
-</ion-footer>
+
+<div class="create-chat-footer d-flex justify-content-center align-items-center">
+  <biz-button [title]="'cancel'" [teamColor]="false" (click)="closePopup()"></biz-button>
+  <biz-button [title]="'create'" [teamColor]="true" (click)="invite()"></biz-button>
+</div>
