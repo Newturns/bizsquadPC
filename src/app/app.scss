@@ -294,6 +294,21 @@ ion-item:hover a {
   }
 }
 
+.biz-footer {
+  height: 45px;
+  font-size: 11px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.45;
+  letter-spacing: 0.4px;
+  color: #b4b9cc;
+  .link-newturns {
+    color: #707c97;
+    font-weight: bold;
+  }
+}
+
 
 //custom search input placeholder //
 ::-webkit-input-placeholder { /* Edge */

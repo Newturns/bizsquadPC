@@ -191,6 +191,11 @@ export const language = {
         "en": "Translate",
         "ja": "翻訳"
       },
+      "SFA": {
+        "ko": "영업관리",
+        "en": "SFA",
+        "ja": "販売管理"
+      },
       "conference": {
         "ko": "회의실",
         "en": "Conference",

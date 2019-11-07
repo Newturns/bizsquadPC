@@ -1,6 +1,6 @@
 
 <ion-content no-padding class="content-color">
-  <ion-item no-lines style="margin-top: 1px">
+  <ion-item no-lines style="border: 1px solid #e3e7f2">
     <!-- 프로필 사진이 있으면 -->
     <ion-avatar item-start *ngIf="currentUser && currentUser.photoURL">
       <img class="photoURL" src="{{currentUser.photoURL}}">
@@ -54,9 +54,9 @@
     <div class="menu-con d-flex justify-content-between align-items-center">
       <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
         <div class="menu-box d-flex align-items-center justify-content-center">
-          <img src="imgs/renewal/Icon_translate.svg">
+          <img src="imgs/renewal/Icon_sales.svg">
         </div>
-        <div class="menu-text mt-3">{{ langPack['translate'] }}</div>
+        <div class="menu-text mt-3">{{ langPack['SFA'] }}</div>
       </div>
       <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
         <div class="menu-box d-flex align-items-center justify-content-center">

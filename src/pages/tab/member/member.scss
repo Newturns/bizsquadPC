@@ -1,5 +1,10 @@
 page-member {
 
+  .member-scroll-con {
+    height: calc(100vh - 240px);
+    overflow: auto;
+  }
+
   ion-avatar{
     border-radius: 100%;
     cursor: pointer;
@@ -17,10 +22,10 @@ page-member {
     position: absolute;
     border-radius: 100%;
     padding:0;
-    width: 8px;
-    height: 8px;
-    left:38px;
-    bottom: 15px;
+    width: 12px;
+    height: 12px;
+    left:42px;
+    bottom: 10px;
     color: transparent;
     font-size: 7px;
     line-height: 1.5;

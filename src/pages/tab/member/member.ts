@@ -9,6 +9,7 @@ import {LangService} from "../../../providers/lang-service";
 import {IBizGroup, IUser, IUserData} from "../../../_models";
 import {CacheService} from "../../../providers/cache/cache";
 import {Commons} from "../../../biz-common/commons";
+import {Electron} from "../../../providers/electron/electron";
 
 @IonicPage({
   name: 'page-member',
@@ -20,6 +21,8 @@ import {Commons} from "../../../biz-common/commons";
   templateUrl: 'member.html',
 })
 export class MemberPage {
+
+  ipc : any;
 
   private _unsubscribeAll;
 
@@ -55,9 +58,12 @@ export class MemberPage {
     private groupColorProvider: GroupColorProvider,
     private langService : LangService,
     private cacheService : CacheService,
+    private electron : Electron,
     public popoverCtrl :PopoverController) {
 
     this._unsubscribeAll = new Subject<any>();
+
+    this.ipc = electron.ipc;
 
     this.langService.onLangMap
       .pipe(takeUntil(this._unsubscribeAll))

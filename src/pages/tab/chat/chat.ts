@@ -42,6 +42,8 @@ export class ChatPage extends TakeUntil{
 
   serachValue : string;
 
+  ipc : any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -54,6 +56,8 @@ export class ChatPage extends TakeUntil{
     private cacheService : CacheService,
     ) {
       super();
+
+      this.ipc = electron.ipc;
   }
 
   ngOnInit() {
