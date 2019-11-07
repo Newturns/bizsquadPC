@@ -1,7 +1,7 @@
 import * as firebase from "firebase";
 import {ISquad} from "../providers/squad.service";
 import {STRINGS} from "../biz-common/commons";
-import {IMessageData} from "./message";
+import {IChat, IMessage, IMessageData} from "./message";
 
 export interface IUser {
   uid: string,

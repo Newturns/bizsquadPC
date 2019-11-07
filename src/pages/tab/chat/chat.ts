@@ -4,13 +4,15 @@ import { ChatService } from './../../../providers/chat.service';
 import { BizFireService } from './../../../providers/biz-fire/biz-fire';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
-import {distinctUntilChanged, filter} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 import {IChat, IMessageData} from '../../../_models/message';
 import { SquadService, ISquad } from '../../../providers/squad.service';
 import {TakeUntil} from "../../../biz-common/take-until";
 import {IBizGroup, IUnreadItem, IUser} from "../../../_models";
-import {Subject} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {Commons} from "../../../biz-common/commons";
+import {IUnreadMap, MapItem, UnreadCounter} from "./unread-counter";
+import {CacheService} from "../../../providers/cache/cache";
 
 @IonicPage({
   name: 'page-chat',
@@ -23,7 +25,7 @@ import {Commons} from "../../../biz-common/commons";
 })
 export class ChatPage extends TakeUntil{
 
-  defaultSegment : string = "squadChatRoom";
+  defaultSegment : string = "chatRoom";
   chatRooms : IChat[];
   squadChatRooms: IChat[];
   members = [];
@@ -38,6 +40,8 @@ export class ChatPage extends TakeUntil{
   // sort distinct and debounce subject
   sortChatRooms$ = new Subject<string>();
 
+  serachValue : string;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -47,6 +51,7 @@ export class ChatPage extends TakeUntil{
     private squadService: SquadService,
     public popoverCtrl :PopoverController,
     public groupColorProvider: GroupColorProvider,
+    private cacheService : CacheService,
     ) {
       super();
   }
@@ -61,40 +66,52 @@ export class ChatPage extends TakeUntil{
 
     // unread count map
     this.chatService.unreadCountMap$
-      .pipe(this.takeUntil)
-      .subscribe((list: IUnreadItem[]) => {
-
-
+      .pipe(
+        this.takeUntil,
+        filter(d=>d!=null)
+      )
+      .subscribe((list: IUnreadMap) => {
         // temp array for counting.
-        const typeMember = [];
-        const typeSquad = [];
-
-        // get chat data
-        list.filter(i => {
-          const chat = this.chatService.findChat(i.cid);
-          if(chat){
-            if(chat.data.type === 'member'){
-              typeMember.push(chat);
-            } else {
-              typeSquad.push(chat);
-            }
+        this.memberUnreadTotalCount = 0;
+        this.squadUnreadTotalCount = 0;
+        list.getValues().forEach( (item: MapItem) => {
+          if(item.chat.data.type === 'member'){
+            this.memberUnreadTotalCount += item.unreadList.length;
+          } else {
+            this.squadUnreadTotalCount += item.unreadList.length;
           }
         });
-
-        this.memberUnreadTotalCount = typeMember.length;
-        this.squadUnreadTotalCount = typeSquad.length;
-        console.log(this.memberUnreadTotalCount, this.squadUnreadTotalCount);
-
-    });
+      });
 
     this.bizFire.onBizGroupSelected.pipe(this.takeUntil).subscribe((group : IBizGroup) => {
+      this.group = group;
       this.groupMainColor = this.groupColorProvider.makeGroupColor(group.data.team_color);
     });
 
     // 멤버 채팅방
     this.chatService.onChatRoomListChanged
-    .pipe(filter(d=>d!=null),this.takeUntil)
-    .subscribe((rooms : IChat[]) => {
+    .pipe(filter(d=>d!=null),this.takeUntil,map((chats : IChat[]) => {
+      return chats.map((chat : IChat) => {
+        if(chat.data.title == null) {
+          this.cacheService.resolvedUserList(chat.getMemberIds(false), Commons.userInfoSorter)
+            .pipe(this.takeUntil)
+            .subscribe((users :IUser[]) => {
+              chat.data.title = '';
+              users.forEach(u => {
+                if(chat.data.title.length > 0) {
+                  chat.data.title += ',';
+                }
+                chat.data.title += u.data.displayName;
+              });
+              if(users.length === 0) {
+                chat.data.title = 'No users';
+              }
+            });
+        }
+        return chat;
+      });
+    })
+    ).subscribe((rooms : IChat[]) => {
       // this.chatRooms = rooms.sort(Commons.sortDataByCreated());
       this.chatRooms = rooms.sort(Commons.sortDataByLastMessage(false));
     });

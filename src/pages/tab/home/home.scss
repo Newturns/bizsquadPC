@@ -114,12 +114,20 @@ page-home {
     letter-spacing: normal;
     color: #707c97;
   }
+  .text-60 {
+    width: 60px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
 
   .frame-con {
     height: 170px;
 
     .menu-con {
       padding: 0 35px;
+      max-width: 460px;
+      max-height: 170px;
 
       .menu-box {
         width: 60px;

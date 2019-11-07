@@ -1,173 +1,155 @@
 page-chat {
-    ion-segment-button{
-        color:black !important;
-        text-transform: capitalize !important;
-    }
-    ion-avatar{
-        border-radius: 100%;
-        float: left;
-        position: relative;
-        bottom: 5px;
-    }
-    .list-md .item-block .item-inner{
-        border-bottom: none !important;
-    }
-    .marginB56{
-        margin-bottom: 56px;
-    }
-    .chat-item{
-        padding: 3px 5px 3px 16px;
-        border-bottom: 1px solid #e0e0e0 !important;
-        cursor: pointer;
-    }
-    .chat-item:hover {
-        background-color: rgba(107, 166, 238, 0.1);
-    }
-    .chat-count{
-        float:right;
-        line-height: 1.5;
-        font-size: 12px !important;
-        color:#777;
-        font-weight: bold;
-    }
-    .room_title{
-        display: inline-block;
-        font-size: 15px;
-        width: 75%;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-    .room_title_noMember{
-        color: #444;
-        display: inline-block;
-        font-size: 15px;
-        width: 65%;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-    .notPhoto{
-        text-align: center;
-    }
-    .displayName{
-        font-weight: bold;
-        color:white;
-        line-height: 2.5;
-    }
-
-    .squadRoomName{
-        display: block;
-        width: 75%;
-        font-size: 15px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        margin-bottom: 6px;
-    }
-    .squadMemberCount{
-        position: absolute;
-        top: 18px;
-        right: 20px;
-        line-height: 1.5;
-        font-size: 12px !important;
-        color:#777;
-        font-weight: bold;
-    }
-    ion-fab{
-        margin-bottom: 60px;
-        margin-right: 15px;
-        position: fixed;
-        bottom: 30px;
-        right: 20px;
-        opacity: 0.9;
-
-    }
-    .fab-button{
-        width: 45px;
-        height: 45px;
-    }
-    .triangle{
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 50px 50px 0 50px;
-        border-color: #007bff transparent transparent transparent;
-    }
-
-    // scroll bar
-    .scrollable{
-        height: 90%;
-        overflow: auto !important;
-    }
-    ::-webkit-scrollbar,
-    *::-webkit-scrollbar {
-        display: inherit;
-    }
-    ::-webkit-scrollbar-track {
-        // -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3) !important;
-        // border-radius: 8px!important;
-        background-color: #f6f6f6!important;
-        margin-bottom: 35px;
-    }
-    ::-webkit-scrollbar {
-        width: 12px!important;
-        background-color: #f6f6f6!important;
-    }
-    ::-webkit-scrollbar-thumb {
-        // border-radius: 8px!important;
-        // -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,.3)!important;
-        border: 2px solid #f6f6f6 !important;
-        background-color: #BEBEBE!important;
-        opacity: 0.7;
-        border-radius: 7px !important;
-    }
-
-    .msg-badge{
+  ion-avatar{
       border-radius: 100%;
-      font-size: 11px;
-    }
-    .new_message_icon{
-        display: inline-block;
-        position: absolute;
-        color: #FF5B5B;
-        right: 45px;
-        top: 17px;
-    }
-    .new_message_general_icon{
-        display: inline-block;
-        position: absolute;
-        color: #FF5B5B;
-        right: 65px;
-        top: 17px;
-    }
-
-    .ion-md-customNewRoom {
-        background: url(../../www/imgs/new_room.svg) 50% 50% no-repeat;
-        height: 24px;
-        width: 25px;
-        margin-top: 4px;
-    }
-
-    .msg-badge-chat{
-      position: absolute;
-      min-width: 20px;
-      max-height:21px;
-      border-radius: 50%;
+      float: left;
+      position: relative;
+      bottom: 5px;
+  }
+  .list-md .item-block .item-inner{
+      border-bottom: none !important;
+  }
+  .marginB56{
+      margin-bottom: 56px;
+  }
+  .chat-item{
+      padding: 3px 5px 3px 16px;
+      border-bottom: 1px solid #e0e0e0 !important;
+      cursor: pointer;
+  }
+  .chat-item:hover {
+      background-color: rgba(107, 166, 238, 0.1);
+  }
+  .chat-count{
+      float:right;
+      line-height: 1.5;
+      font-size: 12px !important;
+      color:#777;
+      font-weight: bold;
+  }
+  .room_title{
       display: inline-block;
-      font-size: 10px;
-      font-weight: 700;
-      text-align: center;
+      font-size: 15px;
+      width: 75%;
+      text-overflow: ellipsis;
+      overflow: hidden;
       white-space: nowrap;
-      vertical-align: baseline;
-      background-color: red;
-      color: #fff;
-      padding: .25em .4em;
-      margin-right: 10px;
-      right:45px;
-    }
+  }
+  .room_title_noMember{
+      color: #444;
+      display: inline-block;
+      font-size: 15px;
+      width: 65%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+  }
+  .notPhoto{
+      text-align: center;
+  }
+  .displayName{
+      font-weight: bold;
+      color:white;
+      line-height: 2.5;
+  }
+
+  .squadRoomName{
+      display: block;
+      width: 75%;
+      font-size: 15px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      margin-bottom: 6px;
+  }
+  .squadMemberCount{
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      line-height: 1.5;
+      font-size: 12px !important;
+      color:#777;
+      font-weight: bold;
+  }
+  ion-fab{
+      margin-bottom: 60px;
+      margin-right: 15px;
+      position: fixed;
+      bottom: 30px;
+      right: 20px;
+      opacity: 0.9;
+
+  }
+  .fab-button{
+      width: 45px;
+      height: 45px;
+  }
+  .triangle{
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 50px 50px 0 50px;
+      border-color: #007bff transparent transparent transparent;
+  }
+
+  .msg-badge{
+    border-radius: 100%;
+    font-size: 11px;
+  }
+  .new_message_icon{
+      display: inline-block;
+      position: absolute;
+      color: #FF5B5B;
+      right: 45px;
+      top: 17px;
+  }
+  .new_message_general_icon{
+      display: inline-block;
+      position: absolute;
+      color: #FF5B5B;
+      right: 65px;
+      top: 17px;
+  }
+
+  .ion-md-customNewRoom {
+      background: url(../../www/imgs/new_room.svg) 50% 50% no-repeat;
+      height: 24px;
+      width: 25px;
+      margin-top: 4px;
+  }
+
+  .msg-badge-chat{
+    position: absolute;
+    min-width: 20px;
+    max-height:21px;
+    border-radius: 50%;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    background-color: red;
+    color: #fff;
+    padding: .25em .4em;
+    margin-right: 10px;
+    right:45px;
+  }
 
 
+  ion-segment-button{
+    color:#0d1c2e !important;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize !important;
+    margin-left: 20px !important;
+    margin-right: 20px !important;
+    border-width: 3px;
+  }
 
+
+  .chat-scroll-con {
+    height: calc(100vh - 248px);
+    overflow: auto;
+  }
 
 }

@@ -18,6 +18,7 @@ import {TeamIconComponent} from "./team-icon/team-icon.component";
 import {GroupColorDirective} from "../biz-common/directives/group-color.directive";
 import {BizButtonComponent} from "./biz-button/biz-button.component";
 import {NoticeItemComponent} from "./notice-item/notice-item.component";
+import {ChatItemComponent} from "./chat-item/chat-item.component";
 
 @NgModule({
 	declarations: [
@@ -34,6 +35,7 @@ import {NoticeItemComponent} from "./notice-item/notice-item.component";
     TeamIconComponent,
     BizButtonComponent,
     NoticeItemComponent,
+    ChatItemComponent,
     GroupColorDirective
   ],
   imports: [
@@ -43,6 +45,7 @@ import {NoticeItemComponent} from "./notice-item/notice-item.component";
     IonicModule,
     //QuillEditor
     QuillModule.forRoot(),
+
 
   ],
   exports: [
@@ -60,7 +63,9 @@ import {NoticeItemComponent} from "./notice-item/notice-item.component";
     TeamIconComponent,
     BizButtonComponent,
     NoticeItemComponent,
-    GroupColorDirective
+    ChatItemComponent,
+    GroupColorDirective,
+
   ],
   entryComponents: [
     ChatHeaderComponent,

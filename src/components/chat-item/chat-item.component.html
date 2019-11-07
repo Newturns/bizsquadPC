@@ -1,0 +1,47 @@
+<div class="chat-btn d-flex align-items-center pr-3 border-biz-bottom"  (click)="onClickFunc();"
+     bizGroupColor [selected]="chatSelected">
+
+  <!--image-->
+  <div class="chat-image mr-3 flex-shrink-0">
+    <div *ngIf="chatBox.data.type !== 'member'; else memberChat">
+      <biz-team-icon [teamData]="chatBox?.data"  [size]="40"></biz-team-icon>
+    </div>
+    <ng-template #memberChat>
+      <div>
+        <app-avatar-button [uid]="chatBox.data.lastMessage.sender"></app-avatar-button>
+<!--        <biz-chat-icon [uids]="chatBox.getMemberIds(true)"></biz-chat-icon>-->
+      </div>
+    </ng-template>
+  </div>
+
+  <!--right-->
+  <div class="d-flex flex-column flex-grow-1">
+
+    <div class="d-flex justify-content-between align-items-center mb-1">
+
+      <div class="chat-name d-flex flex-grow-1 flex-shrink-1">
+        <span>{{chatTitle}}</span>
+      </div>
+
+      <div class="chat-date flex-shrink-0">
+        {{chatBox?.data.lastMessage?.created | timestampToDate | date:'MM-dd HH:mm' }}
+      </div>
+
+    </div>
+
+    <div class="flex-grow-1 d-flex justify-content-between align-items-start chat-last-msg">
+      <div *ngIf="chatBox?.data.lastMessage?.message.text != null; else noMessage"
+           class="flex-grow-1 text-wrap text-truncate text-break">
+        {{removeHtml(chatBox?.data.lastMessage?.message.text)}}
+      </div>
+      <ng-template #noMessage>
+        <div class="flex-grow-1">
+          No Message
+        </div>
+      </ng-template>
+      <div class="msg-badge d-flex text-white mr-2 align-items-center justify-content-center flex-shrink-0" *ngIf="unreadCount">
+        {{ unreadCount | badgeLimit: 999 }}
+      </div>
+    </div>
+  </div>
+</div>

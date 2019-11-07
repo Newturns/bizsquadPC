@@ -1,0 +1,71 @@
+biz-chat-item {
+  .chat-btn{
+    cursor: pointer;
+    border-bottom: 1px solid #e3e7f2;
+
+    background-color: white;
+    height: 72px;
+
+    .upper-line {
+      /* 제목이 왼쪽 아바타 이미지의 가운데 오게하려면
+      밑의 주석 해제..
+      디자인이 별로 안이뻐서 주석처리해둠.
+      padding-top: 11px;
+       */
+      padding-top: 5px;
+      padding-bottom: 11px;
+    }
+
+    .chat-name{
+
+      width: 0;
+      font-size: 14px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: #0d1c2e;
+      span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+    }
+    .chat-date{
+      font-size: 12px;
+      color: #b4b9cc;
+    }
+
+    .chat-last-msg{
+
+      height: 18px;
+
+      font-size: 12px;
+      font-weight: 500;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 18px;
+      letter-spacing: normal;
+      color: #707c97;
+      div{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        word-wrap: break-word;
+      }
+      .msg-badge{
+        background-color: #ff3366;
+        font-size: 10px;
+        width: 20px;
+        height: 20px;
+        border-radius: 25px;
+        box-shadow: 0 0px 2px 0 rgba(255, 51, 102, 0.2), 0 6px 15px 0 rgba(255, 51, 102, 0.19);
+      }
+    }
+  }
+}
+

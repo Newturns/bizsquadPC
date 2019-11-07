@@ -25,10 +25,6 @@ export class AvatarButtonComponent extends TakeUntil implements OnInit {
   displayNameOn = false;
 
   @Input()
-  tooltip = false;
-
-
-  @Input()
   set uid(uid: string){
     if(uid){
       this.setUserData(uid, null);

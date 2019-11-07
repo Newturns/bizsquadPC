@@ -2,19 +2,20 @@ import { Electron } from './electron/electron';
 import { Injectable } from '@angular/core';
 import {BizFireService} from './biz-fire/biz-fire';
 import {SquadService, ISquad} from './squad.service';
-import {BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import { LoadingProvider } from './loading/loading';
 import * as firebase from 'firebase';
 import {Commons, STRINGS} from '../biz-common/commons';
 
 import {LangService} from "./lang-service";
-import {takeUntil} from "rxjs/operators";
+import {debounceTime, filter, takeUntil} from "rxjs/operators";
 import {IChat, IChatData, IFiles, IMessage, IMessageData} from "../_models/message";
 import {IUser} from "../_models";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../environments/environments";
 import {Content} from "ionic-angular";
 import {CacheService} from "./cache/cache";
+import {IUnreadMap, UnreadCounter} from "../pages/tab/chat/unread-counter";
 
 @Injectable({
     providedIn: 'root'
@@ -30,7 +31,13 @@ export class ChatService {
 
     fileUploadProgress = new BehaviorSubject<number>(null);
 
-    unreadCountMap$ = new BehaviorSubject<any[]>(null);
+    get unreadCountMap$(): Observable<IUnreadMap> {
+      return this.unreadCounter.unreadChanged$.asObservable()
+        .pipe(
+          filter(d=>d!=null),
+          debounceTime(500), // 0.5 sec
+        );
+    }
 
     langPack: any = {};
 
@@ -41,6 +48,7 @@ export class ChatService {
         private http: HttpClient,
         private cacheService : CacheService,
         private squadService: SquadService,
+        private unreadCounter: UnreadCounter,
         private loading: LoadingProvider,) {
 
       this.langService.onLangMap

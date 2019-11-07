@@ -11,10 +11,10 @@ import { SquadService, ISquad } from '../../providers/squad.service';
 import { TokenProvider } from '../../providers/token/token';
 import {Commons, STRINGS} from "../../biz-common/commons";
 import { LangService } from '../../providers/lang-service';
-import { UnreadCounter } from "../../classes/unread-counter";
 import {IBizGroup, INotification, IUnreadItem, IUserData} from "../../_models";
 import {IChat, IChatData} from "../../_models/message";
 import {Chat} from "../../biz-common/chat";
+import {IUnreadMap, MapItem, UnreadCounter} from "../tab/chat/unread-counter";
 
 @IonicPage({
   name: 'page-tabs',
@@ -29,9 +29,6 @@ export class TabsPage {
 
 
   private _unsubscribeAll;
-
-  private unreadCounter: UnreadCounter;
-  private unreadListSubscription: Subscription;
 
   groupList; // display Select
   memberNewMessage = 0;
@@ -73,6 +70,7 @@ export class TabsPage {
     private squadService: SquadService,
     public groupColorProvider : GroupColorProvider,
     private tokenService: TokenProvider,
+    private unreadCounter: UnreadCounter,
     private noticeService : NotificationService,
     private langService: LangService,
     ) {
@@ -131,8 +129,6 @@ export class TabsPage {
 
             console.log("언리드 모니터 시작");
             // 모든 채팅의 UNREAD COUNT 를 모니터
-            this.unreadCounter = new UnreadCounter(this.group.gid, this.bizFire.uid);
-            this.unreadListSubscription = this.unreadCounter.unreadList$.subscribe(this.chatService.unreadCountMap$);
 
             if(reloadGroup === true){
                 // group squads reloading...
@@ -152,21 +148,16 @@ export class TabsPage {
 
       this.squadService.onSquadListChanged.next(newChat);
 
-      list.forEach(s => {
-        if(!this.unreadCounter.isRegistered(s.sid)) {
-          this.unreadCounter.register(s.sid, s.ref);
-        }
-      });
     });
 
 
     this.chatService.unreadCountMap$
       .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((map: IUnreadItem[]) => {
-        if(map){
-          this.chatCount = map.length;
+      .subscribe((list: IUnreadMap) => {
+        list.getValues().forEach((item : MapItem) => {
+          this.chatCount += item.unreadList.length;
           this.electron.setAppBadge(this.chatCount);
-      }
+        });
     });
 
     this.bizFire.afStore.collection(Commons.chatPath(this.group.gid),ref =>{
@@ -182,7 +173,9 @@ export class TabsPage {
         if(change.type === 'added') {
           const item = new Chat(mid, data, this.bizFire.uid, change.payload.doc.ref);
           this.chatRooms.push(item);
-          this.unreadCounter.register(mid, change.payload.doc.ref);
+          if(this.unreadCounter){
+            this.unreadCounter.register(mid, item);
+          }
 
         } else if(change.type === 'modified') {
           for(let index = 0 ; index < this.chatRooms.length; index ++){
@@ -203,7 +196,9 @@ export class TabsPage {
             if (this.chatRooms[index].cid === mid) {
               // remove from array
               this.chatRooms.splice(index, 1);
-              this.unreadCounter.unRegister(mid);
+              if(this.unreadCounter){
+                this.unreadCounter.unRegister(mid);
+              }
               break;
             }
           }
@@ -242,10 +237,6 @@ export class TabsPage {
 
       // unreadCounter 가 보내는 현 그룹의 언리드 리스트인
       // unreadList$ 가 받는 구독을 먼저 해제한다.
-      if(this.unreadListSubscription){
-        this.unreadListSubscription.unsubscribe();
-        this.unreadListSubscription = null;
-      }
       // 데이터를 지운다.
       this.unreadCounter.clear();
       this.unreadCounter = null; // always create new one with new GID.
