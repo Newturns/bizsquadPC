@@ -1,25 +1,45 @@
- <ion-item class="drag listBorder" no-margin no-padding no-lines>
-    <div class="electron-menu">
-      <ion-item class="opacity">
-        <ion-range [(ngModel)]="opacity" color="dark" (ionChange)="electron.setOpacity(opacity)"></ion-range>
-      </ion-item>
-      <button ion-button icon-only clear small color="light" (click)="electron.windowMimimize()">
-        <ion-icon class="login-top-menu windowMimimize" name="md-remove"></ion-icon>
-      </button>
-      <button ion-button icon-only clear small color="light" (click)="electron.windowClose()">
-        <ion-icon class="login-top-menu" name="md-close"></ion-icon>
-      </button>
+
+<div class="d-flex px-4 py-4 drag header-frame">
+  <!-- 채팅방 아이콘 -->
+  <div class="d-flex align-items-center mr-2" *ngIf="room?.data.type !== 'member'; else memberChat">
+    <biz-team-icon [teamData]="room?.data"  [size]="40"></biz-team-icon>
+  </div>
+  <ng-template #memberChat>
+    <div class="d-flex align-items-center mr-2" *ngIf="senderUid">
+      <app-avatar-button [uid]="senderUid"></app-avatar-button>
     </div>
-    <div class="chatName-frame" *ngIf="chatTitle !== ''">
-      <h2 class="chatName">{{ chatTitle }}</h2>
-      <p class="members" (click)="chatMemberList($event)"><ion-icon name="person"></ion-icon> {{ userCount }} </p>
+  </ng-template>
+
+  <div class="d-flex align-items-center flex-grow-1">
+    <!--  위 : 채팅방제목, 아래 : 멤버수 -->
+    <div class="d-flex chat-title-frame flex-column flex-grow-1 flex-shrink-1">
+      <!--   채팅방 제목   -->
+      <div class="d-flex chat_title mb-2">
+        <div> {{ chatTitle }} </div>
+      </div>
+      <!--   멤버 수   -->
+      <div class="d-flex align-items-center memeber-count pointer no-drag" (click)="chatMemberList($event)">
+        <img src="imgs/renewal/Icon_Outline_user.svg"> {{ userCount }}
+      </div>
     </div>
-    <div class="header-menu">
-      <button ion-button clear icon-only small color="dark" (click)="notificationOnOff()">
-        <ion-icon name="{{ notifications }}"></ion-icon>
-      </button>
-      <button ion-button clear icon-only small color="dark" (tap)="presentPopover($event)" *ngIf="memberChat">
-        <ion-icon name="menu"></ion-icon>
-      </button>
+
+    <!--  왼 : 멤버수,  오 : 채팅방 메뉴들  -->
+    <div class="d-flex flex-shrink-0">
+      <div class="d-flex flex-column">
+        <!--   최소화 | 종료   -->
+        <div class="d-flex align-items-center justify-content-end no-drag mb-2">
+          <img class="pointer" src="imgs/renewal/Icon_Outline_minimize.svg" (click)="electron.windowMimimize()">
+          <img class="pointer ml-1" src="imgs/renewal/Icon_Outline_close.svg" (click)="electron.windowClose()">
+        </div>
+        <!--   채팅방 메뉴들   -->
+        <div class="d-flex align-items-center justify-content-end no-drag">
+<!--          <ion-item>-->
+<!--            <ion-range [(ngModel)]="opacity" color="dark" (ionChange)="electron.setOpacity(opacity)"></ion-range>-->
+<!--          </ion-item>-->
+          <img class="pointer ml-2" src="imgs/renewal/{{notifications}}.svg" width="22" height="22" (click)="notificationOnOff()">
+          <img class="pointer ml-2" src="imgs/renewal/Icon_Outline_more.svg" width="20" height="22" (tap)="presentPopover($event)">
+        </div>
+      </div>
     </div>
-  </ion-item>
+  </div>
+</div>

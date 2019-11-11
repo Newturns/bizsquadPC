@@ -4,10 +4,10 @@
   <div class="d-flex flex-column justify-content-between flex-wrap content-color h-100 p-3">
     <!-- 헤더  -->
     <div class="d-flex justify-content-end">
-      <button ion-button icon-only clear small color="light" (click)="windowMimimize()">
+      <button class="top-side-menu" ion-button icon-only clear small color="light" (click)="windowMimimize()">
         <img src="imgs/renewal/Icon_Outline_minimize.svg">
       </button>
-      <button ion-button icon-only clear small color="light" (click)="windowHide()">
+      <button class="top-side-menu" ion-button icon-only clear small color="light" (click)="windowHide()">
         <img src="imgs/renewal/Icon_Outline_close.svg">
       </button>
     </div>
@@ -30,7 +30,7 @@
         <div class="d-flex justify-content-between align-items-center">
           <div class="sign-up-text">New to Bizsquad?</div>
           <div class="d-flex justify-content-between align-items-center">
-            <div class="sign-up-btn"><biz-button [title]="'Sign up'" [teamColor]="false" class="w-100 h-100"></biz-button></div>
+            <div class="sign-up-btn"><biz-button [title]="'Sign up'" [teamColor]="false" class="w-100 h-100 m-0"></biz-button></div>
           </div>
         </div>
       </div>

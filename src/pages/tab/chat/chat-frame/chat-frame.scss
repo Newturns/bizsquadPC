@@ -6,7 +6,7 @@ page-chat-frame {
 
   //스크롤 컨텐츠 배경색
   ion-content .scroll-content {
-    background-color: #EDF4F8;
+    background-color: white;
   }
 
   //프로그래스바
@@ -17,10 +17,11 @@ page-chat-frame {
   }
 
   .differentDay{
-    color: white;
-    background-color: #BFBFBF;
-    border-radius: 20px;
-    font-size: 12px;
+    color: #707c97;
+    opacity: 0.5;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
   }
 
   // chat body Frame Design
@@ -29,70 +30,36 @@ page-chat-frame {
     height: 100%;
   }
 
-  // chat input Design
-  .input-menu {
-    padding: 0 5px;
-    display: flex;
-    height: 35px;
-    background-color: #f4f4f4;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  .input-wrap {
-    padding: 5px;
-    display: flex;
-    height: 90px;
-    form {
-      height: 90px;
-      flex: 1;
+  .chat-input-frame {
+    background-color: #fcfcfc;
+    border-top: 1px solid #e3e7f2;
+    .circle_send {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
     }
-    textarea {
-      flex: 1;
-      border: 0;
-      height: 80px;
+    ion-textarea {
+      border: 1px solid #e3e7f2;
+      border-radius: 5px;
     }
-  }
-  textarea {
-    width: calc(100% - 20px);
-    margin-left: 10px;
-    background-color: #fff;
-    font-size: 14px;
-    resize: none;
-    border: none;
-  }
-  .sendButton{
-    height: auto;
-    opacity: 0.8;
-    border-radius: 7px;
-    text-transform: capitalize;
-    width:80px;
+    //textarea {
+    //  font-size: 15px;
+    //  line-height: 1.5;
+    //  background-color: #fcfcfc;
+    //  border: 0;
+    //  resize: none;
+    //  height: 40px;
+    //}
   }
 
-
-  // scroll bar
-  .scrollable{
-    height: 100%;
-    overflow: scroll !important;
+  //custom search input placeholder //
+  ::-webkit-input-placeholder { /* Edge */
+    text-align: left;
   }
-  ::-webkit-scrollbar,
-  *::-webkit-scrollbar {
-    display: inherit;
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    text-align: left;
   }
-  ::-webkit-scrollbar-track {
-    // -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3) !important;
-    // border-radius: 8px!important;
-    background-color: #f6f6f6!important;
+  ::placeholder {
+    text-align: left;
   }
-  ::-webkit-scrollbar {
-    width: 10px!important;
-    background-color: #f6f6f6!important;
-  }
-  ::-webkit-scrollbar-thumb {
-    // border-radius: 8px!important;
-    // -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,.3)!important;
-    border: 2px solid #f6f6f6 !important;
-    background-color: #BEBEBE!important;
-    opacity: 0.7;
-    border-radius: 7px !important;
-  }
-
 }

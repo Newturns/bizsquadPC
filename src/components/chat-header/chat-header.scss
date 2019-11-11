@@ -1,10 +1,6 @@
 chat-header {
 
   // start header CSS //
-
-  .drag{
-    -webkit-app-region: drag;
-  }
   .listBorder{
     height: 84px;
     border-bottom: 1px solid #e0e0e0 !important;
@@ -13,12 +9,6 @@ chat-header {
     position: absolute;
     top: 1px;
     right: 1px;
-  }
-  .opacity{
-    position: absolute;
-    right: 70px;
-    top: -8px;
-    -webkit-app-region: no-drag;
   }
   .login-top-menu{
     -webkit-app-region: no-drag;
@@ -56,6 +46,42 @@ chat-header {
   }
 
   // end header CSS //
+
+
+
+  .header-frame {
+    background-color: #fcfcfc;
+
+    .chat-title-frame {
+      width: 0;
+      .chat_title {
+        font-size: 14px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        color: #0d1c2e;
+        div {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+      }
+    }
+
+
+    .memeber-count {
+      font-size: 12px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      letter-spacing: normal;
+      color: #707c97;
+    }
+
+    ion-range {
+      padding: 0 !important;
+    }
+  }
 
 
 }

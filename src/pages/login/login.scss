@@ -1,128 +1,25 @@
 page-login {
-    background: white;
-    .grid {
-        padding: 0;
-        .col {
-            padding: 0;
-        }
-    }
-    #wrapper {
-      margin-top: 177px;
-      text-align: center;
-    }
-    .login-top-menu{
-        -webkit-app-region: no-drag;
-        color: #757272;
-    }
-    .windowMimimize{
-        padding-top: 8px;
-    }
-    ion-img{
-        background-color: #f6f6f6;
-    }
-
-    #username {
-        -webkit-app-region: no-drag;
-        width: 95%;
-        height: 36px;
-        margin-top: 20px;
-        border: 1px solid #d3d3d3;
-        border-radius: 4px 4px 0 0;
-        border-bottom: 0px;
-        padding-left: 12px;
-        font-size: 13px;
-      }
-
-    #password {
-        -webkit-app-region: no-drag;
-        width: 95%;
-        height: 36px;
-        border: 1px solid #d3d3d3;
-        border-radius: 0 0 4px 4px;
-        padding-left: 12px;
-        font-size: 13px;
-    }
-    #signinBtn {
-        -webkit-app-region: no-drag;
-        color: #fff;
-        background-color: #62a8ea;
-        border: none;
-        border-radius: 25px;
-        width: 100%;
-        height: 40px;
-        margin-top: 15px;
-    }
-    .textLabel {
-        margin-top: 10px;
-        margin-left: 10px;
-        display: inline-block;
-        width: 100%;
-      }
-
-    .left {
-        float: left;
-        display: block;
-    }
-
-    .right {
-        float: right;
-        display: block;
-    }
-    .txt {
-        font-family: 'Noto Sans KR', sans-serif;
-        font-size: 13px;
-        color: #7d8288;
-        text-decoration: none;
-      }
-    ion-checkbox{
-        -webkit-app-region: no-drag;
-        margin-right: 5px;
-        top:2px;
-    }
-    #footer {
-        margin-top: 45px;
-        text-align: left;
-    }
-
-    #footer button {
-        -webkit-app-region: no-drag;
-        width: 65px;
-        height: 25px;
-        border-radius: 20px;
-        border: 1px solid #D3D3D3;
-        background-color: white;
-        margin-top: -5px;
-    }
-
-    #footer button a {
-        -webkit-app-region: no-drag;
-        color: #5B9CED;
-        text-decoration: none;
-    }
-    .version{
-        position: absolute;
-        bottom: 2%;
-        right: 3%;
-        color: #888;
-        font-size: 12px;
-        font-weight: bold;
-    }
-
-
 
   //new design
   .login-content{
     // background-color: #f6f6f6;
-    -webkit-app-region: drag
-  }
-  .login-btn {
-    border-radius: 6px;
-    text-transform: capitalize;
-    height: 48px;
-    background-color: #0c5899;
-  }
-  .login-btn:hover {
-    background-color: #0c5899;
+    -webkit-app-region: drag;
+    .top-side-menu {
+      -webkit-app-region: no-drag !important;
+    }
+
+    .login-btn {
+      -webkit-app-region: no-drag !important;
+      border-radius: 6px;
+      text-transform: capitalize;
+      height: 48px;
+      background-color: #0c5899;
+    }
+    .sign-up-btn{
+      -webkit-app-region: no-drag !important;
+      width: 100px;
+      height: 40px;
+    }
   }
   .inputTitle {
     font-family: Roboto;
@@ -187,12 +84,9 @@ page-login {
     letter-spacing: 0.4px;
     color: #707c97;
   }
-  .sign-up-btn{
-    width: 100px;
-    height: 40px;
-  }
 
   .login-footer {
+    -webkit-app-region: no-drag !important;
     height: 45px;
     font-size: 11px;
     font-weight: normal;

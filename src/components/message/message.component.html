@@ -1,131 +1,68 @@
-<div class=" message-frame d-flex text-biz-dark mb-3" *ngIf="message">
+<div class=" message-frame d-flex text-biz-dark mb-3" *ngIf="!message.data.isNotice; else notice">
 
-  <ng-container *ngIf="!message.data.isNotice; else notice">
+  <!--LEFT AVATAR-->
+  <div class="flex-shrink-0">
+    <app-avatar-button [user]="currentUserData"></app-avatar-button>
+  </div>
 
-    <!--LEFT AVATAR-->
-    <div class="flex-shrink-0">
-      <app-avatar-button [user]="currentUserData"></app-avatar-button>
+  <!--CENTER-->
+  <div class="flex-grow-1 message-content d-flex flex-column flex-shrink-1" style="word-break: break-word;">
+
+    <!--NAME + TITLE-->
+    <div class="d-flex align-items-center justify-content-between textdrag"
+         [ngClass]="{'font-weight-bold': isMyMessage}">
+      <span class="font-14 text-facebook mr-2">{{displayName}} </span>
+      <span class="font-12 text-biz-gray"> {{message.data.created | timestampToDate | date: 'HH:mm'}}</span>
     </div>
 
-    <!--CENTER-->
-    <div class="flex-grow-1 message-content d-flex flex-column flex-shrink-1" style="word-break: break-word;">
+    <!--TITLE-->
+    <div class="font-16 text-biz-dark font-weight-500 pb-2 post-title textdrag" *ngIf="message.data.title">{{message.data.title}}</div>
 
-      <!--NAME + TITLE-->
-      <div class="d-flex align-items-center justify-content-between textdrag"
-           [ngClass]="{'font-weight-bold': isMyMessage}">
-        <span class="font-14 text-facebook mr-2">{{displayName}} </span>
-        <span class="font-12 text-biz-gray"> {{message.data.created | timestampToDate | date: 'HH:mm'}}</span>
+    <div class="d-flex">
+      <div [innerHTML]="text | sanitizingHtml" class="content-html overflow-hidden font-13 text-biz-dark flex-grow-1 textdrag">
       </div>
-
-      <!--TITLE-->
-      <div class="font-16 text-biz-dark font-weight-500 pb-2 post-title textdrag" *ngIf="message.data.title">{{message.data.title}}</div>
-
-      <!--quill.snow.css have 12px 15px padding-->
-<!--      <div class="ql-editor-custom pb-2 textdrag">-->
-<!--        <quill-editor-->
-<!--          [theme]="'bubble'"-->
-<!--          [format]="'html'"-->
-<!--          [(ngModel)]="text"-->
-<!--          [readOnly]="true"-->
-<!--          [modules]="{toolbar: false}">-->
-<!--        </quill-editor>-->
-<!--      </div>-->
-
-      <div class="d-flex">
-        <div [innerHTML]="text | sanitizingHtml" class="content-html overflow-hidden font-13 text-biz-dark flex-grow-1 textdrag">
-        </div>
-        <div class="flex-shrink-0 d-flex align-items-start" *ngIf="showUnreadCount && unreadCount > 0">
-          <span class="font-12 text-biz-gray">{{unreadCount}}</span>
-        </div>
+      <div class="flex-shrink-0 d-flex align-items-start" *ngIf="showUnreadCount && unreadCount > 0">
+        <span class="font-12 text-biz-gray">{{unreadCount}}</span>
       </div>
+    </div>
 
-<!--      <div [innerHTML]="text | sanitizingHtml" class="overflow-hidden font-13 text-biz-dark textdrag"></div>-->
+    <!--<div [innerHTML]="text | sanitizingHtml" class="overflow-hidden font-13 text-biz-dark textdrag"></div>-->
 
 
-      <!--SHOW FILES-->
-      <div class="msg-file-frame " *ngIf="message.data.message.files &&  message.data.message.files.length > 0">
+    <!--SHOW FILES-->
+    <div class="msg-file-frame " *ngIf="message.data.message.files &&  message.data.message.files.length > 0">
 
-        <div class = "msg-file" *ngFor="let file of message.data.message.files">
+      <div class = "msg-file" *ngFor="let file of message.data.message.files">
 
-          <!--IMAGE-->
-          <div class="msg-file-image" *ngIf="isImageFile(file) === true">
+        <!--IMAGE-->
+        <div class="msg-file-image" *ngIf="isImageFile(file) === true">
 
-            <biz-img [file]="file"></biz-img>
+          <biz-img [file]="file"></biz-img>
 
-            <div class="font-13">
-              <a target="_blank" href="{{file.url}}">{{file.name}}({{file.size / 1000 |number:'1.0-0'}}kb)</a>
-            </div>
-
+          <div class="font-13">
+            <a target="_blank" href="{{file.url}}">{{file.name}}({{file.size / 1000 |number:'1.0-0'}}kb)</a>
           </div>
 
-          <!--BINARY-->
-          <div class="mb-2" *ngIf="isImageFile(file) === false">
-            <div style="word-wrap: break-word">
-              <a target="_blank" href="{{file.url}}" class="text-primary font-13">{{file.name}} ({{file.size / 1000 | number: '1.0-0'}}kb)</a>
-            </div>
+        </div>
+
+        <!--BINARY-->
+        <div class="mb-2" *ngIf="isImageFile(file) === false">
+          <div style="word-wrap: break-word">
+            <a target="_blank" href="{{file.url}}" class="text-primary font-13">{{file.name}} ({{file.size / 1000 | number: '1.0-0'}}kb)</a>
           </div>
         </div>
       </div>
     </div>
-
-  </ng-container>
+  </div>
 
 </div>
 
 
 
 <ng-template #notice>
-
-  <div class="w-100 d-flex justify-content-center align-items-center px-3 py-2 bg-light font-14 border">
-
-    <ng-container *ngIf="message.data.message.notice">
-
-      <!--notice.type 으로 판명-->
-      <ng-container *ngIf="message.data.message.notice.type != null">
-        <ng-container [ngSwitch]="message.data.message.notice.type">
-
-          <!--START 누가 시작함.-->
-          <ng-container *ngSwitchCase="'init'">
-            <div class="text-secondary" >
-              {{langPack['create_chat_room']}}
-            </div>
-          </ng-container>
-
-          <!--EXIT 채팅방에서 누가 나감-->
-          <ng-container *ngSwitchCase="'exit'">
-            <div class="text-secondary" >
-              {{makeNoticeMessage() | async}}
-            </div>
-          </ng-container>
-
-          <!--INVITE 누가 들어옴.-->
-          <ng-container *ngSwitchCase="'invite'">
-            <div class="text-secondary">
-              {{makeNoticeMessage() | async}}
-            </div>
-          </ng-container>
-
-
-        </ng-container>
-      </ng-container>
-
-      <!--notice.type 은 없고, notice.langKey만 있다.-->
-      <ng-container *ngIf="message.data.message.notice.type == null && message.data.message.notice.langKey">
-        <div class="text-secondary">
-          {{langPack[message.data.message.notice.langKey]}}
-        </div>
-      </ng-container>
-
-    </ng-container>
-
-
-    <!--notice 없이 text 만 있다.-->
-    <ng-container *ngIf="!message.data.message.notice && message.data.message.text">
-      <div class="text-secondary">
-        {{message.data.message.text}}
-      </div>
-    </ng-container>
-
-  </div>
-
+  <ng-container *ngIf="message.data.message.notice">
+    <div class="d-flex flex-column mb-3 align-items-center">
+      <biz-chat-notice [message]="message"></biz-chat-notice>
+    </div>
+  </ng-container>
 </ng-template>

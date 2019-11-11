@@ -10,6 +10,7 @@ import {MembersPopoverComponent} from "../members-popover/members-popover";
 import {TakeUntil} from "../../biz-common/take-until";
 import {AlertProvider} from "../../providers/alert/alert";
 import {ChatService} from "../../providers/chat.service";
+import {takeUntil} from "rxjs/operators";
 
 /**
  * Generated class for the ChatHeaderComponent component.
@@ -23,18 +24,18 @@ import {ChatService} from "../../providers/chat.service";
 })
 export class ChatHeaderComponent extends TakeUntil {
 
-  private langPack : any;
-
   public memberChat : boolean;
 
-  notifications = 'notifications' || 'notifications-off';
+  notifications = 'Icon_Outline_bell' || 'Icon_Outline_bell_off';
   private userCustomData : any;
+
+  senderUid : string;
 
   @Input()
   set chat(room: IChat) {
     if(room) {
       let reload = true;
-
+      this.senderUid = room.data.lastMessage.sender;
       if(this.room){
         const oldCount = this._room.isPublic()? this.bizFire.currentBizGroup.getMemberCount() : this._room.getMemberCount();
         const newCount = room.isPublic() ? this.bizFire.currentBizGroup.getMemberCount() : room.getMemberCount();
@@ -63,6 +64,7 @@ export class ChatHeaderComponent extends TakeUntil {
   public chatTitle : string = '';
   public userCount : number = 0;
 
+
   constructor(
     public electron : Electron,
     private popoverCtrl :PopoverController,
@@ -79,16 +81,16 @@ export class ChatHeaderComponent extends TakeUntil {
         this.userCustomData = data;
         if(this.userCustomData[this.room.cid] == null ||
           this.userCustomData[this.room.cid]['notify'] == null){
-          this.notifications = 'notifications';
+          this.notifications = 'Icon_Outline_bell';
         } else {
-          this.notifications = this.userCustomData[this.room.cid]['notify'] === true ? 'notifications' : 'notifications-off';
+          this.notifications = this.userCustomData[this.room.cid]['notify'] === true ? 'Icon_Outline_bell' : 'Icon_Outline_bell_off';
         }
-      })
+      });
   }
 
   notificationOnOff() {
-    const noStatus = this.notifications !== 'notifications';
-    console.log(this.room.cid, 'notificationOnOff', `set to`, noStatus);
+    const noStatus = this.notifications !== 'Icon_Outline_bell';
+    console.log(this.room.cid, 'Icon_Outline_bell_off', `set to`, noStatus);
     // get delete or add
     this.bizFire.userDataRef.set({[this.room.cid]: { notify: noStatus }}, {merge: true});
   }
@@ -131,7 +133,7 @@ export class ChatHeaderComponent extends TakeUntil {
               this.chatTitle += u.data.displayName;
             });
             if (users.length === 0) {
-              this.chatTitle = this.langPack['no_members'];
+              this.chatTitle = "There are no members to chat with.";
             }
           });
 

@@ -1,0 +1,54 @@
+biz-chat-attach {
+
+  .file-frame {
+    &.otherMessage {
+
+      .file-info{
+        color: white;
+        .file-link {
+          color: white;
+          word-break: break-all;
+        }
+        .file-size {
+          opacity: 0.6;
+          font-size: 12px;
+        }
+      }
+
+      .custom-button {
+        width: 35px;
+        height: 35px;
+        color: white;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 6px;
+      }
+    }
+
+    &.isMyMessage {
+      margin-left: 0;
+
+      .file-info{
+        color: #707c97;
+        .file-link {
+          color: #707c97;
+          word-break: break-all;
+        }
+        .file-size {
+          opacity: 0.6;
+          font-size: 12px;
+        }
+      }
+      .custom-button {
+        width: 35px;
+        height: 35px;
+        color: #707c97;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 6px;
+      }
+    }
+  }
+
+  .file-frame:nth-child(n+2) {
+    padding-top: 10px;
+  }
+}

@@ -51,30 +51,33 @@
   </div>
   <div class="frame-con bg-white d-flex flex-column justify-content-center">
     <div class="menu-title pl-4 pb-4">{{ langPack['taskbox'] }}</div>
-    <div class="menu-con d-flex justify-content-between align-items-center">
-      <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
-        <div class="menu-box d-flex align-items-center justify-content-center">
-          <img src="imgs/renewal/Icon_sales.svg">
+    <div class="menu-con d-flex flex-column">
+      <!--   첫 줄   -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
+          <div class="menu-box d-flex align-items-center justify-content-center">
+            <img src="imgs/renewal/Icon_video.svg">
+          </div>
+          <div class="menu-text mt-2">{{langPack['video_chat']}}</div>
         </div>
-        <div class="menu-text mt-3">{{ langPack['SFA'] }}</div>
-      </div>
-      <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
-        <div class="menu-box d-flex align-items-center justify-content-center">
-          <img src="imgs/renewal/Icon_board.svg">
+        <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
+          <div class="menu-box d-flex align-items-center justify-content-center">
+            <img src="imgs/renewal/Icon_sales.svg">
+          </div>
+          <div class="menu-text mt-2">{{ langPack['SFA'] }}</div>
         </div>
-        <div class="menu-text mt-3">{{ langPack['conference'] }}</div>
-      </div>
-      <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
-        <div class="menu-box d-flex align-items-center justify-content-center">
-          <img src="imgs/renewal/Icon_task.svg">
+        <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
+          <div class="menu-box d-flex align-items-center justify-content-center">
+            <img src="imgs/renewal/Icon_workflow.svg">
+          </div>
+          <div class="menu-text mt-2">{{ langPack['workflow'] }}</div>
         </div>
-        <div class="menu-text mt-3">{{ langPack['task'] }}</div>
-      </div>
-      <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
-        <div class="menu-box d-flex align-items-center justify-content-center">
-          <img src="imgs/renewal/Icon_workflow.svg">
+        <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('serviceinfo',group.gid)">
+          <div class="menu-box d-flex align-items-center justify-content-center">
+            <img src="imgs/renewal/Icon_task.svg">
+          </div>
+          <div class="menu-text mt-2">{{ langPack['task'] }}</div>
         </div>
-        <div class="menu-text mt-3">{{ langPack['workflow'] }}</div>
       </div>
     </div>
   </div>
@@ -83,10 +86,10 @@
 
   <div class="frame-con bg-white d-flex flex-column justify-content-center">
     <div class="menu-title pl-4 pb-4">{{ langPack['apps'] }}</div>
-    <div class="menu-con d-flex align-items-center">
+    <div class="menu-con d-flex align-items-center justify-content-between">
       <!--  추가되는 링크 for  -->
       <ng-container *ngFor="let link of userCustomLinks">
-        <div class="d-flex flex-column align-items-center justify-content-center" style="margin-right: 50px">
+        <div class="d-flex flex-column align-items-center justify-content-center">
           <div class="menu-box d-flex align-items-center justify-content-center" (mouseenter)="link.data.hidden=false" (mouseleave)="link.data.hidden=true">
             <div class="white-circle d-flex align-items-center justify-content-center">
               <img class="favicon-img pointer" (click)="goLink($event,link)" *ngIf="link.data.img" src="{{ link.data.img }}">
@@ -94,17 +97,16 @@
             </div>
             <ion-icon name="remove-circle" class="link-remove" (click)="removeLink($event,link)" [hidden]="link.data.hidden"></ion-icon>
           </div>
-          <div class="menu-text text-60 mt-3 pointer text-center">{{ link.data.title }}</div>
+          <div class="menu-text text-55 mt-2 pointer text-center">{{ link.data.title }}</div>
         </div>
       </ng-container>
-
-      <div class="d-flex flex-column align-items-center justify-content-center" *ngIf="9 > userCustomLinks.length" (click)="presentPopover($event)">
+      <div class="d-flex flex-column align-items-center justify-content-center" *ngIf="4 > userCustomLinks.length" (click)="presentPopover($event)">
         <div class="menu-box d-flex align-items-center justify-content-center">
           <div class="white-circle d-flex align-items-center justify-content-center">
             <img src="imgs/renewal/Icon_plus.svg">
           </div>
         </div>
-        <div class="menu-text mt-3 text-center">{{ langPack['add'] }}</div>
+        <div class="menu-text mt-2 text-center">{{ langPack['add'] }}</div>
       </div>
     </div>
   </div>

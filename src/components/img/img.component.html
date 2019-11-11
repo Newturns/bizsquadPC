@@ -1,14 +1,12 @@
-<div *ngIf="file" class="">
-  <ng-container>
 
-    <a class="cursor-pointer" [hidden]="showSpinner" (click)="electron.goLink(file.url)">
-      <img src="{{downloadImage}}" class="default-frame" (load)="onLoad($event)">
-    </a>
+<ng-container *ngIf="file">
 
-    <div class="d-flex justify-content-center align-items-center default-frame bg-white" *ngIf="showSpinner" >
-      <img src="imgs/loading_5.gif">
-    </div>
+  <a class="cursor-pointer" [hidden]="showSpinner" (click)="electron.goLink(file.url)">
+    <img src="{{downloadImage}}" class="default-frame" (load)="onLoad($event)">
+  </a>
 
-  </ng-container>
+  <div class="d-flex justify-content-center align-items-center default-frame bg-white" *ngIf="showSpinner" >
+    <img src="imgs/renewal/loading_5.gif">
+  </div>
 
-</div>
+</ng-container>

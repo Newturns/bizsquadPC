@@ -5,7 +5,7 @@ biz-squad-item {
       height: 56px;
       border-radius: 8px;
       background-color: rgba(255, 255, 255, 0.1);
-      padding: 13px 13px 13px 15px;
+      padding: 13px 13px 13px 15px !important;
 
       .squad-image{
         margin-right: 12px;
@@ -69,15 +69,9 @@ biz-squad-item {
   }
 
   .squadSelected{
-    margin-left: 0px;
     background-color: white !important;
-    border-bottom-left-radius: 0px;
-    border-top-left-radius: 0px;
     height: 56px;
-    padding: 13px 13px 13px 15px;
     border-radius: 8px;
-    border-bottom-left-radius: 0px;
-    border-top-left-radius: 0px;
 
     .squad-name{
       font-family: Roboto;

@@ -37,7 +37,7 @@ export class ChatFramePage extends TakeUntil{
   chatForm : FormGroup;
 
   //비즈그룹 데이터
-  private selectBizGroup : IBizGroup;
+  private selectBizGroup : IBizGroup = null;
 
   // 부모 윈도우에서 받은 룸 데이터 : getChatroom.
   // 새로 로드하는 룸 데이터 : newChatRoom.

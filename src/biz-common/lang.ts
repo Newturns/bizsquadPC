@@ -196,6 +196,11 @@ export const language = {
         "en": "SFA",
         "ja": "販売管理"
       },
+      "video_chat": {
+        "ko": "화상회의",
+        "en": "Video Chat",
+        "ja": "ビデオ会議"
+      },
       "conference": {
         "ko": "회의실",
         "en": "Conference",
@@ -204,7 +209,7 @@ export const language = {
       "task": {
         "ko": "업무일지",
         "en": "Tasklog",
-        "ja": "業務日誌"
+        "ja": "電子決濟"
       },
       "workflow": {
         "ko": "전자결재",

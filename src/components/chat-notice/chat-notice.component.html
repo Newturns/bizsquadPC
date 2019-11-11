@@ -1,0 +1,39 @@
+<div class="w-100 d-flex justify-content-center align-items-center px-3 py-2 font-14 mb-3">
+
+  <!--notice.type 으로 판명-->
+  <ng-container *ngIf="message.data.message.notice.type != null">
+    <ng-container [ngSwitch]="message.data.message.notice.type">
+
+      <!--START 누가 시작함.-->
+      <ng-container *ngSwitchCase="'init'">
+        <div class="notice-text">
+          {{langPack['create_chat_room']}}
+        </div>
+      </ng-container>
+
+      <!--EXIT 채팅방에서 누가 나감-->
+      <ng-container *ngSwitchCase="'exit'">
+        <div class="notice-text" >
+          {{makeNoticeMessage() | async}}
+        </div>
+      </ng-container>
+
+      <!--INVITE 누가 들어옴.-->
+      <ng-container *ngSwitchCase="'invite'">
+        <div class="notice-text">
+          {{makeNoticeMessage() | async}}
+        </div>
+      </ng-container>
+
+
+    </ng-container>
+  </ng-container>
+
+  <!--notice.type 은 없고, notice.langKey만 있다.-->
+  <ng-container *ngIf="message.data.message.notice.type == null && message.data.message.notice.langKey">
+    <div class="notice-text">
+      {{langPack[message.data.message.notice.langKey]}}
+    </div>
+  </ng-container>
+
+</div>

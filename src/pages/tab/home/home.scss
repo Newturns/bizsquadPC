@@ -4,7 +4,7 @@ page-home {
   ion-content{
     position: absolute;
     ion-item{
-      height: 80px;
+      height: 70px;
       margin: 1px 0 !important;
     }
   }
@@ -45,7 +45,7 @@ page-home {
       width: 13px;
       height: 13px;
       left:45px;
-      bottom: 20px;
+      bottom: 15px;
       color: transparent;
       font-size: 7px;
       line-height: 1.5;
@@ -106,7 +106,7 @@ page-home {
   }
 
   .menu-text {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
@@ -114,24 +114,20 @@ page-home {
     letter-spacing: normal;
     color: #707c97;
   }
-  .text-60 {
-    width: 60px;
+  .text-55 {
+    width: 55px;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
   }
 
   .frame-con {
-    height: 170px;
-
+    padding: 15px 0;
     .menu-con {
-      padding: 0 35px;
-      max-width: 460px;
-      max-height: 170px;
-
+      padding: 0 30px;
       .menu-box {
-        width: 60px;
-        height: 60px;
+        width: 55px;
+        height: 55px;
         border-radius: 22px;
         background-color: #e3e7f280;
         cursor: pointer;
@@ -160,7 +156,7 @@ page-home {
     }
 
     .menu-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       font-stretch: normal;
       font-style: normal;
@@ -171,7 +167,6 @@ page-home {
   }
 
   .notice-con {
-    height: 250px;
     .menu-title {
       border-bottom: 1px solid #e3e7f2;
     }
@@ -179,7 +174,7 @@ page-home {
     .notice-msg-con {
 
       //height
-      height: 50px;
+      height: 40px;
 
       .notice-title {
         font-size: 14px;

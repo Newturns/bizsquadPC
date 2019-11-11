@@ -21,6 +21,9 @@ import {NoticeItemComponent} from "./notice-item/notice-item.component";
 import {ChatItemComponent} from "./chat-item/chat-item.component";
 import {GroupLogoComponent} from "./group-logo/group-logo.component";
 import {BizCheckBtnComponent} from "./biz-check-btn/biz-check-btn.component";
+import {ChatNoticeComponent} from "./chat-notice/chat-notice.component";
+import {MessageBalloonComponent} from "./message-balloon/message-balloon.component";
+import {ChatAttachComponent} from "./chat-attach/chat-attach.component";
 
 @NgModule({
 	declarations: [
@@ -40,6 +43,9 @@ import {BizCheckBtnComponent} from "./biz-check-btn/biz-check-btn.component";
     ChatItemComponent,
     GroupLogoComponent,
     BizCheckBtnComponent,
+    ChatNoticeComponent,
+    MessageBalloonComponent,
+    ChatAttachComponent,
     GroupColorDirective
   ],
   imports: [
@@ -70,7 +76,10 @@ import {BizCheckBtnComponent} from "./biz-check-btn/biz-check-btn.component";
     ChatItemComponent,
     GroupLogoComponent,
     BizCheckBtnComponent,
+    ChatNoticeComponent,
     GroupColorDirective,
+    ChatAttachComponent,
+    MessageBalloonComponent,
 
   ],
   entryComponents: [

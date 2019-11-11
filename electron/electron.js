@@ -89,11 +89,10 @@ function createWindow() {
 
     // windowStateKeeper
     let mainWindowState = windowStateKeeper({
-        file: 'mainWindow.json',
-        defaultWidth: 460,
-        defaultHeight: 874
+        file: 'mainWindow_01.json',
+        defaultWidth: 400,
+        defaultHeight: 756
     });
-
 
     // Create the browser window.
     win = new BrowserWindow({
@@ -102,8 +101,8 @@ function createWindow() {
         'width': mainWindowState.width,
         'height': mainWindowState.height,
         frame: false,
-        minWidth:460,
-        minHeight:874,
+        minWidth:400,
+        minHeight:756,
         maxWidth:600,
         maxHeight:1024,
         titleBarStyle: 'hidden-inset',
@@ -225,9 +224,9 @@ ipcMain.on('createChatRoom', (event, chatRoom) => {
 
         // windowStateKeeper
         let chatWindowState = windowStateKeeper({
-            file: `${chatRoomId}.json`,
-            defaultWidth: 350,
-            defaultHeight: 600,
+            file: `${chatRoomId}_01.json`,
+            defaultWidth: 400,
+            defaultHeight: 700,
         });
 
         testRooms[chatRoomId] = new BrowserWindow({
@@ -236,10 +235,10 @@ ipcMain.on('createChatRoom', (event, chatRoom) => {
             'width': chatWindowState.width,
             'height': chatWindowState.height,
             frame: false,
-            minWidth:350,
-            minHeight:600,
-            maxWidth:600,
-            maxHeight:750,
+            minWidth:400,
+            minHeight:700,
+            maxWidth:800,
+            maxHeight:1024,
             titleBarStyle: 'hidden-inset',
             opacity: 1,
         });

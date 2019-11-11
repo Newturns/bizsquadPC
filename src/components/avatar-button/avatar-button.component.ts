@@ -87,25 +87,18 @@ export class AvatarButtonComponent extends TakeUntil implements OnInit {
   private setUserData(uid, userData: IUserData){
 
     this.currentUserId = uid;
-    this.isMyMessage = uid === this.bizFire.uid;
-    if(this.isMyMessage){
-
-      this.setUser(this.bizFire.currentUserValue);
-
+    
+    if(userData == null){
+      // get user data from cache
+      this.cacheService.userGetObserver(uid)
+        .pipe(this.takeUntil)
+        .subscribe((data: IUser) => {
+          if(data != null){
+            this.setUser(data.data);
+          }
+        });
     } else {
-
-      if(userData == null){
-        // get user data from cache
-        this.cacheService.userGetObserver(uid)
-          .pipe(this.takeUntil)
-          .subscribe((data: IUser) => {
-            if(data != null){
-              this.setUser(data.data);
-            }
-          });
-      } else {
-        this.setUser(userData);
-      }
+      this.setUser(userData);
     }
   }
 

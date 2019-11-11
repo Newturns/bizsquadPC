@@ -1,6 +1,7 @@
 import { FormControl } from '@angular/forms';
 import {IUser, IUserData} from "../_models";
 import {ISquad} from "../providers/squad.service";
+import {NEWCOLORS} from "./colors";
 
 export const STRINGS = {
   STRING_BIZGROUPS: 'bizgroups',
@@ -333,5 +334,25 @@ export class Commons {
         }
         return ret;
       }
+
+  // #4343434
+  static getGroupColorStyleName(value) : string {
+    switch (value) {
+      case NEWCOLORS.duskblue.main:
+        return 'duskblue';
+      case NEWCOLORS.blue.main:
+        return 'blue';
+      case NEWCOLORS.dark.main:
+        return 'dark';
+      case NEWCOLORS.green.main:
+        return 'green';
+      case NEWCOLORS.orange.main:
+        return 'orange';
+      case NEWCOLORS.purple.main:
+        return 'purple';
+      case NEWCOLORS.red.main:
+        return 'red';
+    }
+  }
 
 }

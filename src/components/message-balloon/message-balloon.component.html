@@ -1,0 +1,59 @@
+<ng-container *ngIf="!message.data.isNotice; else notice">
+
+  <ng-container *ngIf="isMyMessage">
+    <div class="d-flex justify-content-end">
+      <div class="d-flex flex-column justify-content-center">
+        <div class="font-12 text-muted"> {{message.data.created | timestampToDate | date: 'HH:mm'}}</div>
+        <div class="read-count text-right">{{readCount}}</div>
+<!--        <div class="d-flex justify-content-center">-->
+<!--          <i class="material-icons">more_horiz</i>-->
+<!--        </div>-->
+      </div>
+
+      <div class="myMessage m-2 p-3">
+        <ng-container *ngIf="message.data.message.files &&  message.data.message.files.length > 0; else myText">
+          <biz-chat-attach [files]="message.data.message.files" [isMyMessage]="isMyMessage"></biz-chat-attach>
+        </ng-container>
+        <ng-template #myText>
+          <span [innerHTML]="text | sanitizingHtml"></span>
+        </ng-template>
+      </div>
+
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!isMyMessage">
+    <div class="m-3">
+      <!--childContentPadding 추가 됨.-->
+      <app-avatar-button [user]="currentUserData" [displayNameOn]="true" [childContentPadding]="'7px'">
+        <div class="d-flex justify-content-start">
+
+          <div class="otherMessage p-3" [ngClass]="groupColorBalloon()">
+            <ng-container *ngIf="message.data.message.files &&  message.data.message.files.length > 0; else otherText">
+              <biz-chat-attach [files]="message.data.message.files" [isMyMessage]="isMyMessage"></biz-chat-attach>
+            </ng-container>
+            <ng-template #otherText>
+              <span [innerHTML]="text | sanitizingHtml"></span>
+            </ng-template>
+          </div>
+
+          <div class="d-flex flex-column justify-content-center ml-2">
+            <div class="font-12 text-muted"> {{message.data.created | timestampToDate | date: 'HH:mm'}}</div>
+            <div class="read-count">{{readCount}}</div>
+<!--            <div class="d-flex justify-content-center">-->
+<!--              <i class="material-icons">more_horiz</i>-->
+<!--            </div>-->
+          </div>
+        </div>
+      </app-avatar-button>
+    </div>
+  </ng-container>
+
+</ng-container>
+<!--*ngIf="message.data.message.files &&  message.data.message.files.length > 0"-->
+
+<ng-template #notice>
+  <ng-container *ngIf="message.data.message.notice">
+    <biz-chat-notice [message]="message"></biz-chat-notice>
+  </ng-container>
+</ng-template>

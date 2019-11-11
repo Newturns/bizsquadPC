@@ -9,29 +9,35 @@
 <ion-content #scrollContent (ionScroll)="scrollHandler($event)">
   <div class="message-wrap">
     <ng-container *ngFor="let message of chatContent; let i = index">
-      <div class="d-flex justify-content-center">
-        <p class="differentDay p-2 pl-3 pr-3" *ngIf="isDifferentDay(i)">{{ getMessageDate(i) }}</p>
+      <div class="d-flex align-items-center mb-3" *ngIf="isDifferentDay(i)">
+        <div class="d-flex flex-grow-1 ml-3" style="background-color: #ECECEC; height:1px"></div>
+        <div class="differentDay pl-3 pr-3">{{ getMessageDate(i) }}</div>
+        <div class="d-flex flex-grow-1 mr-3" style="background-color: #ECECEC; height:1px"></div>
       </div>
-      <app-message [menu]="false" [comment]="false" [message]="message" [showUnreadCount]=true></app-message>
+      <biz-message-balloon [message]="message"></biz-message-balloon>
+<!--      <app-message [menu]="false" [comment]="false" [message]="message" [showUnreadCount]=true></app-message>-->
     </ng-container>
   </div>
 </ion-content>
 
 <ion-footer no-border>
-  <div class="input-menu d-flex justify-content-between align-items-center">
-    <button ion-button clear icon-only small color="dark" (click)="fileAttach.click()">
-      <ion-icon name="attach"></ion-icon>
-    </button>
-    <input #fileAttach type="file" style="display: none;" #fileAttach (change)="file($event)" accept="image/jpeg,image/gif,image/png">
-    <span class="chatLengthError" *ngIf="chatLengthError">{{ chatLengthError }} </span>
-  </div>
-  <div class="input-wrap">
-    <form [formGroup]="chatForm">
-      <textarea formControlName="chat" (keydown)="keydown($event)">
-      </textarea>
-    </form>
-    <button type="submit" color="dark" class="sendButton" ion-button item-right
-            (click)="sendMsg(chatForm.value.chat)" [disabled]="chatForm.invalid">send
-    </button>
-  </div>
+  <form [formGroup]="chatForm">
+    <div class="chat-input-frame p-4 d-flex align-items-end">
+      <div class="file-attach-div d-flex align-items-center justify-content-center pointer mb-2" (click)="fileAttach.click()">
+        <img src="imgs/renewal/Icon_circle_attach.svg">
+        <input type="file" style="display: none;" accept="*" #fileAttach (change)="file($event)">
+      </div>
+
+      <div class="flex-grow-1 mx-3">
+        <ion-textarea rows="1" formControlName="chat" placeholder="Type a message here" (keydown)="keydown($event)" autosize>
+        </ion-textarea>
+      </div>
+      <div class="mb-2">
+        <div class="circle_send d-flex align-items-center justify-content-center pointer" (click)="sendMsg(chatForm.value.chat)"
+             [ngStyle]="{'background-color': selectBizGroup != null ? selectBizGroup.data.team_color : 'silver'}">
+          <img src="imgs/renewal/Icon_Fill_navigation.svg">
+        </div>
+      </div>
+    </div>
+  </form>
 </ion-footer>
