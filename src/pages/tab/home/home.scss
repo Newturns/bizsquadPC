@@ -59,18 +59,19 @@ page-home {
   }
 
   .popup {
-      width: 100px;
-      max-width: 110px;
-      font-size: 12px;
-      color: #434343;
-      background-color: white;
-      border: 1px solid #E2E4E5;
-      border-radius: 2px;
-      // display: none;
-      position: absolute;
-      z-index: 1;
-      right:25px;
-      top:45px;
+    width: 100px;
+    max-width: 110px;
+    font-size: 12px;
+    color: #434343;
+    background-color: white;
+    //border: 1px solid #E2E4E5;
+    border-radius: 5px;
+    // display: none;
+    position: absolute;
+    z-index: 1;
+    right:25px;
+    top:45px;
+    box-shadow: 0 10px 25px 0 #00000019;
   }
   .statusMenu{
       width: 70px !important;
@@ -93,7 +94,7 @@ page-home {
   }
 
   .popup li {
-      height: 23px;
+      height: 26px;
       text-align: left;
       padding-top: 3px;
       padding-left: 5px;
