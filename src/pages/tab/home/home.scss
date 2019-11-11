@@ -121,49 +121,75 @@ page-home {
     white-space:nowrap;
   }
 
-  .frame-con {
-    padding: 15px 0;
-    .menu-con {
-      padding: 0 30px;
-      .menu-box {
-        width: 55px;
-        height: 55px;
-        border-radius: 22px;
-        background-color: #e3e7f280;
-        cursor: pointer;
+  .home-con-frame {
+    height: calc(100vh - 204px);
+    background-color: white;
+    .home-con {
+      padding: 15px 0;
+      .menu-con {
         position: relative;
-        .white-circle {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background-color: #ffffff;
-        }
-        .favicon-img {
-          width: 32px;
-          height: 32px;
-          border-radius: 5px;
-        }
-
-        .link-remove{
-          position: absolute;
-          right: 0;
-          top: 0;
-          padding:5px;
-          font-size: 16px;
+        .menu-box {
+          width: 55px;
+          height: 55px;
+          border-radius: 22px;
+          background-color: #e3e7f280;
           cursor: pointer;
+          position: relative;
+          .white-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #ffffff;
+          }
+          .favicon-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 5px;
+          }
+
+          .link-remove{
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding:5px;
+            font-size: 16px;
+            cursor: pointer;
+          }
         }
       }
+
+      .menu-title {
+        font-size: 13px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.14;
+        letter-spacing: 0.4px;
+        color: #0d1c2e;
+      }
+    }
+  }
+
+
+  .slide_icon {
+    cursor: pointer;
+    position: absolute;
+    font-size: 14px;
+    padding: 5px;
+    color: #707c97;
+    &.right {
+      z-index: 99;
+      right: 0px;
+    }
+    &.left {
+      z-index: 99;
+      left : 0px;
     }
 
-    .menu-title {
-      font-size: 13px;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.14;
-      letter-spacing: 0.4px;
-      color: #0d1c2e;
-    }
+  }
+
+  .px-30 {
+    padding: 0 30px;
   }
 
   .notice-con {

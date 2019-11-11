@@ -91,7 +91,7 @@ function createWindow() {
     let mainWindowState = windowStateKeeper({
         file: 'mainWindow_01.json',
         defaultWidth: 400,
-        defaultHeight: 756
+        defaultHeight: 752
     });
 
     // Create the browser window.
@@ -102,7 +102,7 @@ function createWindow() {
         'height': mainWindowState.height,
         frame: false,
         minWidth:400,
-        minHeight:756,
+        minHeight:752,
         maxWidth:600,
         maxHeight:1024,
         titleBarStyle: 'hidden-inset',

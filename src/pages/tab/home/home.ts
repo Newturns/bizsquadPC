@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Electron } from './../../../providers/electron/electron';
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams,App, PopoverController } from 'ionic-angular';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {IonicPage, NavController, NavParams, App, PopoverController, Slides} from 'ionic-angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {BehaviorSubject, Subject, Subscription, timer} from 'rxjs';
 import { filter, takeUntil, map } from 'rxjs/operators';
@@ -25,6 +25,8 @@ import {Message} from "../../../biz-common/message";
   templateUrl: 'home.html',
 })
 export class HomePage implements OnInit {
+
+  @ViewChild('slides') slides: Slides;
 
   currentUser: IUserData;
   group: IBizGroup;
@@ -250,5 +252,12 @@ export class HomePage implements OnInit {
   removeLink(ev,link) {
     this.bizFire.deleteLink(link);
     console.log(link);
+  }
+
+  slideBack() {
+    this.slides.slidePrev();
+  }
+  slideNext() {
+    this.slides.slideNext();
   }
 }
