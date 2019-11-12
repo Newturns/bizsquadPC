@@ -100,14 +100,6 @@ export class TabsPage {
         this.langPack = l;
     });
 
-    this.noticeService.onNotifications
-      .pipe(takeUntil(this._unsubscribeAll),filter(m=> m!=null))
-      .subscribe(async (m: INotification[]) => {
-        const unreadNotify = m.filter(n => n.data.statusInfo.done === false);
-        console.log("unreadNotify :::",unreadNotify);
-        this.notifyCount = unreadNotify.length;
-      });
-
     this.bizFire.onBizGroupSelected
     .pipe(filter(d=>d!=null),takeUntil(this._unsubscribeAll),
         switchMap(group => {
@@ -148,6 +140,15 @@ export class TabsPage {
 
       this.squadService.onSquadListChanged.next(newChat);
 
+    });
+
+    this.noticeService.onNotifications
+    .pipe(takeUntil(this._unsubscribeAll),filter(m=> m!=null))
+    .subscribe(async (m: INotification[]) => {
+      const unreadNotify = m.filter(n => n.data.statusInfo.done === false);
+      console.log("unreadNotify :::",unreadNotify);
+      this.notifyCount = unreadNotify.filter(notify => notify.data.gid === this.group.gid).length;
+      // this.notifyCount = unreadNotify.length;
     });
 
 

@@ -37,12 +37,12 @@
     </div>
     <div class="row mt-3" *ngIf="who">
       <div class="col-6 offset-3">
-        <button class="profile_button" ion-button round full (click)="editProfileShow()" [color]="group.data.team_color">edit Profile</button>
+        <biz-button class="w-100 m-0" [title]="'edit_profile'" [teamColor]="true" (click)="editProfileShow()"></biz-button>
       </div>
     </div>
     <div class="row mt-3" *ngIf="!who">
       <div class="col-6 offset-3">
-        <button class="profile_button" ion-button round full (click)="gotoChat()" [color]="group.data.team_color">1:1 Chat</button>
+        <biz-button class="w-100 m-0" [title]="'1-1Chat'" [teamColor]="true" (click)="gotoChat()"></biz-button>
       </div>
     </div>
   </ion-list>
@@ -86,10 +86,10 @@
       </div>
       <div class="row mt-3">
         <div class="col-5 offset-1">
-            <button class="profile_button" ion-button round full (click)="editSubmit()" [color]="group.data.team_color">ok</button>
+          <biz-button [title]="'cancel'" (click)="cancelEdit()"></biz-button>
         </div>
         <div class="col-5">
-            <button class="profile_button" ion-button round full (click)="cancelEdit()" color="warn">cancel</button>
+          <biz-button [title]="'ok'" (click)="editSubmit()" [teamColor]="true"></biz-button>
         </div>
       </div>
     </form>

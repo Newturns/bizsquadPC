@@ -91,6 +91,19 @@
       <div class="menu-con d-flex align-items-center justify-content-between">
 
         <ion-slides no-padding [slidesPerView]="4" #slides>
+
+          <!--  링크 추가  -->
+          <ion-slide>
+            <div class="d-flex flex-column align-items-center justify-content-center" (click)="presentPopover($event)">
+              <div class="menu-box d-flex align-items-center justify-content-center">
+                <div class="white-circle d-flex align-items-center justify-content-center">
+                  <img src="imgs/renewal/Icon_plus.svg">
+                </div>
+              </div>
+              <div class="menu-text mt-2 text-center">{{ langPack['add'] }}</div>
+            </div>
+          </ion-slide>
+
           <!--  추가되는 링크 for  -->
           <ion-slide *ngFor="let link of userCustomLinks; let i = index" [attr.data-index]="i">
             <div class="d-flex flex-column align-items-center justify-content-center">
@@ -104,22 +117,10 @@
               <div class="menu-text text-55 mt-2 pointer text-center">{{ link.data.title }}</div>
             </div>
           </ion-slide>
-
-          <!--  링크 추가  -->
-          <ion-slide>
-            <div class="d-flex flex-column align-items-center justify-content-center" (click)="presentPopover($event)">
-              <div class="menu-box d-flex align-items-center justify-content-center">
-                <div class="white-circle d-flex align-items-center justify-content-center">
-                  <img src="imgs/renewal/Icon_plus.svg">
-                </div>
-              </div>
-              <div class="menu-text mt-2 text-center">{{ langPack['add'] }}</div>
-            </div>
-          </ion-slide>
         </ion-slides>
 
-        <i class="fa fa-chevron-left slide_icon left" (click)="slideBack()"></i>
-        <i class="fa fa-chevron-right slide_icon right" (click)="slideNext()"></i>
+        <i *ngIf="userCustomLinks.length > 2" class="fa fa-chevron-left slide_icon left" (click)="slideBack()"></i>
+        <i *ngIf="userCustomLinks.length > 2" class="fa fa-chevron-right slide_icon right" (click)="slideNext()"></i>
       </div>
     </div>
 

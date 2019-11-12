@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { InviteRoomPage } from './invite-room';
 import { AccountService } from '../../../../../providers/account/account';
+import {ComponentsModule} from "../../../../../components/components.module";
 
 @NgModule({
   declarations: [
@@ -9,6 +10,7 @@ import { AccountService } from '../../../../../providers/account/account';
   ],
   imports: [
     IonicPageModule.forChild(InviteRoomPage),
+    ComponentsModule
   ],
   providers: [
     AccountService

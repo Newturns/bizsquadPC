@@ -19,6 +19,8 @@ import {IBizGroup} from "../../../../_models";
 })
 export class CustomlinkPage {
 
+  langPack = {};
+
   private _unsubscribeAll;
   currentGroup: IBizGroup;
   groupMainColor: string;
@@ -46,14 +48,20 @@ export class CustomlinkPage {
     public groupColorProvider: GroupColorProvider,
     private tokenService: TokenProvider
     ) {
-      this._unsubscribeAll = new Subject<any>();
+    this._unsubscribeAll = new Subject<any>();
+
+    this.bizFire.onLang
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((l: any) => {
+      this.langPack = l.pack();
+    });
   }
 
   ngOnInit(): void {
 
     this.addLinkForm = this.formBuilder.group({
       linkTitle: ['', this.linkTitleValidator],
-      linkUrl: ['https://', this.linkUrlValidator],
+      linkUrl: ['', this.linkUrlValidator],
     });
 
     this.bizFire.onBizGroupSelected
@@ -70,7 +78,13 @@ export class CustomlinkPage {
 
   submitAddLink() {
     if(this.addLinkForm.valid) {
-      this.tokenService.addCustomLink(this.bizFire.currentUID,this.addLinkForm.value['linkTitle'],this.addLinkForm.value['linkUrl'])
+      let linkUrl = this.addLinkForm.value['linkUrl'];
+      if(linkUrl.indexOf('http') != -1) {
+        console.log('http가 포함됨');
+      } else {
+        linkUrl = "https://".concat(linkUrl);
+      }
+      this.tokenService.addCustomLink(this.bizFire.currentUID,this.addLinkForm.value['linkTitle'],linkUrl)
       .then(() =>{
         this.closePopup();
       });

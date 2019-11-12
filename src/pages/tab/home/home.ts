@@ -245,13 +245,20 @@ export class HomePage implements OnInit {
   presentPopover(ev): void {
     if(this.userCustomLinks.length < 8) {
       let popover = this.popoverCtrl.create('page-customlink',{}, {cssClass: 'page-customlink'});
-      popover.present({ev: ev});
+      popover.present({ev: ev}).then((v) => {
+        console.log(v);
+      });
     }
   }
 
   removeLink(ev,link) {
     this.bizFire.deleteLink(link);
     console.log(link);
+    if(this.slides.isBeginning()) {
+      console.log('first slide page');
+    } else {
+      this.slides.slideTo(0);
+    }
   }
 
   slideBack() {

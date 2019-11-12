@@ -105,8 +105,8 @@ ion-item:hover a {
   .popover-content{
       right: 15px !important;
       left: auto !important;
-      width: 280px;
-      height: 410px;
+      top: 75px !important;
+      width: 300px;
       border: 3px;
       background-color: #f6f6f6 !important;
       border-top-left-radius: 5px;
@@ -135,10 +135,10 @@ ion-item:hover a {
 
 .page-customlink{
     .popover-content{
-        top:40% !important;
+        top:25% !important;
         left:10% !important;
         width: 80% !important;
-        height: 45%;
+        height: 335px;
         border-radius: 5px;
         // border-top-right-radius: 3px;
         // border-bottom-right-radius: 3px;
@@ -326,10 +326,10 @@ ion-item:hover a {
 }
 
 ::placeholder {
-  text-align: center;
-  font-size: 13px;
-  color: #b4b9cc;
-}
+   text-align: center;
+   font-size: 13px;
+   color: #b4b9cc;
+ }
 
 
 button.biz-button {
@@ -417,9 +417,13 @@ ion-grid {
   -webkit-app-region: no-drag !important;
 }
 
+.biz-border-bottom {
+  border-bottom: 1px solid #e3e7f2;
+}
 
-
-
+.biz-border-top {
+  border-top: 1px solid #e3e7f2;
+}
 
 
 

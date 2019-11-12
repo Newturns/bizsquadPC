@@ -35,6 +35,8 @@ export class InviteRoomPage {
 
   langPack: any;
 
+  groupSubColor: string;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -60,6 +62,7 @@ export class InviteRoomPage {
       .subscribe(([chat,group]) => {
         this.roomData = chat;
         this.currentGroup = group;
+        this.groupSubColor = group.data.team_subColor;
         this.groupMainColor = this.groupColorProvider.makeGroupColor(this.currentGroup.data.team_color);
 
         const inviteUids = this.currentGroup.getMemberIds(false)
@@ -84,7 +87,7 @@ export class InviteRoomPage {
     this.isChecked.forEach(d => {
       members[d.data.uid] = true;
       makeNoticeUsers.push(d.data.uid);
-    })
+    });
     this.bizFire.afStore.doc(Commons.chatDocPath(this.roomData.data.gid,this.roomData.cid)).set({
       members : members
     },{merge : true}).then(() =>{
@@ -93,16 +96,28 @@ export class InviteRoomPage {
     })
   }
 
-  selectedUser(users : IUser[]) {
-    this.isChecked = users.filter(u => u.data.isChecked == true);
-    console.log(this.isChecked)
+  // selectedUser(users : IUser[]) {
+  //   this.isChecked = users.filter(u => u.data.isChecked == true);
+  //   console.log(this.isChecked)
+  // }
+  //
+  // badgeMember(user : IUser) {
+  //   user.data.isChecked = false;
+  //   this.isChecked = this.isChecked.filter(u => u.data.isChecked == true);
+  //   console.log(this.isChecked)
+  // }
+
+  checkedUsers(user : IUser) {
+    if(user['checked']) {
+      user['checked'] = false;
+    } else {
+      user['checked'] = true;
+      this.isChecked.push(user);
+    }
+    this.isChecked = this.isChecked.filter(user => user['checked'] === true);
+    console.log(this.isChecked);
   }
 
-  badgeMember(user : IUser) {
-    user.data.isChecked = false;
-    this.isChecked = this.isChecked.filter(u => u.data.isChecked == true);
-    console.log(this.isChecked)
-  }
 
   closePopup(){
     this.viewCtrl.dismiss();

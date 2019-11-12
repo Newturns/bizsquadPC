@@ -161,6 +161,26 @@ export const language = {
         "en": "Shutdown",
         "ja": "終了"
       },
+      "length_limit_10": {
+        "ko": "최대 10글자 이내",
+        "en": "Limmit the length is 10",
+        "ja": "最大10文字以内"
+      },
+      "add_apps": {
+        "ko": "앱 추가",
+        "en": "Add apps",
+        "ja": "アプリ追加"
+      },
+      "edit_profile": {
+        "ko": "프로필 수정",
+        "en": "Edit Profile",
+        "ja": "プロフィール編集"
+      },
+      "1-1Chat": {
+        "ko": "1:1 채팅",
+        "en": "1:1 Chat",
+        "ja": "1:1 チャット"
+      },
       "bookmark": {
         "ko": "즐겨찾기",
         "en": "bookmark",
@@ -921,7 +941,7 @@ export const language = {
       }
       ,"invite": {
         "ko": "초대",
-        "en": "Invitation",
+        "en": "Invite",
         "ja": "招待"
       }
       ,"invite_finished": {
