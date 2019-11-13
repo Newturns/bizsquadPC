@@ -440,8 +440,10 @@ export class BizFireService {
   editUserProfile(editData) {
     if(editData){
         return this.afStore.doc(`users/${this.currentUID}`).set({
-            displayName : editData.displayName,
-            phoneNumber : editData.phoneNumber
+          displayName : editData.displayName,
+          phoneNumber : editData.phoneNumber,
+          user_visible_firstname : editData.user_visible_firstname,
+          user_visible_lastname : editData.user_visible_lastname,
         }, {merge: true})
     }
   }

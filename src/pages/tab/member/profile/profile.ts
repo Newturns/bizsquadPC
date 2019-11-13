@@ -128,7 +128,7 @@ export class ProfilePage {
           this.bizFire.afAuth.auth.currentUser.updateProfile(updateProfileData).then(()=>{
             this.bizFire.afStore.doc(`users/${this.bizFire.currentUID}`).update({
               displayName: this.editProfileForm.value['displayName'],
-              photoURL: url
+              photoURL: url,
             }).then(()=>{
               // clear old value
               this.attachFile = null;
@@ -176,7 +176,7 @@ export class ProfilePage {
       };
       this.bizFire.afAuth.auth.currentUser.updateProfile(updateProfileData).then(() =>{
         this.bizFire.editUserProfile(editData).then(() => {
-          console.log(this.editProfileForm['displayName'])
+          console.log(this.editProfileForm['displayName']);
           console.log("바뀐값이 없어도 실행됨.");
           this.loading.hide();
           this.viewCtrl.dismiss();
