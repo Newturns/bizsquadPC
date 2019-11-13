@@ -171,6 +171,11 @@ export const language = {
         "en": "Add apps",
         "ja": "アプリ追加"
       },
+      "member_list": {
+        "ko": "멤버 리스트",
+        "en": "Member List",
+        "ja": "メンバーリスト"
+      },
       "edit_profile": {
         "ko": "프로필 수정",
         "en": "Edit Profile",

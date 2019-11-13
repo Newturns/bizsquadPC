@@ -148,7 +148,6 @@ export class ChatHeaderComponent extends TakeUntil {
     popover.onDidDismiss(data => {
       if(data === 'title') {
 
-        //채팅방 이름 변경 Alert
         console.log("채팅방 이름변경 시작");
         this.changeTitle(ev);
 
@@ -169,7 +168,14 @@ export class ChatHeaderComponent extends TakeUntil {
   }
 
   changeTitle(ev): void {
-    let titlePopover = this.popoverCtrl.create(ChangeTitlePopoverComponent);
+    let titlePopover = this.popoverCtrl.create(ChangeTitlePopoverComponent, {title: this.chatTitle}, {cssClass: 'change-title-popover'});
     titlePopover.present({ev: ev});
+
+    titlePopover.onDidDismiss(data => {
+      if(data) {
+        console.log("헤더에서 받는 변경된 채팅방 명 ::",data);
+        this._room.ref.set({ title: data },{merge : true});
+      }
+    });
   }
 }

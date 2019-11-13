@@ -1,11 +1,19 @@
-<ion-content no-padding>
-  <ion-scroll class="scrollable" scrollY="true">
-    <ion-list no-margin *ngIf="userInfos">
+<div class="memeberList-frame d-flex flex-column">
+  <div class="d-flex justify-content-between align-items-center p-4">
+    <div class="apps-title">
+      {{langPack['member_list']}}
+    </div>
+    <div>
+      <img class="pointer" src="imgs/renewal/Icon_Outline_close.svg" (click)="closePopup()">
+    </div>
+  </div>
+  <div class="list-scroll-con">
+    <ng-container *ngIf="userInfos">
       <ng-container *ngFor="let user of userInfos">
-        <ion-item class="userList" no-lines style="background-color: #f6f6f6">
-          <app-avatar-button [user]="user"></app-avatar-button>
-        </ion-item>
+        <div class="p-3 biz-border-top">
+          <app-avatar-button [user]="user" [displayNameOn]="true" [size]="30"></app-avatar-button>
+        </div>
       </ng-container>
-    </ion-list>
-  </ion-scroll>
-</ion-content>
+    </ng-container>
+  </div>
+</div>

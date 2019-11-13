@@ -80,10 +80,7 @@ ion-item:hover a {
   .popover-content{
     top: 65px !important;
     border: 3px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 5px;
   }
 }
 .page-invite{
@@ -145,6 +142,15 @@ ion-item:hover a {
         background-color: white !important;
     }
 }
+.change-title-popover {
+  .popover-content{
+    width: 80% !important;
+    height: 235px;
+    border-radius: 5px;
+    top:25% !important;
+    left:10% !important;
+  }
+}
 
 
 //custom toast
@@ -167,9 +173,6 @@ ion-item:hover a {
   }
 }
 
-.change-title-popover {
-
-}
 
 .biz-color-default {
   color: #707c97;
@@ -270,8 +273,8 @@ ion-item:hover a {
 
 // search input design
 .search-frame {
-  border-top: 1px solid rgba(0, 0, 0, 0.25);
-  border-bottom: 1px solid rgba(0,0,0, 0.25);
+  border-top: 1px solid #e3e7f2;
+  border-bottom: 1px solid #e3e7f2;
   .search-group {
     border: 1px solid #e3e7f2;
     border-radius: 6px;

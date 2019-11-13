@@ -1,3 +1,68 @@
 change-title-popover {
+  .changeTitle-frame {
+    .change-title {
+      font-size: 17px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: #4d4f5c;
+    }
 
+    .inputTitle{
+      font-size: 12px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      color: #acb5bd;
+      margin-bottom: 8px;
+    }
+    .input-text{
+      height: 48px;
+      border-radius: 8px;
+      border: solid 1px #e3e7f2;
+      background-color: #ffffff;
+
+      font-size: 16px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: #495057;
+
+      padding: 16px 15px 16px 15px;
+      &.disabled{
+        background-color: #fdfcfc;
+      }
+    }
+
+
+  }
+
+  input {
+    color: #b4b9cc;
+  }
+
+
+  //custom search input placeholder //
+  ::-webkit-input-placeholder { /* Edge */
+    text-align: left;
+    font-size: 13px;
+    color: #b4b9cc;
+  }
+
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    text-align: left;
+    font-size: 13px;
+    color: #b4b9cc;
+  }
+
+  ::placeholder {
+    text-align: left;
+    font-size: 13px;
+    color: #b4b9cc;
+  }
 }

@@ -1,11 +1,11 @@
 <ion-content no-padding class="content-color">
   <ion-segment [(ngModel)]="defaultSegment" class="bg-white">
-    <ion-segment-button value="chatRoom" class="d-flex justify-content-center align-items-center"
+    <ion-segment-button value="chatRoom" class="d-flex justify-content-center align-items-center font-14"
                         [ngStyle]="{'border-color': defaultSegment === 'chatRoom' ? group.data.team_color : 'white'}">
       {{ langPack['chatroom'] }}
       <ion-badge class="ml-2 msg-badge" *ngIf="memberUnreadTotalCount" color="danger">{{ memberUnreadTotalCount | badgeLimit: 999 }}</ion-badge>
     </ion-segment-button>
-    <ion-segment-button value="squadChatRoom" class="d-flex justify-content-center align-items-center"
+    <ion-segment-button value="squadChatRoom" class="d-flex justify-content-center align-items-center font-14"
                         [ngStyle]="{'border-color': defaultSegment === 'squadChatRoom' ? group.data.team_color : 'white'}">
       {{ langPack['squad_chatroom'] }}
       <ion-badge class="ml-2 msg-badge" *ngIf="squadUnreadTotalCount" color="danger">{{ squadUnreadTotalCount | badgeLimit: 999 }}</ion-badge>
