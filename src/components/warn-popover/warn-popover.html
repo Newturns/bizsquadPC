@@ -1,4 +1,19 @@
-<!-- Generated template for the WarnPopoverComponent component -->
-<div>
-  {{text}}
+<div class="d-flex flex-column warn-frame p-4">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="warn-title">
+      {{title}}
+    </div>
+    <div>
+      <img class="pointer" src="imgs/renewal/Icon_Outline_close.svg" (click)="closePopup()">
+    </div>
+  </div>
+
+  <div class="d-flex p-3 warn-desc align-items-center justify-content-center">
+    {{description}}
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <biz-button [title]="'cancel'" (click)="cancel()"></biz-button>
+    <biz-button [title]="'ok'" (click)="ok()"></biz-button>
+  </div>
 </div>

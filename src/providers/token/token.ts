@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Electron } from "../electron/electron";
 import {LoadingProvider} from "../../providers/loading/loading";
+import {INotification} from "../../_models";
 
 /*
   Generated class for the TokenProvider provider.
@@ -66,28 +67,55 @@ export class TokenProvider {
         })
     }
 
-    makeWebJump(type: string,gid?:string,sid?:string) {
+    makeWebJump(type: string,sid?:string) {
       this.loading.show();
       this.getToken(this.bizFire.uid).then((token : string) => {
-        if(type === 'serviceinfo') {
-          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=serviceinfo/${gid}`);
-        }
-        if(type === 'member'){
-          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=users/${gid}`);
-        }
-        if(type === 'bbs') {
-          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=bbs/${gid}`);
-        }
-        if(type === 'property') {
-          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=home/${gid}/property`);
+        if(type === 'video_chat') {
+          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=video`);
         }
         if(type == 'mypage') {
-          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=mypage`);
+          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=myPage`);
         }
         if(type == 'squad') {
-          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=squad/${gid}/${sid}`);
+          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=${this.bizFire.gid}/squad/${sid}`);
+        }
+        if(type == 'bbs') {
+          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=${this.bizFire.gid}/notice`);
+        }
+        // 미구현된 기능들..
+        if(type === 'SFA'){
+          this.ipc.send('loadGH',`${environment.publicWeb}`);
+        }
+        if(type === 'workflow') {
+          this.ipc.send('loadGH',`${environment.publicWeb}`);
+        }
+        if(type === 'task') {
+          this.ipc.send('loadGH',`${environment.publicWeb}`);
         }
         this.loading.hide();
+      }).catch(err => {
+        this.loading.hide();
+      });
+    }
+
+    notifyWebJump(item: INotification,link?:string) {
+      this.loading.show();
+      this.getToken(this.bizFire.uid).then((token : string) => {
+        this.loading.hide();
+        if(item.data.type === 'groupInvite') {
+          this.ipc.send('loadGH',`${environment.webJumpBaseUrl}${token}&url=${item.data.gid}/home`)
+        } else {
+          let jumpUrl = `${environment.webJumpBaseUrl}${token}&url=${link}`;
+          this.ipc.send('loadGH',jumpUrl);
+        }
+
+        //웹 점프시 알람 읽음 처리
+        if(item.data.statusInfo.done !== true) {
+          item.ref.update({
+            statusInfo: { done: true }
+          });
+        }
+
       }).catch(err => {
         this.loading.hide();
       });

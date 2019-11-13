@@ -152,6 +152,15 @@ ion-item:hover a {
   }
 }
 
+.warn-popover {
+  .popover-content{
+    width: 80% !important;
+    height: 200px;
+    border-radius: 5px;
+    top:25% !important;
+    left:10% !important;
+  }
+}
 
 //custom toast
 .toast-wrapper {

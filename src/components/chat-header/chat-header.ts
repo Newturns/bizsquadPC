@@ -12,6 +12,8 @@ import {ChatService} from "../../providers/chat.service";
 
 import {MembersPopoverComponent} from "../members-popover/members-popover";
 import {ChangeTitlePopoverComponent} from "../change-title-popover/change-title-popover";
+import {WarnPopoverComponent} from "../warn-popover/warn-popover";
+import * as firebase from "firebase";
 
 
 @Component({
@@ -20,12 +22,14 @@ import {ChangeTitlePopoverComponent} from "../change-title-popover/change-title-
 })
 export class ChatHeaderComponent extends TakeUntil {
 
-  public memberChat : boolean;
+  public memberChat : boolean = false;
 
   notifications = 'Icon_Outline_bell' || 'Icon_Outline_bell_off';
   private userCustomData : any;
 
   senderUid : string;
+
+  langPack = {};
 
   @Input()
   set chat(room: IChat) {
@@ -70,6 +74,12 @@ export class ChatHeaderComponent extends TakeUntil {
     private chatService : ChatService
   ) {
     super();
+
+    this.bizFire.onLang
+      .pipe(this.takeUntil)
+      .subscribe((l: any) => {
+        this.langPack = l.pack();
+      });
 
     this.bizFire.userData
       .pipe(this.takeUntil)
@@ -141,6 +151,8 @@ export class ChatHeaderComponent extends TakeUntil {
 
   //Chat invite Popover
   presentPopover(ev): void {
+    console.log(this.memberChat);
+    console.log(this.room.data.type);
     let popover = this.popoverCtrl.create('page-member-chat-menu',{}, {cssClass: 'page-member-chat-menu'});
 
     popover.present({ev: ev});
@@ -154,6 +166,7 @@ export class ChatHeaderComponent extends TakeUntil {
       } else if(data === 'leave') {
 
         console.log("채팅방 나가기 클릭");
+        this.leaveChatRoom(ev);
 
       } else {
         return;
@@ -168,13 +181,37 @@ export class ChatHeaderComponent extends TakeUntil {
   }
 
   changeTitle(ev): void {
-    let titlePopover = this.popoverCtrl.create(ChangeTitlePopoverComponent, {title: this.chatTitle}, {cssClass: 'change-title-popover'});
+    let titlePopover = this.popoverCtrl.create(ChangeTitlePopoverComponent,
+      {title: this.chatTitle}, {cssClass: 'change-title-popover'});
     titlePopover.present({ev: ev});
 
     titlePopover.onDidDismiss(data => {
       if(data) {
         console.log("헤더에서 받는 변경된 채팅방 명 ::",data);
         this._room.ref.set({ title: data },{merge : true});
+      }
+    });
+  }
+
+  leaveChatRoom(ev): void {
+    let warnPopover = this.popoverCtrl.create(WarnPopoverComponent,
+      {title:this.langPack['leave_chat'],description:this.langPack['leave_chat_desc']}, {cssClass: 'warn-popover'});
+    warnPopover.present({ev: ev});
+
+    warnPopover.onDidDismiss(value => {
+      if(value) {
+        console.log("방나가기");
+        this._room.ref.update({
+          ['members.'+this.bizFire.uid]: firebase.firestore.FieldValue.delete()
+        }).then(() => {
+          const text = this.langPack['chat_exit_user_notice'].replace('$DISPLAYNAME', this.bizFire.currentUserValue.displayName);
+          this.chatService.makeRoomNoticeMessage('member-chat','exit',this.bizFire.gid,this._room.cid,[this.bizFire.uid])
+            .then(() => {
+              this.electron.windowClose();
+            });
+        })
+      }else {
+        return;
       }
     });
   }

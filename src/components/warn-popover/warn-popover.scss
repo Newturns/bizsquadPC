@@ -1,3 +1,22 @@
 warn-popover {
-
+  .warn-frame {
+    .warn-title {
+      font-size: 18px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      letter-spacing: normal;
+      color: #0d1c2e;
+    }
+    .warn-desc {
+      height: 100px;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: #eb5757;
+    }
+  }
 }

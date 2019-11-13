@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {IonicPage, NavController, NavParams, PopoverController} from 'ionic-angular';
 import { NotificationService } from '../../../providers/notification.service';
 import {BehaviorSubject, combineLatest, Subject} from 'rxjs';
 import { BizFireService } from '../../../providers/biz-fire/biz-fire';
@@ -10,7 +10,8 @@ import {LangService} from "../../../providers/lang-service";
 import {Commons} from "../../../biz-common/commons";
 import {TakeUntil} from "../../../biz-common/take-until";
 import {CacheService} from "../../../providers/cache/cache";
-import {AlertProvider} from "../../../providers/alert/alert";
+import {WarnPopoverComponent} from "../../../components/warn-popover/warn-popover";
+import {TokenProvider} from "../../../providers/token/token";
 
 @IonicPage({
   name: 'page-notify',
@@ -56,7 +57,8 @@ export class NotifyPage extends TakeUntil{
     private bizFire: BizFireService,
     private langService : LangService,
     private cacheService : CacheService,
-    private alertService : AlertProvider,
+    private popoverCtrl :PopoverController,
+    private tokenService : TokenProvider,
     ) {
     super();
 
@@ -138,62 +140,63 @@ export class NotifyPage extends TakeUntil{
   }
 
   onAccept(msg: INotification) {
+    this.noticeService.acceptInvitation(msg.data).then(() => {
 
+      this.tokenService.notifyWebJump(msg);
+
+      if(msg.ref) {
+        msg.ref.delete()
+      }
+    })
   }
 
     // onClickNotifyContents(msg : INotificationItem){
   //   this.noticeService.onClickNotifyContents(msg);
   // }
   async onDeleteFinished(){
+    let warnPopover = this.popoverCtrl.create(WarnPopoverComponent,
+      {title:this.langPack['alarm_read_delete_title'],description:this.langPack['alarm_read_delete_desc']},
+      {cssClass: 'warn-popover'});
+    warnPopover.present();
 
-    // const ok = true;
-    //
-    // const ok = await this.dialogService.openConfirmDialog(this.langPack['alarm_read_delete_confirm'],
-    //   true, null, null,this.langPack['alarm_delete_read_only'],'orangered');
-    //
-    // if(ok){
-    //   const done = this.messages.filter(m => m.data.statusInfo.done === true);
-    //   if(done.length > 0) {
-    //     const batch = this.bizFire.afStore.firestore.batch();
-    //     done.forEach(m => {
-    //       //return this.noticeService.deleteNotification(m);
-    //       const ref = this.bizFire.afStore.firestore.collection(Commons.notificationPath(this.bizFire.currentUID)).doc(m.mid);
-    //       batch.delete(ref);
-    //     });
-    //
-    //     batch.commit().then(()=>{
-    //       this.hasFinished = this.messages.filter(m => m.data.statusInfo.done === true).length > 0;
-    //     });
-    //   }
-    // }
+    warnPopover.onDidDismiss(ok => {
+      if(ok) {
+        const done = this.messages.filter(m => m.data.statusInfo.done === true);
+        if(done.length > 0) {
+          const batch = this.bizFire.afStore.firestore.batch();
+          done.forEach(m => {
+            //return this.noticeService.deleteNotification(m);
+            const ref = this.bizFire.afStore.firestore.collection(Commons.notificationPath(this.bizFire.currentUID)).doc(m.mid);
+            batch.delete(ref);
+          });
 
+          batch.commit().then(()=>{
+            this.hasFinished = this.messages.filter(m => m.data.statusInfo.done === true).length > 0;
+          });
+        }
+      }
+    });
   }
 
-  onDeleteAll(){
+  onDeleteAll() {
     //console.log('onDeleteAll()');
+    let warnPopover = this.popoverCtrl.create(WarnPopoverComponent,
+      {title:this.langPack['alarm_delete_all_title'],description:this.langPack['alarm_delete_all_desc']},
+      {cssClass: 'warn-popover'});
+    warnPopover.present();
 
-    // const data = {
-    //   // default only ok button
-    //   title: `${this.langPack['delete']}`,
-    //   text: this.langPack['notice_delete_confirm_test'].replace('?', ' all ?'),
-    //   noCancelButton: false,
-    //   ok_text: this.langPack['delete'],
-    //   okColor: 'dodgerblue'
-    // } as IConfirmData;
-    // this.dialogService.openConfirmDialogWithData(data)
-    //   .subscribe(ok => {
-    //     if(ok){
-    //       const batch = this.bizFire.afStore.firestore.batch();
-    //       this.messages.forEach(msg => {
-    //         const ref = this.bizFire.afStore.firestore.collection(Commons.notificationPath(this.bizFire.currentUID)).doc(msg.mid);
-    //         batch.delete(ref);
-    //       });
-    //       batch.commit().then(()=>{
-    //         this.hasFinished = this.messages.filter(m => m.data.statusInfo.done === true).length > 0;
-    //       }).catch(e => console.error(e));
-    //     }
-    //   });
-
+    warnPopover.onDidDismiss(ok => {
+      if(ok) {
+        const batch = this.bizFire.afStore.firestore.batch();
+        this.messages.forEach(msg => {
+          const ref = this.bizFire.afStore.firestore.collection(Commons.notificationPath(this.bizFire.currentUID)).doc(msg.mid);
+          batch.delete(ref);
+        });
+        batch.commit().then(()=>{
+          this.hasFinished = this.messages.filter(m => m.data.statusInfo.done === true).length > 0;
+        }).catch(e => console.error(e));
+      }
+    });
   }
 
   selectTypeSelected(type: string){

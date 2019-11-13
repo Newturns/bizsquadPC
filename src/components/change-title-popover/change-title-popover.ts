@@ -24,9 +24,9 @@ export class ChangeTitlePopoverComponent extends TakeUntil {
   ]);
 
   constructor(private navParams: NavParams,
+              private viewCtrl: ViewController,
               private bizFire : BizFireService,
-              private formBuilder: FormBuilder,
-              private viewCtrl: ViewController) {
+              private formBuilder: FormBuilder,) {
     super();
 
     // 채팅방 제목 받음.

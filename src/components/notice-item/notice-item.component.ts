@@ -8,6 +8,7 @@ import {NEWCOLORS} from "../../biz-common/colors";
 import {Commons} from "../../biz-common/commons";
 import {BizComponent} from "../../classes/biz-component";
 import {ISquadData} from "../../providers/squad.service";
+import {TokenProvider} from "../../providers/token/token";
 
 @Component({
   selector: 'biz-notice-item',
@@ -39,11 +40,14 @@ export class NoticeItemComponent extends BizComponent implements OnInit {
   private linkUrl: string[] = [];
   private linkParam;
 
+  private pcLinkUrl : string;
+
   // 세로 실선 배경색.
   subColor = '#2a8bf2';
   group: IBizGroup;
 
   constructor(private bizFire: BizFireService,
+              private tokenService : TokenProvider,
               private cacheService: CacheService) {
     super();
     this.loadLang(bizFire);
@@ -75,29 +79,11 @@ export class NoticeItemComponent extends BizComponent implements OnInit {
 
   onLinkClicked(item: INotification){
 
-    console.log(item, this.linkUrl, this.linkParam);
+    // console.log(item, this.linkUrl, this.linkParam);
 
     if(this.linkUrl.length > 0){
 
-      if(this.linkUrl[0] === '/video'){
-        // this.router.navigate(this.linkUrl);
-        return;
-      }
-
-      //------------------- gid -------------------//
-      const gid = this.linkUrl[0].substr(1);
-      if(gid === this.bizFire.gid){
-        // same gid with current gid.
-        // this.router.navigate(this.linkUrl, {queryParams: this.linkParam || {}});
-        /*if(this.linkParam == null){
-          this.router.navigate(this.linkUrl);
-        } else {
-          this.router.navigate(this.linkUrl, {queryParams: this.linkParam});
-        }*/
-      } else {
-        // send to selector
-        // this.router.navigate(['/selector'], {queryParams: {gid: gid, url: this.linkUrl.join('/')}});
-      }
+      this.tokenService.notifyWebJump(item,this.pcLinkUrl);
 
     }
   }
@@ -108,13 +94,16 @@ export class NoticeItemComponent extends BizComponent implements OnInit {
     let link = groupData.team_name;
 
     // add gid
-    this.linkUrl.push('/' + item.data.gid);
+    this.linkUrl.push(item.data.gid);
+
+    this.pcLinkUrl = item.data.gid;
 
     // is it bbs ?
     if(item.data.type === 'bbs'){
 
       link += `/${this.langPack['BBS']}`;
       this.linkUrl.push('notice');
+      this.pcLinkUrl += '/notice';
 
     }
 
@@ -130,11 +119,13 @@ export class NoticeItemComponent extends BizComponent implements OnInit {
       // ??
       link = `video`;
       this.linkUrl = [];
-      this.linkUrl.push('/video');
+      this.linkUrl.push('video');
+      this.pcLinkUrl += '/notice';
 
       if(item.data.info.vid){
         link += `/${item.data.info.vid}`;
         this.linkUrl.push(item.data.info.vid);
+        this.pcLinkUrl += `/${item.data.info.vid}`;
       }
 
     }
@@ -151,6 +142,8 @@ export class NoticeItemComponent extends BizComponent implements OnInit {
           // add squad
           this.linkUrl.push('squad');
           this.linkUrl.push(sid);
+
+          this.pcLinkUrl += `/squad/${sid}`;
 
           // add comment id?
           if(item.data.type === 'comment' && item.data.info.cid){

@@ -26,7 +26,12 @@ biz-squad-item {
         font-stretch: normal;
         /*      line-height: 1.14;
               letter-spacing: 0.4px;*/
-        max-width: 125px;
+        width: 0;
+        span {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
       }
 
       .squad-member{
@@ -79,6 +84,7 @@ biz-squad-item {
       font-weight: 500;
       font-style: normal;
       font-stretch: normal;
+      width: 0;
 
       color: #231f20;
       /*
@@ -87,7 +93,11 @@ biz-squad-item {
       letter-spacing: 0.4px;*/
 
       //color: var(--dusk-blue); directive 로 변경.
-      max-width: 125px;
+      span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
 
     .squad-item{

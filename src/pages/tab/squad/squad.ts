@@ -207,4 +207,8 @@ export class SquadPage {
     }
   }
 
+  squadstatus(s) {
+    console.log(s);
+  }
+
 }

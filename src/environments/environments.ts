@@ -21,7 +21,11 @@ export const environment = {
         spinner: 'circles',
         showBackdrop: false,
     },
-    // bizServerUri: 'http://localhost:9010'
+    //테스트용
+    // bizServerUri: 'http://localhost:9010',
+    // webJumpBaseUrl: 'http://localhost:4200/auth?token=',
     bizServerUri: 'https://manager.bizsquad.net:9010',
-    webJumpBaseUrl: 'https://product.bizsquad.net/auth?token='
+    webJumpBaseUrl: 'https://product.bizsquad.net/auth?token=',
+    publicWeb : 'https://www.bizsquad.net/'
+
 };

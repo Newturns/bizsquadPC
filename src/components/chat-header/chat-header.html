@@ -1,10 +1,10 @@
 
 <div class="d-flex px-4 py-4 drag header-frame">
   <!-- 채팅방 아이콘 -->
-  <div class="d-flex align-items-center mr-2" *ngIf="room?.data.type !== 'member'; else memberChat">
+  <div class="d-flex align-items-center mr-2" *ngIf="!memberChat; else personal">
     <biz-team-icon [teamData]="room?.data"  [size]="40"></biz-team-icon>
   </div>
-  <ng-template #memberChat>
+  <ng-template #personal>
     <div class="d-flex align-items-center mr-2" *ngIf="senderUid">
       <app-avatar-button [uid]="senderUid"></app-avatar-button>
     </div>
@@ -37,7 +37,7 @@
 <!--            <ion-range [(ngModel)]="opacity" color="dark" (ionChange)="electron.setOpacity(opacity)"></ion-range>-->
 <!--          </ion-item>-->
           <img class="pointer ml-2" src="imgs/renewal/{{notifications}}.svg" width="22" height="22" (click)="notificationOnOff()">
-          <img class="pointer ml-2" src="imgs/renewal/Icon_Outline_more.svg" width="20" height="22" (tap)="presentPopover($event)">
+          <img *ngIf="memberChat" class="pointer ml-2" src="imgs/renewal/Icon_Outline_more.svg" width="20" height="22" (tap)="presentPopover($event)">
         </div>
       </div>
     </div>

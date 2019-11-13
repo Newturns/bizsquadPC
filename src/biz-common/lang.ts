@@ -171,6 +171,36 @@ export const language = {
         "en": "Add apps",
         "ja": "アプリ追加"
       },
+      "leave_chat": {
+        "ko": "채팅방 나가기",
+        "en": "Leave Chatroom",
+        "ja": "チャットルーム脱退"
+      },
+      "leave_chat_desc": {
+        "ko": "정말로 채팅방에서 나가시겠습니까?",
+        "en": "Do you really want to leave the chat room?",
+        "ja": "本当にチャットルームを脱退しますか？"
+      },
+      "alarm_read_delete_title": {
+        "ko": "읽은 알람",
+        "en": "Read alarms",
+        "ja": "既読通知"
+      },
+      "alarm_read_delete_desc": {
+        "ko": "읽은 알람을 삭제하시겠습니까?",
+        "en": "Are you sure you want to delete all read alarms?",
+        "ja": "既読通知を一括削除しますか？"
+      },
+      "alarm_delete_all_title": {
+        "ko": "알람 삭제",
+        "en": "Delete alarm",
+        "ja": "通知削除"
+      },
+      "alarm_delete_all_desc": {
+        "ko": "알람을 전부 삭제하시겠습니까?",
+        "en": "Do you want to delete all alarms?",
+        "ja": "通知を全部削除しますか？"
+      },
       "member_list": {
         "ko": "멤버 리스트",
         "en": "Member List",
