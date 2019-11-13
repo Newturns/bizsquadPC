@@ -12,6 +12,8 @@ import {QuillModule} from 'ngx-quill';
 import {AvatarButtonComponent} from "./avatar-button/avatar-button.component";
 import {ImgComponent} from "./img/img.component";
 import { MembersPopoverComponent } from './members-popover/members-popover';
+import { ChangeTitlePopoverComponent } from './change-title-popover/change-title-popover';
+import { WarnPopoverComponent } from './warn-popover/warn-popover';
 import {SquadFilterComponent} from "./squad-filter/squad-filter.component";
 import {SquadItemComponent} from "./squad-item/squad-item.component";
 import {TeamIconComponent} from "./team-icon/team-icon.component";
@@ -35,6 +37,8 @@ import {ChatAttachComponent} from "./chat-attach/chat-attach.component";
     AvatarButtonComponent,
     ImgComponent,
     MembersPopoverComponent,
+    ChangeTitlePopoverComponent,
+    WarnPopoverComponent,
     SquadFilterComponent,
     SquadItemComponent,
     TeamIconComponent,
@@ -46,7 +50,7 @@ import {ChatAttachComponent} from "./chat-attach/chat-attach.component";
     ChatNoticeComponent,
     MessageBalloonComponent,
     ChatAttachComponent,
-    GroupColorDirective
+    GroupColorDirective,
   ],
   imports: [
     CommonModule,
@@ -55,7 +59,6 @@ import {ChatAttachComponent} from "./chat-attach/chat-attach.component";
     IonicModule,
     //QuillEditor
     QuillModule.forRoot(),
-
 
   ],
   exports: [
@@ -68,6 +71,8 @@ import {ChatAttachComponent} from "./chat-attach/chat-attach.component";
     AvatarButtonComponent,
     ImgComponent,
     MembersPopoverComponent,
+    ChangeTitlePopoverComponent,
+    WarnPopoverComponent,
     SquadFilterComponent,
     SquadItemComponent,
     TeamIconComponent,
@@ -83,6 +88,8 @@ import {ChatAttachComponent} from "./chat-attach/chat-attach.component";
 
   ],
   entryComponents: [
+    ChangeTitlePopoverComponent,
+    WarnPopoverComponent,
     ChatHeaderComponent,
     MembersPopoverComponent,
   ]

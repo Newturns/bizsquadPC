@@ -6,18 +6,14 @@ import {Commons} from "../../biz-common/commons";
 import {IUser} from "../../_models";
 import {CacheService} from "../../providers/cache/cache";
 import {BizFireService} from "../../providers";
-import {MembersPopoverComponent} from "../members-popover/members-popover";
 import {TakeUntil} from "../../biz-common/take-until";
 import {AlertProvider} from "../../providers/alert/alert";
 import {ChatService} from "../../providers/chat.service";
-import {takeUntil} from "rxjs/operators";
 
-/**
- * Generated class for the ChatHeaderComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+import {MembersPopoverComponent} from "../members-popover/members-popover";
+import {ChangeTitlePopoverComponent} from "../change-title-popover/change-title-popover";
+
+
 @Component({
   selector: 'chat-header',
   templateUrl: 'chat-header.html'
@@ -147,21 +143,33 @@ export class ChatHeaderComponent extends TakeUntil {
   presentPopover(ev): void {
     let popover = this.popoverCtrl.create('page-member-chat-menu',{}, {cssClass: 'page-member-chat-menu'});
 
+    popover.present({ev: ev});
+
     popover.onDidDismiss(data => {
-      if(data == 'title') {
-      //  채팅방 이름 변경 Alert
-        let prompt = this.alertCtrl.promptAlert(this.chatTitle,this._room);
+      if(data === 'title') {
+
+        //채팅방 이름 변경 Alert
+        console.log("채팅방 이름변경 시작");
+        this.changeTitle(ev);
+
+      } else if(data === 'leave') {
+
+        console.log("채팅방 나가기 클릭");
+
       } else {
         return;
       }
     });
-
-    popover.present({ev: ev});
   }
 
   //chat member list
   chatMemberList(ev): void {
     let popover = this.popoverCtrl.create(MembersPopoverComponent,{}, {cssClass: 'members-popover'});
     popover.present({ev: ev});
+  }
+
+  changeTitle(ev): void {
+    let titlePopover = this.popoverCtrl.create(ChangeTitlePopoverComponent);
+    titlePopover.present({ev: ev});
   }
 }

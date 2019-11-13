@@ -64,8 +64,8 @@ export class MemberChatMenuPage extends TakeUntil {
   }
 
   leaveChatRoom(){
-    this.viewCtrl.dismiss();
-    this.alertCtrl.leaveRoomAlert(this.bizFire.uid,this.selectChatRoom.data.gid,this.selectChatRoom.cid);
+    this.viewCtrl.dismiss('leave');
+    // this.alertCtrl.leaveRoomAlert(this.bizFire.uid,this.selectChatRoom.data.gid,this.selectChatRoom.cid);
   }
 
   ngOnDestroy(): void {
