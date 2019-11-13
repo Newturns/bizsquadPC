@@ -64,14 +64,14 @@ ion-item:hover a {
 
 // member page - popover template
 .page-profile{
-    .popover-content{
-        top:15% !important;
-        left:7% !important;
-        width: 86% !important;
-        height: 360px !important;
-        border-radius: 10px;
-        background-color: white !important;
-    }
+  .popover-content{
+    top:25% !important;
+    left:7% !important;
+    width: 85% !important;
+    height: 420px;
+    border-radius: 10px;
+    background-color: white !important;
+  }
 }
 
 // chat page invite popover - popover template

@@ -221,6 +221,16 @@ export const language = {
         "en": "bookmark",
         "ja": "お気に入り"
       },
+      "first_name": {
+        "ko": "이름",
+        "en": "First Name",
+        "ja": "名前(名)"
+      }
+      ,"last_name": {
+        "ko": "성",
+        "en": "Last Name",
+        "ja": "苗字(姓)"
+      },
       "online": {
         "ko": "온라인",
         "en": "online",

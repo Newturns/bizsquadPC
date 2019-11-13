@@ -155,10 +155,8 @@ export class TabsPage {
     this.chatService.unreadCountMap$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((list: IUnreadMap) => {
-        list.getValues().forEach((item : MapItem) => {
-          this.chatCount += item.unreadList.length;
-          this.electron.setAppBadge(this.chatCount);
-        });
+        this.chatCount = list.totalUnreadCount();
+        this.electron.setAppBadge(this.chatCount);
     });
 
     this.bizFire.afStore.collection(Commons.chatPath(this.group.gid),ref =>{

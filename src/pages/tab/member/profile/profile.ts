@@ -24,7 +24,7 @@ import {STRINGS} from "../../../../biz-common/commons";
 export class ProfilePage {
 
   // 본인 프로필인지 다른 유저의 프로필인지 체크
-  who : boolean = false;
+  me : boolean = false;
   editProfileForm: FormGroup;
 
   // 프로필 변경 버튼 클릭
@@ -68,75 +68,40 @@ export class ProfilePage {
     public electron : Electron,
     public chatService: ChatService) {
 
-      this._unsubscribeAll = new Subject<any>();
+    this._unsubscribeAll = new Subject<any>();
 
-      this.bizFire.onLang
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((l: any) => {
-          this.langPack = l.pack();
-      });
+    this.bizFire.onLang
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((l: any) => {
+        this.langPack = l.pack();
+    });
+
+    this.targetValue = this.navParams.get('target');
+    this.group = this.navParams.get('group');
+
   }
 
   ngOnInit(): void {
 
     // 본인선택시 본인프로필값 / 유저선택시 유저 프로필값 가져옴.
-    this.targetValue = this.navParams.get('target');
-    this.group = this.navParams.get('group');
-
 
     console.log("targetValue ::",this.targetValue);
 
-    if(this.targetValue){
-
-      this.loadUserData();
-
-      // 본인인가, 유저인가
-      this.who = this.bizFire.currentUID == this.targetValue.uid;
-    }
+    // 본인인가, 유저인가
+    this.me = this.bizFire.currentUID == this.targetValue.uid;
 
     this.editProfileForm = this.formBuilder.group({
       displayName: [this.targetValue.data.displayName, this.displayNameValidator],
       phoneNumber: [this.targetValue.data.phoneNumber, this.phoneNumberValidator],
       email: [this.targetValue.data.email],
+      user_visible_firstname: [this.targetValue.data.user_visible_firstname || '',this.phoneNumberValidator],
+      user_visible_lastname: [this.targetValue.data.user_visible_lastname || '',this.phoneNumberValidator]
     });
 
     this.editProfileForm.valueChanges.pipe(takeUntil(this._unsubscribeAll))
     .subscribe(data => {
       this.checkProfile = true;
     })
-  }
-
-  getType(uid: string): string {
-
-    let ret = '';
-
-    if(this.bizFire.currentBizGroup.isManager(uid) != undefined) {
-
-      if(this.bizFire.currentBizGroup.isManager(uid) === true) {
-        ret = STRINGS.FIELD.MANAGER;
-      } else if(this.bizFire.currentBizGroup.isMember(uid) === true) {
-        ret = STRINGS.FIELD.MEMBER;
-      }
-    }
-
-    if(this.bizFire.currentBizGroup.isPartner(uid) === true){
-      ret = STRINGS.FIELD.PARTNER;
-    }
-
-    return ret;
-
-  }
-
-  editProfileShow() {
-    if(this.who && !this.editProfile) {
-      this.editProfile = true;
-    }
-  }
-
-  cancelEdit() {
-    if(this.who && this.editProfile) {
-      this.editProfile = false;
-    }
   }
 
   editPhoto(event) {
@@ -165,9 +130,6 @@ export class ProfilePage {
               displayName: this.editProfileForm.value['displayName'],
               photoURL: url
             }).then(()=>{
-              this.closePopover().then(()=>{
-                this.alertCtrl.successEditProfile();
-              });
               // clear old value
               this.attachFile = null;
               this.loading.hide();
@@ -177,6 +139,7 @@ export class ProfilePage {
       }
     }
   }
+
   uploadProfile(): Promise<string>{
     return new Promise<string>( (resolve, reject) => {
         if(this.attachFile){
@@ -201,6 +164,7 @@ export class ProfilePage {
         }
     });
   }
+
   editSubmit() {
     if(this.editProfileForm.valid && this.checkProfile) {
       this.loading.show();
@@ -224,27 +188,6 @@ export class ProfilePage {
     } else {
       this.viewCtrl.dismiss();
     }
-  }
-
-  loadUserData(){
-    if(this.targetValue.data != null && this.targetValue.data.photoURL != null) {
-      this.imageSrc = this.targetValue.data.photoURL;
-    } else if(this.targetValue.data.displayName != null || this.targetValue.data.displayName.length != 0){
-      let count = 2;
-      if(this.targetValue.data.displayName.length === 1){
-        count = 1;
-      }
-      this.notImg = this.targetValue.data.displayName.substr(0,count);
-    } else {
-      this.notImg = this.targetValue.data.email.substr(0,2);
-    }
-  }
-
-  closePopover(){
-    return this.viewCtrl.dismiss().then(() => {
-      this._unsubscribeAll.next();
-      this._unsubscribeAll.complete();
-    });
   }
 
   gotoChat(){
@@ -271,6 +214,13 @@ export class ProfilePage {
       this.electron.openChatRoom(selectedRoom);
     }
     this.closePopover();
+  }
+
+  closePopover(){
+    return this.viewCtrl.dismiss().then(() => {
+      this._unsubscribeAll.next();
+      this._unsubscribeAll.complete();
+    });
   }
 
   ngOnDestroy(): void {
