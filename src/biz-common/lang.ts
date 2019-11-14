@@ -301,6 +301,11 @@ export const language = {
         "en": "Deleted.",
         "ja": "削除されました。"
       }
+      ,"deleted_group": {
+        "ko": "이미 삭제된 그룹입니다.",
+        "en": "This group has already been deleted.",
+        "ja": "このグループは、すでに削除されました。"
+      }
       ,"manager": {
         "ko": "관리자",
         "en": "Manager",

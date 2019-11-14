@@ -50,13 +50,13 @@
 
       <!--TITLE ? -->
       <div class="item-info word-break-all text-wrap text-ellipsis flex-grow-1 flex-shrink-1 d-flex align-items-center">
-        {{item.data.info?.title}}
+        {{item.data.info?.title || langPack['deleted_group']}}
       </div>
 
       <div class="flex-shrink-0 d-flex align-items-center">
 
         <ng-container *ngIf="item.data.groupInvite">
-          <div class="notice-item-link text-danger mr-3"  (click)="onAcceptClicked()">
+          <div class="notice-item-link text-danger mr-3" *ngIf="!item.data.info.title" (click)="onAcceptClicked()">
             {{langPack['accept']}}
           </div>
         </ng-container>

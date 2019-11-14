@@ -8,7 +8,7 @@
     </div>
     <ng-template #memberChat>
       <div>
-        <app-avatar-button [uid]="chatBox.data.lastMessage.sender"></app-avatar-button>
+        <app-avatar-button [uid]="senderUid()"></app-avatar-button>
 <!--        <biz-chat-icon [uids]="chatBox.getMemberIds(true)"></biz-chat-icon>-->
       </div>
     </ng-template>

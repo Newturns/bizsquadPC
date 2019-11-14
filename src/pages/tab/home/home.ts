@@ -174,7 +174,8 @@ export class HomePage implements OnInit {
           this.badgeCount = msgs.filter(m => {
             let ret : boolean;
             if(m.data.statusInfo.done !== true) {
-              ret = m.data.gid === this.group.gid;
+              ret = true;
+              // ret = m.data.gid === this.group.gid;
             } else {
               ret = false;
             }

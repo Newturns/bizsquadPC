@@ -7,6 +7,7 @@ import {ChatService} from "../../providers/chat.service";
 import {IUnreadMap} from "../../pages/tab/chat/unread-counter";
 import {Commons} from "../../biz-common/commons";
 import {IUser} from "../../_models";
+import {BizFireService} from "../../providers";
 
 
 @Component({
@@ -52,6 +53,7 @@ export class ChatItemComponent extends TakeUntil implements OnInit {
   unreadCount: number = 0;
 
   constructor(private cacheService: CacheService,
+              private bizFire : BizFireService,
               private chatService: ChatService) {
     super();
   }
@@ -126,6 +128,22 @@ export class ChatItemComponent extends TakeUntil implements OnInit {
             this.chatTitle = 'No users';
           }
         });
+    }
+  }
+
+
+  senderUid() : string {
+
+    const lastMessage = this.chatBox.data.lastMessage;
+
+    if(lastMessage) {
+      if(lastMessage.sender) {
+        return lastMessage.sender;
+      } else {
+        return this.bizFire.uid;
+      }
+    } else {
+      return  this.bizFire.uid;
     }
   }
 }

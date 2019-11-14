@@ -121,11 +121,13 @@ export class NotifyPage extends TakeUntil{
           return new Promise<ICustomMenu>(resolve => {
             this.cacheService.getObserver(Commons.groupPath(gid))
               .pipe(take(1))
-              .subscribe((groupValue: IBizGroupData)=> resolve({
-                id: gid,
-                title: groupValue.team_name,
-                data: groupValue
-              }));
+              .subscribe((groupValue: IBizGroupData) => {
+                if(groupValue === null) {
+                  resolve({ id: gid, title: 'Deleted Group' })
+                } else {
+                  resolve({ id: gid, title: groupValue.team_name, data: groupValue })
+                }
+              });
           });
         });
         this.noticeGidFilter = await Promise.all(promiseMap);
