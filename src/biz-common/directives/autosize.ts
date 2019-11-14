@@ -1,4 +1,5 @@
-import { ElementRef, HostListener, Directive, OnInit } from '@angular/core';
+import {ElementRef, HostListener, Directive, OnInit, Input} from '@angular/core';
+import {text} from "@angular/core/src/render3";
 
 @Directive({
   selector: 'ion-textarea[autosize]'
@@ -10,16 +11,34 @@ export class Autosize implements OnInit {
     this.adjust();
   }
 
+  @Input('autosize') maxHeight: number;
+
   constructor(public element:ElementRef) {}
 
   ngOnInit():void {
-    setTimeout(() => this.adjust(), 0);
+    this.adjust();
   }
 
-  adjust():void {
-    const textArea = this.element.nativeElement.getElementsByTagName('textarea')[0];
-    textArea.style.overflow = 'hidden';
-    textArea.style.height = 'auto';
-    textArea.style.height = textArea.scrollHeight + 'px';
+  // adjust():void {
+  //   const textArea = this.element.nativeElement.getElementsByTagName('textarea')[0];
+  //   textArea.style.overflow = 'hidden';
+  //   textArea.style.height = 'auto';
+  //   textArea.style.height = textArea.scrollHeight + 'px';
+  // }
+
+  adjust(): void {
+    let ta = this.element.nativeElement.querySelector("textarea"),
+      newHeight;
+
+    if (ta) {
+      ta.style.overflow = "hidden";
+      ta.style.height = "auto";
+      if (this.maxHeight) {
+        newHeight = Math.min(ta.scrollHeight, this.maxHeight);
+      } else {
+        newHeight = ta.scrollHeight;
+      }
+      ta.style.height = newHeight + "px";
+    }
   }
 }

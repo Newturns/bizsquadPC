@@ -1,5 +1,5 @@
-import {Component, ViewChild} from '@angular/core';
-import {Content, IonicPage, NavController, NavParams} from 'ionic-angular';
+import {Component, ElementRef, QueryList, ViewChild} from '@angular/core';
+import {Content, IonicPage, NavController, NavParams, TextInput} from 'ionic-angular';
 import {IChat, IMessage, MessageBuilder} from "../../../../_models/message";
 import {Electron} from "../../../../providers/electron/electron";
 import {BizFireService, LoadingProvider} from "../../../../providers";
@@ -32,6 +32,9 @@ export class ChatFramePage extends TakeUntil{
 
   // 스크롤 컨텐츠
   @ViewChild('scrollContent') contentArea: Content;
+
+  //ion text-area
+  @ViewChild('msgInput') msgInput: ElementRef;
 
   // 채팅 input
   chatForm : FormGroup;
@@ -198,6 +201,14 @@ export class ChatFramePage extends TakeUntil{
 
   }
 
+  protected adjustTextarea(event: any): void {
+    let textarea: any = event.target;
+    textarea.style.overflow = 'hidden';
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+    return;
+  }
+
   keydown(e : any) {
     if (e.keyCode == 13) {
       if (e.shiftKey === false) {
@@ -207,13 +218,13 @@ export class ChatFramePage extends TakeUntil{
         let value = e.target.value;
         value = value.trim();
         if(value.length > 0){
-          this.sendMsg(value);
+          this.sendMsg(value,e);
         }
       }
     }
   }
 
-  sendMsg(value : any) {
+  sendMsg(value : any,e? : any) {
     let valid = this.chatForm.valid;
 
     if(valid) {
@@ -224,6 +235,8 @@ export class ChatFramePage extends TakeUntil{
           timer(100).subscribe(() => this.contentArea.scrollToBottom(0));
         });
         this.chatForm.setValue({chat:''});
+        //textarea 높이 초기화를 위한 이벤트 전달.
+        this.adjustTextarea(e);
       }
     }
   }
@@ -489,6 +502,7 @@ export class ChatFramePage extends TakeUntil{
     } else {
       return wholeDate;
     }
+
   }
 
 }

@@ -1,35 +1,4 @@
 page-group-list {
-    //ion-avatar{
-    //    border-radius: 15%;
-    //    color:white;
-    //    font-weight: bold;
-    //    text-align: center;
-    //    line-height: 2.5;
-    //}
-    //
-    //.groupListItem {
-    //    background-color: inherit;
-    //}
-    //ion-list:hover {
-    //    // background-color: #f6f6f6;
-    //    //-webkit-animation: animationColor 1s infinite; /* Chrome, Safari, Opera */
-    //    //animation: animationColor 1s infinite;
-    //    cursor: pointer;
-    //}
-    //
-    //.groupName{
-    //    text-overflow: ellipsis;
-    //    overflow: hidden;
-    //    white-space: nowrap;
-    //}
-    //.groupInfo{
-    //    text-align: center;
-    //    background-color: rgba($color: #EFEFEF, $alpha: 0.5);
-    //
-    //    .InfoTitle {
-    //        padding-bottom: 5px;
-    //    }
-    //}
 
   .login-top-menu{
     -webkit-app-region: no-drag;
@@ -56,7 +25,7 @@ page-group-list {
   }
 
   .group-card {
-    height: 80px;
+    height: 65px;
     border-radius: 6px;
     box-shadow: 0 10px 25px 0 #00000019;
     //border: solid 1px #324ca8; 이건 호버시만.
@@ -66,7 +35,7 @@ page-group-list {
       width: 0;
       .group-name {
         font-family: Roboto;
-        font-size: 20px;
+        font-size: 17px;
         font-weight: 500;
         font-stretch: normal;
         font-style: normal;

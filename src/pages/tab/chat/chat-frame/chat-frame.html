@@ -29,7 +29,8 @@
       </div>
 
       <div class="flex-grow-1 mx-3">
-        <ion-textarea rows="1" formControlName="chat" placeholder="Type a message here" (keydown)="keydown($event)" autosize>
+        <ion-textarea #msgInput rows="1" formControlName="chat" placeholder="Type a message here"
+                      (keydown)="keydown($event)" autosize="100">
         </ion-textarea>
       </div>
       <div class="mb-2">
