@@ -61,6 +61,11 @@ export const language = {
         "en": "Rename",
         "ja": "名称変更"
       }
+      ,"more": {
+        "ko": "더보기",
+        "en": "more",
+        "ja": "もっと見る"
+      }
       ,"rename_title": {
         "ko": "이름변경",
         "en": "Rename",

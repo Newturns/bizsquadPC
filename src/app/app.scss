@@ -442,7 +442,28 @@ ion-grid {
   border-top: 1px solid #e3e7f2;
 }
 
-
+ion-icon {
+  &[class*="custom-"] {
+    mask-size: contain;
+    mask-position: 50% 50%;
+    mask-repeat: no-repeat;
+    background: currentColor;
+    width: 1.2em;
+    height: 1.2em;
+  }
+  &[class*="custom-home"] {
+    mask-image: url(../../www/imgs/renewal/Icon_Outline_home.svg);
+  }
+  &[class*="custom-chat"] {
+    mask-image: url(../../www/imgs/renewal/Icon_Outline_chat.svg);
+  }
+  &[class*="custom-squad"] {
+    mask-image: url(../../www/imgs/renewal/Icon_Outline_squad.svg);
+  }
+  &[class*="custom-member"] {
+    mask-image: url(../../www/imgs/renewal/Icon_Outline_member.svg);
+  }
+}
 
 
 

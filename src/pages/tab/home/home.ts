@@ -38,8 +38,6 @@ export class HomePage implements OnInit {
   displayName;
   fullName;
 
-  // no bbs message value;
-  noBbs : boolean = false;
   // disable setting value. icon
   manager: boolean = false;
 
@@ -66,11 +64,12 @@ export class HomePage implements OnInit {
 
   langPack: any;
 
-  webUrl = 'https://product.bizsquad.net//auth?token=';
-
-
   //최신 공지사항 4개.
   latelyNotice : IMessage[] = [];
+
+
+  //앱스 더보기
+  moreAppsMode : boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -185,6 +184,9 @@ export class HomePage implements OnInit {
           if(this.badgeCount > 99){ this.badgeCount = 99; }
         }
       });
+
+  //슬라이드 자동재생
+    this.slides.enableKeyboardControl(true);
 }
 
   // profile menu toggle

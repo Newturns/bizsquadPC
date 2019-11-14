@@ -20,8 +20,8 @@
   </ion-navbar>
 </ion-header>
 <ion-tabs tabsPlacement="top" selectedIndex="0" [ngStyle]="{'color': group.data.team_color ? group.data.team_color : '#707c97'}">
-  <ion-tab [root]="tab1Root" tabIcon="customHome" tabTitle="{{ langPack['home'] }}"></ion-tab>
-  <ion-tab [root]="tab2Root" tabIcon="customSquad" tabTitle="{{langPack['squad']}}"></ion-tab>
-  <ion-tab [root]="tab3Root" tabIcon="customChat" tabTitle="{{langPack['chat']}}" tabBadgeStyle="danger" [tabBadge]="chatCount | badgeLimit : 999"></ion-tab>
-  <ion-tab [root]="tab5Root" tabIcon="customMember" tabTitle="{{langPack['members']}}"></ion-tab>
+  <ion-tab [root]="tab1Root" tabIcon="custom-home" tabTitle="{{ langPack['home'] }}"></ion-tab>
+  <ion-tab [root]="tab2Root" tabIcon="custom-squad" tabTitle="{{langPack['squad']}}"></ion-tab>
+  <ion-tab [root]="tab3Root" tabIcon="custom-chat" tabTitle="{{langPack['chat']}}" tabBadgeStyle="danger" [tabBadge]="chatCount | badgeLimit : 999"></ion-tab>
+  <ion-tab [root]="tab5Root" tabIcon="custom-member" tabTitle="{{langPack['members']}}"></ion-tab>
 </ion-tabs>
