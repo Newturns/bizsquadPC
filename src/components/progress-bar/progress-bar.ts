@@ -18,11 +18,11 @@ export class ProgressBarComponent extends TakeUntil implements OnInit{
   }
 
   ngOnInit(): void {
-    if(this.progress$){
-      this.progress$
-        .pipe(this.takeUntil)
-        .subscribe((percentage: number) => this.progress = percentage);
-    }
+    // if(this.progress$){
+    //   this.progress$
+    //     .pipe(this.takeUntil)
+    //     .subscribe((percentage: number) => this.progress = percentage);
+    // }
   }
 
 }
