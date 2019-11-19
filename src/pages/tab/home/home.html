@@ -100,22 +100,14 @@
       <!--  more 버튼 클릭시 콘텐츠가 확장되는 스타일   -->
       <div class="d-flex justify-content-between align-items-center px-4 pb-4">
         <div class="menu-title">{{ langPack['apps'] }}</div>
-        <div class="pointer more-btn" (click)="clickMore()">{{langPack['more']}}</div>
+        <div class="pointer" (click)="presentPopover($event)">
+          <img src="imgs/renewal/Icon_add.svg">
+        </div>
       </div>
       <div class="menu-con">
         <ion-grid #ionGrid class="apps-grid">
           <ion-row class="justify-content-start mx-3">
-            <ion-col class="col-3 mb-5">
-              <div class="d-flex flex-column align-items-center justify-content-center" (click)="presentPopover($event)">
-                <div class="menu-box d-flex align-items-center justify-content-center">
-                  <div class="white-circle d-flex align-items-center justify-content-center">
-                    <img src="imgs/renewal/Icon_plus.svg">
-                  </div>
-                </div>
-                <div class="menu-text mt-2 text-center">{{ langPack['add'] }}</div>
-              </div>
-            </ion-col>
-            <ion-col class="col-3 mb-5" *ngFor="let link of userCustomLinks">
+            <ion-col class="col-3 mb-3" *ngFor="let link of userCustomLinks">
               <div class="d-flex flex-column align-items-center justify-content-center">
                 <div class="menu-box d-flex align-items-center justify-content-center" (mouseenter)="link.data.hidden=false" (mouseleave)="link.data.hidden=true">
                   <div class="white-circle d-flex align-items-center justify-content-center">
@@ -129,6 +121,10 @@
             </ion-col>
           </ion-row>
         </ion-grid>
+        <div class="d-flex justify-content-center pointer mt-4" *ngIf="userCustomLinks && userCustomLinks.length > 8" (click)="clickMore()">
+          <span class="more-apps-text" *ngIf="!moreAppsMode">{{langPack['more_apps']}}</span>
+          <span class="more-apps-text" *ngIf="moreAppsMode">{{langPack['end_more']}}</span>
+        </div>
       </div>
     </div>
 

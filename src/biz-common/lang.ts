@@ -20,6 +20,16 @@ export const language = {
         "ko": "알람",
         "en": "Notifications",
         "ja": "アラーム"
+      },
+      "more_apps": {
+        "ko": "앱 더보기",
+        "en": "More Apps",
+        "ja": "アップスもっと見る"
+      },
+      "end_more": {
+        "ko": "더보기 닫기",
+        "en": "Close More",
+        "ja": "閉じる"
       }
       ,"settings": {
         "ko": "설정",

@@ -256,17 +256,25 @@ export class HomePage implements OnInit {
     if(this.moreAppsMode) {
       console.log("공지사항 숨김모드 : appsGrid 사이즈 원래대로...");
       console.log("this.appGrid :::",this.appGrid);
-      this.appGrid.nativeElement.style.height = 285 + 'px';
+      this.appGrid.nativeElement.style.height = 340 + 'px';
       this.appGrid.nativeElement.style.overflow = 'auto';
     } else {
-      this.appGrid.nativeElement.style.height = 80 + 'px';
+      this.appGrid.nativeElement.style.height = 160 + 'px';
       this.appGrid.nativeElement.style.overflow = 'hidden';
       console.log("공지사항 보임모드 : appsGrid 사이즈 늘리기..");
     }
   }
 
   removeLink(ev,link) {
-    this.bizFire.deleteLink(link);
-    console.log(link);
+    this.bizFire.deleteLink(link).then(() => {
+      if(this.userCustomLinks) {
+        if(this.userCustomLinks.length < 9) {
+          console.log("링크삭제 모어버튼 삭제",this.userCustomLinks.length);
+          this.appGrid.nativeElement.style.height = 160 + 'px';
+          this.appGrid.nativeElement.style.overflow = 'hidden';
+          this.moreAppsMode = false;
+        }
+      }
+    });
   }
 }

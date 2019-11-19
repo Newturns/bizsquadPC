@@ -24,7 +24,7 @@ let win;
 let history;
 let selectChatRoom;
 let testRooms = {};
-let devMode = true;
+let devMode = false;
 
 const mainMenuTemplate = defaultMenu(app,shell);
 // Add custom menu
@@ -89,9 +89,9 @@ function createWindow() {
 
     // windowStateKeeper
     let mainWindowState = windowStateKeeper({
-        file: 'mainWindow_01.json',
+        file: 'mainWindow_02.json',
         defaultWidth: 400,
-        defaultHeight: 752
+        defaultHeight: 815
     });
 
     // Create the browser window.
@@ -102,7 +102,7 @@ function createWindow() {
         'height': mainWindowState.height,
         frame: false,
         minWidth:400,
-        minHeight:752,
+        minHeight:815,
         maxWidth:600,
         maxHeight:1024,
         titleBarStyle: 'hidden-inset',

@@ -130,8 +130,18 @@ page-home {
       .menu-con {
         position: relative;
         .apps-grid {
-          height: 80px;
+          height: 160px;
           overflow: hidden;
+        }
+
+        .more-apps-text {
+          font-size: 12px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.33;
+          letter-spacing: 0.4px;
+          color: #707c97;
         }
         .menu-box {
           width: 55px;
@@ -172,15 +182,6 @@ page-home {
         letter-spacing: 0.4px;
         color: #0d1c2e;
       }
-      .more-btn {
-        font-size: 12px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.14;
-        letter-spacing: 0.4px;
-        color: #707c97;
-      }
     }
   }
 
@@ -214,7 +215,7 @@ page-home {
     .notice-msg-con {
 
       //height
-      height: 40px;
+      height: 35px;
 
       .notice-title {
         font-size: 14px;
