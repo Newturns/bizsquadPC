@@ -24,7 +24,7 @@ let win;
 let history;
 let selectChatRoom;
 let testRooms = {};
-let devMode = false;
+let devMode = true;
 
 const mainMenuTemplate = defaultMenu(app,shell);
 // Add custom menu
@@ -106,6 +106,7 @@ function createWindow() {
         maxWidth:600,
         maxHeight:1024,
         titleBarStyle: 'hidden-inset',
+        webPreferences: { nodeIntegration : true }
     });
 
 
@@ -241,6 +242,7 @@ ipcMain.on('createChatRoom', (event, chatRoom) => {
             maxHeight:1024,
             titleBarStyle: 'hidden-inset',
             opacity: 1,
+            webPreferences: { nodeIntegration : true }
         });
 
         testRooms[chatRoomId].loadURL(url.format({
