@@ -129,6 +129,10 @@ page-home {
       padding: 15px 0;
       .menu-con {
         position: relative;
+        .apps-grid {
+          height: 80px;
+          overflow: hidden;
+        }
         .menu-box {
           width: 55px;
           height: 55px;
@@ -169,7 +173,7 @@ page-home {
         color: #0d1c2e;
       }
       .more-btn {
-        font-size: 14px;
+        font-size: 12px;
         font-weight: normal;
         font-stretch: normal;
         font-style: normal;
@@ -254,4 +258,8 @@ page-home {
       font-weight: bold;
     }
   }
+}
+
+ion-col {
+  height: 74px !important;
 }

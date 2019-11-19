@@ -1,19 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Electron } from './../../../providers/electron/electron';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {IonicPage, NavController, NavParams, App, PopoverController, Slides} from 'ionic-angular';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {IonicPage, NavController, NavParams, App, PopoverController} from 'ionic-angular';
 import { AngularFireAuth } from '@angular/fire/auth';
-import {BehaviorSubject, Subject, Subscription, timer} from 'rxjs';
+import {Subject} from 'rxjs';
 import { filter, takeUntil, map } from 'rxjs/operators';
 import { BizFireService, userLinks } from '../../../providers/biz-fire/biz-fire';
 import { TokenProvider } from '../../../providers/token/token';
 import { NotificationService } from '../../../providers/notification.service';
 import {LangService} from "../../../providers/lang-service";
-import {IBizGroup, INotification, IUser, IUserData} from "../../../_models";
+import {IBizGroup, INotification, IUserData} from "../../../_models";
 import {UserStatusProvider} from "../../../providers/user-status";
 import {IMessage} from "../../../_models/message";
-import {Commons, STRINGS} from "../../../biz-common/commons";
+import {Commons} from "../../../biz-common/commons";
 import {Message} from "../../../biz-common/message";
+import { trigger, state, style, animate, transition } from '@angular/animations';
+import {IonGrid} from "@ionic/angular";
 
 @IonicPage({
   name: 'page-home',
@@ -26,7 +28,7 @@ import {Message} from "../../../biz-common/message";
 })
 export class HomePage implements OnInit {
 
-  @ViewChild('slides') slides: Slides;
+  @ViewChild('ionGrid') appGrid : ElementRef;
 
   currentUser: IUserData;
   group: IBizGroup;
@@ -185,9 +187,6 @@ export class HomePage implements OnInit {
           if(this.badgeCount > 99){ this.badgeCount = 99; }
         }
       });
-
-  //슬라이드 자동재생
-    this.slides.enableKeyboardControl(true);
 }
 
   // profile menu toggle
@@ -246,28 +245,28 @@ export class HomePage implements OnInit {
   }
 
   presentPopover(ev): void {
-    if(this.userCustomLinks.length < 8) {
-      let popover = this.popoverCtrl.create('page-customlink',{}, {cssClass: 'page-customlink'});
-      popover.present({ev: ev}).then((v) => {
-        console.log(v);
-      });
+    let popover = this.popoverCtrl.create('page-customlink',{}, {cssClass: 'page-customlink'});
+    popover.present({ev: ev}).then((v) => {
+      console.log(v);
+    });
+  }
+
+  clickMore() {
+    this.moreAppsMode = !this.moreAppsMode;
+    if(this.moreAppsMode) {
+      console.log("공지사항 숨김모드 : appsGrid 사이즈 원래대로...");
+      console.log("this.appGrid :::",this.appGrid);
+      this.appGrid.nativeElement.style.height = 285 + 'px';
+      this.appGrid.nativeElement.style.overflow = 'auto';
+    } else {
+      this.appGrid.nativeElement.style.height = 80 + 'px';
+      this.appGrid.nativeElement.style.overflow = 'hidden';
+      console.log("공지사항 보임모드 : appsGrid 사이즈 늘리기..");
     }
   }
 
   removeLink(ev,link) {
     this.bizFire.deleteLink(link);
     console.log(link);
-    if(this.slides.isBeginning()) {
-      console.log('first slide page');
-    } else {
-      this.slides.slideTo(0);
-    }
-  }
-
-  slideBack() {
-    this.slides.slidePrev();
-  }
-  slideNext() {
-    this.slides.slideNext();
   }
 }

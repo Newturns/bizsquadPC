@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 //electron
 import { Electron } from '../providers/electron/electron';
 
@@ -35,6 +37,7 @@ import {ComponentsModule} from "../components/components.module";
     AngularFireStorageModule,
     AngularFireAuthModule,
     HttpClientModule,
+    BrowserAnimationsModule,
     ComponentsModule.forRoot()
   ],
   bootstrap: [IonicApp],

@@ -52,115 +52,88 @@
 
   <div class="home-con-frame d-flex flex-column justify-content-between align-content-between">
     <div class="home-con bg-white d-flex flex-column justify-content-center">
-      <div class="menu-title pl-4 pb-4">{{ langPack['taskbox'] }}</div>
-      <div class="menu-con d-flex flex-column px-30">
-        <!--   첫 줄   -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('video_chat',group.gid)">
-            <div class="menu-box d-flex align-items-center justify-content-center">
-              <img src="imgs/renewal/Icon_video.svg">
-            </div>
-            <div class="menu-text mt-2">{{langPack['video_chat']}}</div>
-          </div>
-          <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('SFA',group.gid)">
-            <div class="menu-box d-flex align-items-center justify-content-center">
-              <img src="imgs/renewal/Icon_sales.svg">
-            </div>
-            <div class="menu-text mt-2">{{ langPack['SFA'] }}</div>
-          </div>
-          <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('workflow',group.gid)">
-            <div class="menu-box d-flex align-items-center justify-content-center">
-              <img src="imgs/renewal/Icon_workflow.svg">
-            </div>
-            <div class="menu-text mt-2">{{ langPack['workflow'] }}</div>
-          </div>
-          <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('task',group.gid)">
-            <div class="menu-box d-flex align-items-center justify-content-center">
-              <img src="imgs/renewal/Icon_task.svg">
-            </div>
-            <div class="menu-text mt-2">{{ langPack['task'] }}</div>
-          </div>
-        </div>
+      <div class="menu-title pl-4 pb-4 flex-shrink-0">{{ langPack['taskbox'] }}</div>
+      <div class="menu-con d-flex flex-column justify-content-center">
+
+        <ion-grid>
+          <ion-row class="justify-content-start mx-3">
+            <ion-col class="col-3">
+              <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('video_chat',group.gid)">
+                <div class="menu-box d-flex align-items-center justify-content-center">
+                  <img src="imgs/renewal/Icon_video.svg">
+                </div>
+                <div class="menu-text mt-2">{{langPack['video_chat']}}</div>
+              </div>
+            </ion-col>
+            <ion-col class="col-3">
+              <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('SFA',group.gid)">
+                <div class="menu-box d-flex align-items-center justify-content-center">
+                  <img src="imgs/renewal/Icon_sales.svg">
+                </div>
+                <div class="menu-text mt-2">{{ langPack['SFA'] }}</div>
+              </div>
+            </ion-col>
+            <ion-col class="col-3">
+              <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('workflow',group.gid)">
+                <div class="menu-box d-flex align-items-center justify-content-center">
+                  <img src="imgs/renewal/Icon_workflow.svg">
+                </div>
+                <div class="menu-text mt-2">{{ langPack['workflow'] }}</div>
+              </div>
+            </ion-col>
+            <ion-col class="col-3">
+              <div class="d-flex flex-column align-items-center" (click)="tokenService.makeWebJump('task',group.gid)">
+                <div class="menu-box d-flex align-items-center justify-content-center">
+                  <img src="imgs/renewal/Icon_task.svg">
+                </div>
+                <div class="menu-text mt-2">{{ langPack['task'] }}</div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </div>
     </div>
 
-    <div class="biz-border-line"></div>
+    <div class="biz-border-line d-flex flex-grow-1 flex-shrink-1"></div>
 
-    <div class="home-con bg-white d-flex flex-column justify-content-start flex-grow-1">
+    <div class="home-con bg-white d-flex flex-column justify-content-start">
       <!--  more 버튼 클릭시 콘텐츠가 확장되는 스타일   -->
-<!--      <div class="d-flex justify-content-between align-items-center px-4 pb-4">-->
-<!--        <div class="menu-title">{{ langPack['apps'] }}</div>-->
-<!--        <div class="pointer more-btn" (click)="moreAppsMode = !moreAppsMode">{{langPack['more']}}</div>-->
-<!--      </div>-->
-<!--      <div class="menu-con">-->
-<!--        <ion-grid>-->
-<!--          <ion-row class="justify-content-start" style="overflow: hidden">-->
-<!--            <ion-col class="col-3">-->
-<!--              <div class="d-flex flex-column align-items-center justify-content-center" (click)="presentPopover($event)">-->
-<!--                <div class="menu-box d-flex align-items-center justify-content-center">-->
-<!--                  <div class="white-circle d-flex align-items-center justify-content-center">-->
-<!--                    <img src="imgs/renewal/Icon_plus.svg">-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div class="menu-text mt-2 text-center">{{ langPack['add'] }}</div>-->
-<!--              </div>-->
-<!--            </ion-col>-->
-<!--            <ion-col class="col-3" *ngFor="let link of userCustomLinks">-->
-<!--              <div class="d-flex flex-column align-items-center justify-content-center">-->
-<!--                <div class="menu-box d-flex align-items-center justify-content-center" (mouseenter)="link.data.hidden=false" (mouseleave)="link.data.hidden=true">-->
-<!--                  <div class="white-circle d-flex align-items-center justify-content-center">-->
-<!--                    <img class="favicon-img pointer" (click)="goLink($event,link)" *ngIf="link.data.img" src="{{ link.data.img }}">-->
-<!--                    <img class="favicon-img pointer" (click)="goLink($event,link)" *ngIf="!link.data.img" src="{{ getFavicons + link.data.url }}">-->
-<!--                  </div>-->
-<!--                  <ion-icon name="remove-circle" class="link-remove" (click)="removeLink($event,link)" [hidden]="link.data.hidden"></ion-icon>-->
-<!--                </div>-->
-<!--                <div class="menu-text text-55 mt-2 pointer text-center">{{ link.data.title }}</div>-->
-<!--              </div>-->
-<!--            </ion-col>-->
-<!--          </ion-row>-->
-<!--        </ion-grid>-->
-<!--      </div>-->
-
-      <!--  가로 슬라이드 스타일  -->
-      <div class="menu-title pl-4 pb-4">{{ langPack['apps'] }}</div>
-      <div class="menu-con d-flex align-items-center justify-content-between flex-grow-1">
-
-        <ion-slides no-padding #slides [slidesPerView]="4" autoplay="5000">
-
-          <!--  링크 추가  -->
-          <ion-slide>
-            <div class="d-flex flex-column align-items-center justify-content-center" (click)="presentPopover($event)">
-              <div class="menu-box d-flex align-items-center justify-content-center">
-                <div class="white-circle d-flex align-items-center justify-content-center">
-                  <img src="imgs/renewal/Icon_plus.svg">
+      <div class="d-flex justify-content-between align-items-center px-4 pb-4">
+        <div class="menu-title">{{ langPack['apps'] }}</div>
+        <div class="pointer more-btn" (click)="clickMore()">{{langPack['more']}}</div>
+      </div>
+      <div class="menu-con">
+        <ion-grid #ionGrid class="apps-grid">
+          <ion-row class="justify-content-start mx-3">
+            <ion-col class="col-3 mb-5">
+              <div class="d-flex flex-column align-items-center justify-content-center" (click)="presentPopover($event)">
+                <div class="menu-box d-flex align-items-center justify-content-center">
+                  <div class="white-circle d-flex align-items-center justify-content-center">
+                    <img src="imgs/renewal/Icon_plus.svg">
+                  </div>
                 </div>
+                <div class="menu-text mt-2 text-center">{{ langPack['add'] }}</div>
               </div>
-              <div class="menu-text mt-2 text-center">{{ langPack['add'] }}</div>
-            </div>
-          </ion-slide>
-
-          <!--  추가되는 링크 for  -->
-          <ion-slide *ngFor="let link of userCustomLinks; let i = index" [attr.data-index]="i">
-            <div class="d-flex flex-column align-items-center justify-content-center">
-              <div class="menu-box d-flex align-items-center justify-content-center" (mouseenter)="link.data.hidden=false" (mouseleave)="link.data.hidden=true">
-                <div class="white-circle d-flex align-items-center justify-content-center">
-                  <img class="favicon-img pointer" (click)="goLink($event,link)" *ngIf="link.data.img" src="{{ link.data.img }}">
-                  <img class="favicon-img pointer" (click)="goLink($event,link)" *ngIf="!link.data.img" src="{{ getFavicons + link.data.url }}">
+            </ion-col>
+            <ion-col class="col-3 mb-5" *ngFor="let link of userCustomLinks">
+              <div class="d-flex flex-column align-items-center justify-content-center">
+                <div class="menu-box d-flex align-items-center justify-content-center" (mouseenter)="link.data.hidden=false" (mouseleave)="link.data.hidden=true">
+                  <div class="white-circle d-flex align-items-center justify-content-center">
+                    <img class="favicon-img pointer" (click)="goLink($event,link)" *ngIf="link.data.img" src="{{ link.data.img }}">
+                    <img class="favicon-img pointer" (click)="goLink($event,link)" *ngIf="!link.data.img" src="{{ getFavicons + link.data.url }}">
+                  </div>
+                  <ion-icon name="remove-circle" class="link-remove" (click)="removeLink($event,link)" [hidden]="link.data.hidden"></ion-icon>
                 </div>
-                <ion-icon name="remove-circle" class="link-remove" (click)="removeLink($event,link)" [hidden]="link.data.hidden"></ion-icon>
+                <div class="menu-text text-55 mt-2 pointer text-center">{{ link.data.title }}</div>
               </div>
-              <div class="menu-text text-55 mt-2 pointer text-center">{{ link.data.title }}</div>
-            </div>
-          </ion-slide>
-        </ion-slides>
-
-        <i *ngIf="userCustomLinks.length > 3" class="fa fa-chevron-left slide_icon left" (click)="slideBack()"></i>
-        <i *ngIf="userCustomLinks.length > 3" class="fa fa-chevron-right slide_icon right" (click)="slideNext()"></i>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </div>
     </div>
 
     <ng-container *ngIf="!moreAppsMode">
-      <div class="biz-border-line"></div>
+      <div class="biz-border-line d-flex flex-grow-1 flex-shrink-1"></div>
 
       <!-- 최신 공지사항 4개까지 보여줌. -->
       <div class="notice-con bg-white">
@@ -182,7 +155,7 @@
       </div>
     </ng-container>
 
-    <div class="biz-border-line"></div>
+    <div class="biz-border-line d-flex flex-grow-1 flex-shrink-1"></div>
 
     <div class="home-footer bg-white d-flex justify-content-center align-items-center">
       Bizsquad is powered by<span class="link-newturns pointer" (click)="ipc.send('loadGH','https://www.bizsquad.net/')">&nbsp;Newturns&nbsp;</span>Inc.
