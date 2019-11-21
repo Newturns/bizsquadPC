@@ -1,17 +1,19 @@
-import { TokenProvider } from './../../providers/token/token';
 import { Electron } from './../../providers/electron/electron';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormGroup, ValidatorFn, Validators, FormBuilder } from '@angular/forms';
 import { LoadingProvider,BizFireService } from './../../providers';
-import { Subject } from 'rxjs';
+import {Subject, timer} from 'rxjs';
 import { takeUntil,take } from 'rxjs/operators';
-import { IUserState } from '../../providers/biz-fire/biz-fire';
 import * as electron from 'electron';
 import {IChat} from "../../_models/message";
 import {IUserData} from "../../_models";
-import firebase from "firebase";
 import {UserStatusProvider} from "../../providers/user-status";
+
+import * as firebase from 'firebase';
+import {environment} from "../../environments/environments";
+import * as angularFire from '@angular/fire';
+import {AngularFireDatabase} from "@angular/fire/database";
 
 @IonicPage({
   name: 'page-login',
@@ -29,13 +31,17 @@ export class LoginPage implements OnInit {
   loginForm: FormGroup;
   version: any;
   hideForm = false;
+
   userEmail = '';
+  userPwd : any;
 
   // 새 창으로 열기위해..
   ipc: any;
 
   // 구독 종료
   private _unsubscribeAll;
+
+  autoLoign : boolean = false;
 
   private emailValidator: ValidatorFn = Validators.compose([
     Validators.required,
@@ -53,7 +59,8 @@ export class LoginPage implements OnInit {
     private bizFire: BizFireService,
     private loading: LoadingProvider,
     public formBuilder: FormBuilder,
-    private userStatusService: UserStatusProvider
+    private userStatusService: UserStatusProvider,
+    private angularFIreDB : AngularFireDatabase,
     ) {
       this.loginForm = formBuilder.group({
         email: ['', this.emailValidator],
@@ -65,6 +72,7 @@ export class LoginPage implements OnInit {
   ionViewCanEnter(){
     this.hideForm = true;
     electron.ipcRenderer.send('giveMeRoomValue', 'ping');
+    electron.ipcRenderer.send('getLocalUser', 'ping');
     electron.ipcRenderer.on('selectRoom', (event, roomData : IChat) => {
       if(roomData != null) {
         this.hideForm = false;
@@ -79,21 +87,22 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
 
-    // 아이디 쿠키정보가 있을 시 가져옴.
-    this.getCookieID();
+    electron.ipcRenderer.on('sendUserData',(e, data) => {
+      console.log("datadatadatadatadata:::",data);
+      this.userEmail = data.id;
+      this.userPwd = data.pwd;
+      this.autoLoign = data.auto;
 
-
-    // on/offline check
-    // window.addEventListener('online',this.electron.updateOnlineStatus);
-    // window.addEventListener('offline',this.electron.updateOnlineStatus);
+      // if(this.autoLoign) {
+      //   timer(1000).subscribe(() => {
+      //     if(this.loginForm.valid) this.onLogin();
+      //   });
+      // }
+    });
 
     // 버전 가져오기
     this.version = electron.remote.app.getVersion();
 
-
-    electron.ipcRenderer.on('message',function(text) {
-      console.log(text);
-    })
   }
 
   ngOnDestroy(): void {
@@ -116,6 +125,8 @@ export class LoginPage implements OnInit {
         }
 
         await this.bizFire.loginWithEmail(email,password);
+
+        this.electron.saveLocalUser(email,password,this.autoLoign);
 
         this.electron.setCookieID('https://www.bizsquad.net','rememberID',this.loginForm.value['email']);
 
@@ -158,16 +169,40 @@ export class LoginPage implements OnInit {
         });
     });
   }
+
+
+  changeDB() {
+
+    // this.electron.localStorage.get('userData', (error, data) => {
+    //
+    //   if (error) throw error;
+    //
+    //   console.log(data);
+    // });
+
+    // this.angularFIreDB.database.app.delete().then(() => {
+    //
+    //   const a = firebase.initializeApp(environment.taxline).database().app.firestore().collection('user');
+    //   console.log(a);
+    //
+    // }).catch(err => {
+    //   console.log("에러발생",err)
+    // });
+
+  }
+
+
+
   // ------------------------------------------------------------------
   // * electron function.
   // ------------------------------------------------------------------
 
-  getCookieID() {
-    this.electron.ses.defaultSession.cookies.get({url : 'https://www.bizsquad.net',name: 'rememberID'},(err,cookies) => {
-      if(cookies.length > 0) {
-        this.userEmail = cookies[0].value;
-      }
-    })
+  gotoSignUp() {
+    this.ipc.send('loadGH','http://product.bizsquad.net/signUp/step1');
+  }
+
+  onAutoLogin() {
+    this.autoLoign = !this.autoLoign;
   }
   windowHide() {
     this.electron.windowHide();

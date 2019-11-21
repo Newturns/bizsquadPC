@@ -10,7 +10,7 @@ export class BizCheckBtnComponent implements OnInit {
   @Input()
   checked : boolean;
 
-  groupCOlor : string = '324CA8';
+  groupCOlor : string = '#324CA8';
 
   constructor(private bizFire : BizFireService) { }
 

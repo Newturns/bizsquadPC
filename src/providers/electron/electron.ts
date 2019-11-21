@@ -11,7 +11,7 @@ export class Electron {
   opacity = 0;
   ses = electron.remote.session;
 
-  constructor(public bizFire : BizFireService,) {
+  constructor(public bizFire : BizFireService) {
 
     this.ipc = electron.ipcRenderer;
   }
@@ -73,5 +73,10 @@ export class Electron {
 
   goLink(url){
     this.ipc.send('loadGH',url);
+  }
+
+  saveLocalUser(id:string,pwd:any,auto:boolean) {
+    const data = {id:id,pwd:pwd,auto:auto};
+    electron.ipcRenderer.send('saveLocalUser',data);
   }
 }

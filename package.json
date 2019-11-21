@@ -45,6 +45,7 @@
     "deep-equal": "^1.0.1",
     "electron-context-menu": "^0.12.1",
     "electron-default-menu": "^1.0.1",
+    "electron-json-storage": "^4.1.8",
     "electron-log": "^3.0.1",
     "electron-push-receiver": "^2.1.2",
     "electron-updater": "^4.0.6",

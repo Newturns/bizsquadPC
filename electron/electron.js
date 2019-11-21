@@ -6,7 +6,7 @@ const windowStateKeeper = require('electron-window-state');
 const url = require('url');
 const path = require('path');
 const contextMenu = require('electron-context-menu');
-
+const storage = require('electron-json-storage');
 // Module to create native browser window.
 const { BrowserWindow } = electron;
 
@@ -293,13 +293,31 @@ ipcMain.on('createChatRoom', (event, chatRoom) => {
 
 });
 
+//로그인하면 로컬스토리지에 유저데이터 저장.
+ipcMain.on('saveLocalUser',(e, value) => {
+  console.log("일렉트론 콘솔",value);
+  storage.set('userData', value, function(error) {
+    if (error) throw error;
+  });
+});
+
+//로그인페이지에서 요청시 유저데이터 불러옴.
+ipcMain.on('getLocalUser',(event) => {
+  storage.get('userData', function(error, data) {
+    if (error) throw error;
+
+    event.sender.send('sendUserData',data);
+  });
+});
+
+
 ipcMain.on('resetValue',(e) =>{
     selectChatRoom = null;
 });
 
 ipcMain.on('giveMeRoomValue', (event,text) => {
     event.sender.send('selectRoom',selectChatRoom);
-})
+});
 autoUpdater.on('checking-for-update', function () {
     sendStatusToWindow('Checking for update...');
 });
