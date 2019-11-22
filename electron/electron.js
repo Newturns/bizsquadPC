@@ -24,7 +24,7 @@ let win;
 let history;
 let selectChatRoom;
 let testRooms = {};
-let devMode = true;
+let devMode = false;
 
 const mainMenuTemplate = defaultMenu(app,shell);
 // Add custom menu
@@ -295,7 +295,6 @@ ipcMain.on('createChatRoom', (event, chatRoom) => {
 
 //로그인하면 로컬스토리지에 유저데이터 저장.
 ipcMain.on('saveLocalUser',(e, value) => {
-  console.log("일렉트론 콘솔",value);
   storage.set('userData', value, function(error) {
     if (error) throw error;
   });

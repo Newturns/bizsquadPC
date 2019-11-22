@@ -10,14 +10,18 @@ export class BizCheckBtnComponent implements OnInit {
   @Input()
   checked : boolean;
 
-  groupCOlor : string = '#324CA8';
+  groupColor : string = '#324CA8';
+
+  @Input()
+  useGroupColor: boolean = true;
 
   constructor(private bizFire : BizFireService) { }
 
   ngOnInit() {
     if(this.bizFire.currentBizGroup) {
       if(this.bizFire.currentBizGroup.data.team_color) {
-        this.groupCOlor = this.bizFire.currentBizGroup.data.team_color;
+        if(this.useGroupColor)
+        this.groupColor = this.bizFire.currentBizGroup.data.team_color;
       }
     }
   }

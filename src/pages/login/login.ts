@@ -1,6 +1,6 @@
 import { Electron } from './../../providers/electron/electron';
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Button, IonicPage, NavController, NavParams} from 'ionic-angular';
 import { FormGroup, ValidatorFn, Validators, FormBuilder } from '@angular/forms';
 import { LoadingProvider,BizFireService } from './../../providers';
 import {Subject, timer} from 'rxjs';
@@ -9,11 +9,6 @@ import * as electron from 'electron';
 import {IChat} from "../../_models/message";
 import {IUserData} from "../../_models";
 import {UserStatusProvider} from "../../providers/user-status";
-
-import * as firebase from 'firebase';
-import {environment} from "../../environments/environments";
-import * as angularFire from '@angular/fire';
-import {AngularFireDatabase} from "@angular/fire/database";
 
 @IonicPage({
   name: 'page-login',
@@ -26,6 +21,9 @@ import {AngularFireDatabase} from "@angular/fire/database";
 })
 
 export class LoginPage implements OnInit {
+
+  @ViewChild('submitBtn') submitBtn : Button;
+
 
   rememberId : boolean = false;
   loginForm: FormGroup;
@@ -60,7 +58,6 @@ export class LoginPage implements OnInit {
     private loading: LoadingProvider,
     public formBuilder: FormBuilder,
     private userStatusService: UserStatusProvider,
-    private angularFIreDB : AngularFireDatabase,
     ) {
       this.loginForm = formBuilder.group({
         email: ['', this.emailValidator],
@@ -70,10 +67,10 @@ export class LoginPage implements OnInit {
       this._unsubscribeAll = new Subject<any>();
   }
   ionViewCanEnter(){
+    console.log('ionViewCanEnter');
     this.hideForm = true;
     electron.ipcRenderer.send('giveMeRoomValue', 'ping');
-    electron.ipcRenderer.send('getLocalUser', 'ping');
-    electron.ipcRenderer.on('selectRoom', (event, roomData : IChat) => {
+    electron.ipcRenderer.once('selectRoom', (event, roomData : IChat) => {
       if(roomData != null) {
         this.hideForm = false;
         this.loading.show();
@@ -81,33 +78,27 @@ export class LoginPage implements OnInit {
         this.loading.hide();
       } else {
         this.hideForm = true;
+        const firstLogin = this.bizFire.firstLoginPage.getValue();
+        electron.ipcRenderer.once('sendUserData',(e, data) => {
+          console.log("datadatadatadatadata:::",data);
+          this.loginForm.get('email').setValue(data.id);
+          this.autoLoign = data.auto;
+
+          // if(this.autoLoign && firstLogin) {
+          //   this.loginForm.get('password').setValue(data.pwd);
+          //   timer(1000).subscribe(() =>this.onLogin());
+          // }
+        });
       }
-    })
+    });
   }
 
   ngOnInit() {
 
-    electron.ipcRenderer.on('sendUserData',(e, data) => {
-      console.log("datadatadatadatadata:::",data);
-      this.userEmail = data.id;
-      this.userPwd = data.pwd;
-      this.autoLoign = data.auto;
-
-      // if(this.autoLoign) {
-      //   timer(1000).subscribe(() => {
-      //     if(this.loginForm.valid) this.onLogin();
-      //   });
-      // }
-    });
-
     // 버전 가져오기
     this.version = electron.remote.app.getVersion();
 
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribeAll.next();
-    this._unsubscribeAll.complete();
+    electron.ipcRenderer.send('getLocalUser', 'ping');
   }
 
   async onLogin() {
@@ -120,6 +111,8 @@ export class LoginPage implements OnInit {
         const email = this.loginForm.value['email'];
         const password = this.loginForm.value['password'];
 
+        console.log(email,password);
+
         if(this.bizFire.afAuth.auth.currentUser != null) {
           await this.bizFire.signOut();
         }
@@ -127,8 +120,6 @@ export class LoginPage implements OnInit {
         await this.bizFire.loginWithEmail(email,password);
 
         this.electron.saveLocalUser(email,password,this.autoLoign);
-
-        this.electron.setCookieID('https://www.bizsquad.net','rememberID',this.loginForm.value['email']);
 
         const gid = await this.findLastBizGroup();
 
@@ -170,6 +161,10 @@ export class LoginPage implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
+  }
 
   changeDB() {
 
@@ -190,7 +185,6 @@ export class LoginPage implements OnInit {
     // });
 
   }
-
 
 
   // ------------------------------------------------------------------

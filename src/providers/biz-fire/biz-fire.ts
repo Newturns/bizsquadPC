@@ -133,6 +133,10 @@ export class BizFireService {
   }
   //------------------------------------------------------------//
 
+  // auto Login
+
+  firstLoginPage = new BehaviorSubject<boolean>(true);
+
 
 
   constructor(
@@ -379,6 +383,8 @@ export class BizFireService {
         this.userCustomLinks.next(null);
 
         this._userCustomToken.next(null);
+
+        this.firstLoginPage.next(false);
 
         return this.afAuth.auth.signOut().then(()=> {
 
