@@ -16,6 +16,7 @@ import { LangService } from '../lang-service';
 import {IBizGroup, INotificationData, INotificationItem, IUserData} from "../../_models";
 import {BizGroupBuilder} from "../../biz-common/biz-group";
 import DocumentSnapshot = firebase.firestore.DocumentSnapshot;
+import {AngularFireModule} from "@angular/fire";
 
 export interface IUserState {
   status:'init'|'signIn'|'signOut',
@@ -141,13 +142,13 @@ export class BizFireService {
 
   constructor(
     public afAuth: AngularFireAuth,
+    public aftest : AngularFireModule,
     public afStore: AngularFirestore,
     public afStorage: AngularFireStorage,
     private http: HttpClient,
     private _lang: LangService,
     public _app : App
     ) {
-
       this.onUserSignOut = new Subject<boolean>();
 
       this._lang.onLangMap.subscribe( (totalLanguageMap: any) => {

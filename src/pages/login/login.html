@@ -3,7 +3,7 @@
 
   <div class="d-flex flex-column justify-content-between flex-wrap content-color h-100 p-3">
     <div class="d-flex justify-content-end">
-<!--      <biz-button [title]="'DB_Switch'" (click)="changeDB()"></biz-button>-->
+      <biz-button [title]="'DB_Switch'" (click)="changeDB()"></biz-button>
 
       <!-- 헤더  -->
       <div class="d-flex">
@@ -17,12 +17,16 @@
     </div>
 
     <!-- 바디  -->
-    <div class="d-flex flex-column align-items-center">
+    <div class="d-flex flex-column align-items-center mb-5">
       <img src="imgs/renewal/logo.svg" class="mb-2">
 
       <div class="app-version mb-3">v {{ version }}</div>
       <form [formGroup]="loginForm" class="w-100 mx-5 px-5">
         <div class="d-flex flex-column">
+          <ng-container *ngIf="inputServer">
+            <div class="inputTitle mb-3">Company</div>
+            <input type="email" class="form-control input-text mb-4" formControlName="company">
+          </ng-container>
           <div class="inputTitle mb-3">Email</div>
           <input type="email" class="form-control input-text mb-4" formControlName="email">
           <div class="inputTitle mb-3">Password</div>
@@ -35,7 +39,7 @@
 <!--          <biz-check-btn [checked]="autoLoign" [useGroupColor]="false" (click)="onAutoLogin()"></biz-check-btn>-->
 <!--          <span class="ml-3 auto-login-text">Auto Login</span>-->
 <!--        </div>-->
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center mb-3">
           <div class="sign-up-text">New to Bizsquad?</div>
           <div class="d-flex justify-content-between align-items-center">
             <div class="sign-up-btn">
@@ -44,6 +48,9 @@
             </div>
           </div>
         </div>
+<!--        <div class="d-flex align-items-start sign-up-text pointer" (click)="toggleInputServer()">-->
+<!--          I have a Company server-->
+<!--        </div>-->
       </div>
     </div>
 

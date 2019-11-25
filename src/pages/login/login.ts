@@ -9,6 +9,8 @@ import * as electron from 'electron';
 import {IChat} from "../../_models/message";
 import {IUserData} from "../../_models";
 import {UserStatusProvider} from "../../providers/user-status";
+import firebase from 'firebase';
+import {environment} from "../../environments/environments";
 
 @IonicPage({
   name: 'page-login',
@@ -41,6 +43,8 @@ export class LoginPage implements OnInit {
 
   autoLoign : boolean = false;
 
+  inputServer : boolean = false;
+
   private emailValidator: ValidatorFn = Validators.compose([
     Validators.required,
     Validators.email
@@ -59,7 +63,9 @@ export class LoginPage implements OnInit {
     public formBuilder: FormBuilder,
     private userStatusService: UserStatusProvider,
     ) {
+
       this.loginForm = formBuilder.group({
+        company: [''],
         email: ['', this.emailValidator],
         password: ['', this.passwordValidator]
       });
@@ -99,6 +105,8 @@ export class LoginPage implements OnInit {
     this.version = electron.remote.app.getVersion();
 
     electron.ipcRenderer.send('getLocalUser', 'ping');
+
+
   }
 
   async onLogin() {
@@ -108,6 +116,7 @@ export class LoginPage implements OnInit {
       this.loading.show();
 
       try {
+
         const email = this.loginForm.value['email'];
         const password = this.loginForm.value['password'];
 
@@ -161,12 +170,25 @@ export class LoginPage implements OnInit {
     });
   }
 
+  toggleInputServer() {
+    this.inputServer = !this.inputServer;
+  }
+
   ngOnDestroy(): void {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
 
-  changeDB() {
+  async changeDB() {
+
+    console.log(firebase.app());
+
+    console.log("db Change");
+
+    await firebase.app().delete().then(async () => {
+      firebase.initializeApp(environment.taxline);
+      console.log(firebase.app());
+    }).catch(e => {console.log("delete error:",e)});
 
     // this.electron.localStorage.get('userData', (error, data) => {
     //
@@ -185,7 +207,6 @@ export class LoginPage implements OnInit {
     // });
 
   }
-
 
   // ------------------------------------------------------------------
   // * electron function.

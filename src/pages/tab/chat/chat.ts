@@ -124,8 +124,9 @@ export class ChatPage extends TakeUntil{
     this.squadService.onSquadListChanged
     .pipe(filter(d=>d != null),this.takeUntil)
     .subscribe((squad : IChat[]) => {
+      const onlyPrivateSquad = squad.filter(s => s.data.type !== 'public');
       // this.squadChatRooms = squad.sort(Commons.sortDataByCreated());
-      this.squadChatRooms = squad.sort(Commons.sortDataByLastMessage(false));
+      this.squadChatRooms = onlyPrivateSquad.sort(Commons.sortDataByLastMessage(false));
     });
 
 
