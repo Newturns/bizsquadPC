@@ -42,11 +42,10 @@ export interface userLinks {
 
 export class BizFireService {
 
-  //--------------------------------------------//
-  // BUILD No 55.
-  //--------------------------------------------//
-
   buildNo = '55';
+
+  // *추가 11/26. 로그인한 컴퍼니 아이디를 저장.
+  companyName: string;
 
   ipc: any;
 
@@ -136,7 +135,7 @@ export class BizFireService {
 
   // auto Login
 
-  firstLoginPage = new BehaviorSubject<boolean>(true);
+  firstLoginPage = new BehaviorSubject<boolean>(false);
 
 
 
@@ -384,8 +383,6 @@ export class BizFireService {
         this.userCustomLinks.next(null);
 
         this._userCustomToken.next(null);
-
-        this.firstLoginPage.next(false);
 
         return this.afAuth.auth.signOut().then(()=> {
 

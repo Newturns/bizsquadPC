@@ -27,5 +27,5 @@ export const environment = {
   bizServerUri: 'https://manager.bizsquad.net:9010',
   webJumpBaseUrl: 'https://product.bizsquad.net/auth?token=',
   publicWeb : 'https://www.bizsquad.net/',
-
+  masterUrl: 'https://master-35042.firebaseio.com',
 };

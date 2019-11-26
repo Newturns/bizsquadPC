@@ -48,6 +48,8 @@ export class LoginPage implements OnInit {
 
   serverList = {};
 
+  private roomData : IChat;
+
   private emailValidator: ValidatorFn = Validators.compose([
     Validators.required,
     Validators.email
@@ -65,7 +67,7 @@ export class LoginPage implements OnInit {
     private loading: LoadingProvider,
     public formBuilder: FormBuilder,
     private userStatusService: UserStatusProvider,
-    private $http: HttpClient
+    private http: HttpClient
     ) {
 
       this.loginForm = formBuilder.group({
@@ -75,9 +77,6 @@ export class LoginPage implements OnInit {
       });
       this.ipc = electron.ipc;
       this._unsubscribeAll = new Subject<any>();
-
-    $http.get('https://master-35042.firebaseio.com/servers.json').subscribe(res => this.serverList = res);
-
   }
   ionViewCanEnter(){
     console.log('ionViewCanEnter');
@@ -85,22 +84,23 @@ export class LoginPage implements OnInit {
     electron.ipcRenderer.send('giveMeRoomValue', 'ping');
     electron.ipcRenderer.once('selectRoom', (event, roomData : IChat) => {
       if(roomData != null) {
+        this.roomData = roomData;
         this.hideForm = false;
         this.loading.show();
-        this.navCtrl.setRoot('page-chat-frame',{roomData : roomData});
+        this.navCtrl.setRoot('page-chat-frame',{roomData : this.roomData});
         this.loading.hide();
       } else {
         this.hideForm = true;
-        const firstLogin = this.bizFire.firstLoginPage.getValue();
         electron.ipcRenderer.once('sendUserData',(e, data) => {
           console.log("datadatadatadatadata:::",data);
           this.loginForm.get('email').setValue(data.id);
           this.autoLoign = data.auto;
           this.loginForm.get('company').setValue(data.company);
-          // if(this.autoLoign && firstLogin) {
-          //   this.loginForm.get('password').setValue(data.pwd);
-          //   timer(1000).subscribe(() =>this.onLogin());
-          // }
+
+          //오토로그인 체크되어있을때 비밀번호 값 넣기
+          // if(this.autoLoign) this.loginForm.get('password').setValue(data.pwd);
+          //
+          // this.bizFire.firstLoginPage.next(true);
         });
       }
     });
@@ -113,21 +113,17 @@ export class LoginPage implements OnInit {
 
     electron.ipcRenderer.send('getLocalUser', 'ping');
 
+    // this.bizFire.firstLoginPage
+    //   .pipe(this._unsubscribeAll)
+    //   .subscribe(first => {
+    //     if(first === true && this.autoLoign) {
+    //       timer(0).subscribe(() => this.onLogin());
+    //     } else {
+    //       return;
+    //     }
+    //   })
+
   }
-
-  checkServer() {
-    const company = this.loginForm.value['company'];
-
-    const a = Object.keys(this.serverList).filter(name => name === company);
-
-    if(a.length > 0) {
-      this.onLogin();
-    } else {
-      this.electron.showErrorMessages("Login failed.","Please check the server name.");
-    }
-  }
-
-
 
   async onLogin() {
 
@@ -145,6 +141,14 @@ export class LoginPage implements OnInit {
 
         if(this.bizFire.afAuth.auth.currentUser != null) {
           await this.bizFire.signOut();
+        }
+
+        let companyCheckOk;
+        if(this.inputServer === true) {
+          console.log("companycompany",company);
+          companyCheckOk = await this.checkCompanyName(company);
+          this.bizFire.companyName = companyCheckOk;
+          console.log(companyCheckOk);
         }
 
         await this.bizFire.loginWithEmail(email,password);
@@ -166,9 +170,15 @@ export class LoginPage implements OnInit {
         this.loading.hide();
       } catch (e) {
 
+        if(e.code === 'companyNotFound') {
+          this.electron.showErrorMessages("company not found",e.message);
+
+        } else {
+          this.electron.showErrorMessages("Login failed.","you entered an incorrect email address or password.");
+        }
+
         console.log(e);
         this.loading.hide();
-        this.electron.showErrorMessages("Login failed.","you entered an incorrect email address or password.");
       }
     } else {
       this.electron.showErrorMessages("Login failed.","Email format is invalid or password has 6 digits or less.");
@@ -227,6 +237,28 @@ export class LoginPage implements OnInit {
     //   console.log("에러발생",err)
     // });
 
+  }
+
+
+  private checkCompanyName(company: string): Promise<any>{
+    return new Promise<boolean>((resolve, reject) => {
+      if(company == null || company.length === 0){
+        reject({code: 'companyNotFound', message: 'Sorry, Company name required.'});
+        return;
+      }
+      company = company.toLowerCase().trim();
+      this.http.get(`${environment.masterUrl}/servers.json`)
+        .subscribe( data => {
+          if(data){
+            const found = Object.keys(data).find(value => company === value);
+            if(found){
+              resolve(data[found]);
+            } else {
+              reject({message: 'Sorry, Invalid company name', code: 'companyNotFound'});
+            }
+          }
+        });
+    });
   }
 
   // ------------------------------------------------------------------

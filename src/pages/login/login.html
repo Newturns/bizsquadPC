@@ -31,7 +31,7 @@
           <input type="email" class="form-control input-text mb-4" formControlName="email">
           <div class="inputTitle mb-3">Password</div>
           <input type="password" class="form-control input-text mb-5" formControlName="password">
-          <button #submitBtn (click)="checkServer()" ion-button full class="login-btn mb-4">Sign In</button>
+          <button #submitBtn (click)="onLogin()" ion-button full class="login-btn mb-4">Sign In</button>
         </div>
       </form>
       <div class="w-100 mx-5 px-5">
@@ -48,9 +48,9 @@
             </div>
           </div>
         </div>
-<!--        <div class="d-flex align-items-start sign-up-text pointer" (click)="toggleInputServer()">-->
-<!--          I have a Company server-->
-<!--        </div>-->
+        <div class="d-flex align-items-start sign-up-text pointer" (click)="toggleInputServer()">
+          Personal Login
+        </div>
       </div>
     </div>
 
