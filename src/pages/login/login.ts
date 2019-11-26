@@ -3,7 +3,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Button, IonicPage, NavController, NavParams} from 'ionic-angular';
 import { FormGroup, ValidatorFn, Validators, FormBuilder } from '@angular/forms';
 import { LoadingProvider,BizFireService } from './../../providers';
-import {Subject, timer} from 'rxjs';
+import {combineLatest, Subject, timer} from 'rxjs';
 import { takeUntil,take } from 'rxjs/operators';
 import * as electron from 'electron';
 import {IChat} from "../../_models/message";
@@ -78,10 +78,15 @@ export class LoginPage implements OnInit {
       this.ipc = electron.ipc;
       this._unsubscribeAll = new Subject<any>();
   }
-  ionViewCanEnter(){
+  ionViewCanEnter() {
+
+    // 아이온뷰켄엔터 => 컨스트럭터로 변경해보기.
+
     console.log('ionViewCanEnter');
     this.hideForm = true;
     electron.ipcRenderer.send('giveMeRoomValue', 'ping');
+    electron.ipcRenderer.send('getLocalUser', 'ping');
+
     electron.ipcRenderer.once('selectRoom', (event, roomData : IChat) => {
       if(roomData != null) {
         this.roomData = roomData;
@@ -98,9 +103,7 @@ export class LoginPage implements OnInit {
           this.loginForm.get('company').setValue(data.company);
 
           //오토로그인 체크되어있을때 비밀번호 값 넣기
-          // if(this.autoLoign) this.loginForm.get('password').setValue(data.pwd);
-          //
-          // this.bizFire.firstLoginPage.next(true);
+          if(this.autoLoign) this.loginForm.get('password').setValue(data.pwd);
         });
       }
     });
@@ -111,18 +114,19 @@ export class LoginPage implements OnInit {
     // 버전 가져오기
     this.version = electron.remote.app.getVersion();
 
-    electron.ipcRenderer.send('getLocalUser', 'ping');
+    // const first = this.bizFire.firstLoginPage.getValue();
+    // if(first) {
+    //   this.onLogin();
+    // }
 
-    // this.bizFire.firstLoginPage
-    //   .pipe(this._unsubscribeAll)
-    //   .subscribe(first => {
-    //     if(first === true && this.autoLoign) {
-    //       timer(0).subscribe(() => this.onLogin());
-    //     } else {
-    //       return;
-    //     }
-    //   })
-
+    this.loginForm.valueChanges
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(value => {
+        const first = this.bizFire.firstLoginPage.getValue();
+        if(this.loginForm.valid && first) {
+          timer(3000).subscribe(() => this.onLogin());
+        }
+      })
   }
 
   async onLogin() {

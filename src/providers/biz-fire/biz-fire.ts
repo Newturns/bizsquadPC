@@ -135,7 +135,7 @@ export class BizFireService {
 
   // auto Login
 
-  firstLoginPage = new BehaviorSubject<boolean>(false);
+  firstLoginPage = new BehaviorSubject<boolean>(true);
 
 
 
@@ -362,6 +362,7 @@ export class BizFireService {
 
     signOut(): Promise<boolean> {
 
+        this.firstLoginPage.next(false);
         this._currentUser.next(null);
         firebase.database().goOffline();
 
