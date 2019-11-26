@@ -75,8 +75,8 @@ export class Electron {
     this.ipc.send('loadGH',url);
   }
 
-  saveLocalUser(id:string,pwd:any,auto:boolean) {
-    const data = {id:id,pwd:pwd,auto:auto};
+  saveLocalUser(id:string,pwd:any,auto:boolean,company:string) {
+    const data = {id:id,pwd:pwd,auto:auto,company:company};
     electron.ipcRenderer.send('saveLocalUser',data);
   }
 }

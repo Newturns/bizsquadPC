@@ -11,6 +11,7 @@ import {IUserData} from "../../_models";
 import {UserStatusProvider} from "../../providers/user-status";
 import firebase from 'firebase';
 import {environment} from "../../environments/environments";
+import {HttpClient} from "@angular/common/http";
 
 @IonicPage({
   name: 'page-login',
@@ -43,7 +44,9 @@ export class LoginPage implements OnInit {
 
   autoLoign : boolean = false;
 
-  inputServer : boolean = false;
+  inputServer : boolean = true;
+
+  serverList = {};
 
   private emailValidator: ValidatorFn = Validators.compose([
     Validators.required,
@@ -62,6 +65,7 @@ export class LoginPage implements OnInit {
     private loading: LoadingProvider,
     public formBuilder: FormBuilder,
     private userStatusService: UserStatusProvider,
+    private $http: HttpClient
     ) {
 
       this.loginForm = formBuilder.group({
@@ -71,6 +75,9 @@ export class LoginPage implements OnInit {
       });
       this.ipc = electron.ipc;
       this._unsubscribeAll = new Subject<any>();
+
+    $http.get('https://master-35042.firebaseio.com/servers.json').subscribe(res => this.serverList = res);
+
   }
   ionViewCanEnter(){
     console.log('ionViewCanEnter');
@@ -89,7 +96,7 @@ export class LoginPage implements OnInit {
           console.log("datadatadatadatadata:::",data);
           this.loginForm.get('email').setValue(data.id);
           this.autoLoign = data.auto;
-
+          this.loginForm.get('company').setValue(data.company);
           // if(this.autoLoign && firstLogin) {
           //   this.loginForm.get('password').setValue(data.pwd);
           //   timer(1000).subscribe(() =>this.onLogin());
@@ -106,8 +113,21 @@ export class LoginPage implements OnInit {
 
     electron.ipcRenderer.send('getLocalUser', 'ping');
 
-
   }
+
+  checkServer() {
+    const company = this.loginForm.value['company'];
+
+    const a = Object.keys(this.serverList).filter(name => name === company);
+
+    if(a.length > 0) {
+      this.onLogin();
+    } else {
+      this.electron.showErrorMessages("Login failed.","Please check the server name.");
+    }
+  }
+
+
 
   async onLogin() {
 
@@ -119,6 +139,7 @@ export class LoginPage implements OnInit {
 
         const email = this.loginForm.value['email'];
         const password = this.loginForm.value['password'];
+        const company = this.loginForm.value['company'];
 
         console.log(email,password);
 
@@ -128,7 +149,7 @@ export class LoginPage implements OnInit {
 
         await this.bizFire.loginWithEmail(email,password);
 
-        this.electron.saveLocalUser(email,password,this.autoLoign);
+        this.electron.saveLocalUser(email,password,this.autoLoign,company);
 
         const gid = await this.findLastBizGroup();
 

@@ -3,7 +3,7 @@
 
   <div class="d-flex flex-column justify-content-between flex-wrap content-color h-100 p-3">
     <div class="d-flex justify-content-end">
-      <biz-button [title]="'DB_Switch'" (click)="changeDB()"></biz-button>
+<!--      <biz-button [title]="'DB_Switch'" (click)="changeDB()"></biz-button>-->
 
       <!-- 헤더  -->
       <div class="d-flex">
@@ -31,7 +31,7 @@
           <input type="email" class="form-control input-text mb-4" formControlName="email">
           <div class="inputTitle mb-3">Password</div>
           <input type="password" class="form-control input-text mb-5" formControlName="password">
-          <button #submitBtn (click)="onLogin()" ion-button full class="login-btn mb-4">Sign In</button>
+          <button #submitBtn (click)="checkServer()" ion-button full class="login-btn mb-4">Sign In</button>
         </div>
       </form>
       <div class="w-100 mx-5 px-5">

@@ -22,9 +22,9 @@ export const language = {
         "ja": "アラーム"
       },
       "more_apps": {
-        "ko": "앱 더보기",
-        "en": "More Apps",
-        "ja": "アップスもっと見る"
+        "ko": "더보기",
+        "en": "More",
+        "ja": "もっと見る"
       },
       "end_more": {
         "ko": "더보기 닫기",
