@@ -76,6 +76,7 @@ page-login {
   }
 
   .sign-up-text {
+    -webkit-app-region: no-drag !important;
     font-family: Roboto;
     font-size: 13px;
     font-weight: normal;

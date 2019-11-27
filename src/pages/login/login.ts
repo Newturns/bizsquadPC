@@ -89,6 +89,7 @@ export class LoginPage implements OnInit {
 
     electron.ipcRenderer.once('selectRoom', (event, roomData : IChat) => {
       if(roomData != null) {
+        console.log("hav roomData");
         this.roomData = roomData;
         this.hideForm = false;
         this.loading.show();
@@ -96,15 +97,15 @@ export class LoginPage implements OnInit {
         this.loading.hide();
       } else {
         this.hideForm = true;
-        electron.ipcRenderer.once('sendUserData',(e, data) => {
-          console.log("datadatadatadatadata:::",data);
-          this.loginForm.get('email').setValue(data.id);
-          this.autoLoign = data.auto;
-          this.loginForm.get('company').setValue(data.company);
-
-          //오토로그인 체크되어있을때 비밀번호 값 넣기
-          if(this.autoLoign) this.loginForm.get('password').setValue(data.pwd);
-        });
+        // electron.ipcRenderer.once('sendUserData',(e, data) => {
+        //   console.log("datadatadatadatadata:::",data);
+        //   this.loginForm.get('email').setValue(data.id);
+        //   this.autoLoign = data.auto;
+        //   this.loginForm.get('company').setValue(data.company);
+        //
+        //   //오토로그인 체크되어있을때 비밀번호 값 넣기
+        //   if(this.autoLoign) this.loginForm.get('password').setValue(data.pwd);
+        // });
       }
     });
   }
@@ -119,14 +120,14 @@ export class LoginPage implements OnInit {
     //   this.onLogin();
     // }
 
-    this.loginForm.valueChanges
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(value => {
-        const first = this.bizFire.firstLoginPage.getValue();
-        if(this.loginForm.valid && first) {
-          timer(3000).subscribe(() => this.onLogin());
-        }
-      })
+    // this.loginForm.valueChanges
+    //   .pipe(takeUntil(this._unsubscribeAll))
+    //   .subscribe(value => {
+    //     const first = this.bizFire.firstLoginPage.getValue();
+    //     if(this.loginForm.valid && first) {
+    //       timer(3000).subscribe(() => this.onLogin());
+    //     }
+    //   })
   }
 
   async onLogin() {
