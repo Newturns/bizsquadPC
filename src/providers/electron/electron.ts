@@ -9,7 +9,6 @@ export class Electron {
   ipc : any;
   onlineStatus : boolean = true;
   opacity = 0;
-  ses = electron.remote.session;
 
   constructor(public bizFire : BizFireService) {
 
@@ -45,17 +44,6 @@ export class Electron {
 
     // windows를 위한 프레임 깜빡임 이펙트
     electron.ipcRenderer.send('windowsFlashFrame',count);
-  }
-
-  setCookieID(url :string,name :string,value :string) {
-    let expiration = new Date();
-    let hour = expiration.getHours();
-    hour = hour + 6;
-    expiration.setHours(hour * 365);
-    const cookie = { url: url, expirationDate: expiration.getTime(), name : name, value : value };
-    this.ses.defaultSession.cookies.set(cookie , (error) => {
-      if(error) console.log(error);
-    })
   }
 
   notification() {

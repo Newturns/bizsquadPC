@@ -97,15 +97,15 @@ export class LoginPage implements OnInit {
         this.loading.hide();
       } else {
         this.hideForm = true;
-        // electron.ipcRenderer.once('sendUserData',(e, data) => {
-        //   console.log("datadatadatadatadata:::",data);
-        //   this.loginForm.get('email').setValue(data.id);
-        //   this.autoLoign = data.auto;
-        //   this.loginForm.get('company').setValue(data.company);
-        //
-        //   //오토로그인 체크되어있을때 비밀번호 값 넣기
-        //   if(this.autoLoign) this.loginForm.get('password').setValue(data.pwd);
-        // });
+        electron.ipcRenderer.once('sendUserData',(e, data) => {
+          console.log("datadatadatadatadata:::",data);
+          this.loginForm.get('email').setValue(data.id);
+          this.autoLoign = data.auto;
+          this.loginForm.get('company').setValue(data.company);
+
+          //오토로그인 체크되어있을때 비밀번호 값 넣기
+          if(this.autoLoign) this.loginForm.get('password').setValue(data.pwd);
+        });
       }
     });
   }
