@@ -1,7 +1,6 @@
 import { BizFireService } from './../providers/biz-fire/biz-fire';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -24,37 +23,57 @@ import { CacheService } from '../providers/cache/cache';
 import { ToastProvider } from '../providers/toast/toast';
 import {UserStatusProvider} from "../providers/user-status";
 import {ComponentsModule} from "../components/components.module";
+import {PreloadAllModules, RouteReuseStrategy, RouterModule, Routes} from "@angular/router";
+import {ConfigService} from "./config.service";
+import {IonicModule, IonicRouteStrategy} from "@ionic/angular";
+import {IonicErrorHandler} from "ionic-angular";
+
+const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    loadChildren: './login/login.module#LoginPageModule'
+  },
+  {
+    path: ':firebaseName', // 'bizsquad', 'taxline' 등의 DB명이 온다.
+    canLoad:[
+      ConfigService, // check ConfigService.firebaseName with Master server
+    ],
+    loadChildren: ()=> import('../main/main.module').then(m => m.MainModule)
+  }
+];
 
 @NgModule({
-  declarations: [
-    MyApp,
-  ],
+  declarations: [MyApp],
+  entryComponents: [],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
-    AngularFireStorageModule,
-    AngularFireAuthModule,
+    RouterModule.forRoot(routes,{ preloadingStrategy: PreloadAllModules }),
     HttpClientModule,
     BrowserAnimationsModule,
-    ComponentsModule.forRoot()
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
+    // AngularFireModule.initializeApp(environment.firebase),
+    // AngularFirestoreModule,
+    // AngularFireStorageModule,
+    // AngularFireAuthModule,
+    // ComponentsModule.forRoot()
   ],
   providers: [
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Electron,
-    LoadingProvider,
-    BizFireService,
-    AlertProvider,
-    TokenProvider,
-    GroupColorProvider,
-    UserStatusProvider,
-    CacheService,
-    ToastProvider,
-  ]
+    // LoadingProvider,
+    // BizFireService,
+    // AlertProvider,
+    // TokenProvider,
+    // GroupColorProvider,
+    // UserStatusProvider,
+    // CacheService,
+    // ToastProvider,
+  ],
+  bootstrap: [MyApp],
 })
 export class AppModule {}

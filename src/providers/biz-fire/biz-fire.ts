@@ -1,5 +1,5 @@
 import {App} from 'ionic-angular';
-import { Injectable } from '@angular/core';
+import {Injectable, Optional, SkipSelf} from '@angular/core';
 import { User } from 'firebase';
 import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -17,6 +17,8 @@ import {IBizGroup, INotificationData, INotificationItem, IUserData} from "../../
 import {BizGroupBuilder} from "../../biz-common/biz-group";
 import DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 import {AngularFireModule} from "@angular/fire";
+import {ConfigService} from "../../app/config.service";
+import {AngularFactoryService} from "./angular-factory.service";
 
 export interface IUserState {
   status:'init'|'signIn'|'signOut',
@@ -112,11 +114,25 @@ export class BizFireService {
 
   readonly fireData = new FireData();
 
+  // authState 감시.
+  private authStateSub: Subscription;
+
   _onLang = new BehaviorSubject<LangService>(null);
   get onLang(): Observable<LangService>{
     return this._onLang.asObservable().pipe(
       filter(g => g!=null )
     );
+  }
+
+  get afStore(): AngularFirestore {
+    return this.angularFactoryService.getFirestore();
+  }
+  // afAuth 는 프라이빗으로 선언.
+  public get afAuth(): AngularFireAuth {
+    return this.angularFactoryService.getAuth();
+  }
+  get afStorage(): AngularFireStorage {
+    return this.angularFactoryService.getStorage();
   }
 
   //------------------------------------------------------------//
@@ -140,11 +156,12 @@ export class BizFireService {
 
 
   constructor(
-    public afAuth: AngularFireAuth,
-    public aftest : AngularFireModule,
-    public afStore: AngularFirestore,
-    public afStorage: AngularFireStorage,
-    private http: HttpClient,
+    @Optional() @SkipSelf() parent: BizFireService,
+    // public afAuth: AngularFireAuth,
+    // public afStore: AngularFirestore,
+    // public afStorage: AngularFireStorage,
+    private angularFactoryService: AngularFactoryService,
+    public configService: ConfigService,
     private _lang: LangService,
     public _app : App
     ) {
@@ -192,16 +209,21 @@ export class BizFireService {
           }
         });
 
-        // *
-        this.afAuth.authState.subscribe(async (user: firebase.User | null) => {
+      this.configService.firebaseName$
+        .subscribe((firebaseName : string) =>{
 
-            // unsubscribe old one for UserData
-            if(this.currentUserSubscription != null){
+          if(firebaseName != null && this.authStateSub == null) {
+
+            // *
+            this.authStateSub = this.afAuth.authState.subscribe(async (user: firebase.User | null) => {
+
+              // unsubscribe old one for UserData
+              if(this.currentUserSubscription != null){
                 this.currentUserSubscription.unsubscribe();
                 this.currentUserSubscription = null;
-            }
+              }
 
-            if(user){
+              if(user){
 
                 // ------------------------------------------------------------------
                 // * update user info.
@@ -215,17 +237,17 @@ export class BizFireService {
                 }
 
                 if(this.bizGroupSub){
-                    this.bizGroupSub();
-                    this.bizGroupSub = null;
+                  this.bizGroupSub();
+                  this.bizGroupSub = null;
                 }
                 this.startBizGroupMonitor(user);
 
 
                 // start trigger after update login date.
                 this.currentUserSubscription = this.afStore.doc(Commons.userPath(user.uid))
-                .snapshotChanges()
-                .pipe(takeUntil(this.onUserSignOut))
-                .subscribe((snapshot: any) => {
+                  .snapshotChanges()
+                  .pipe(takeUntil(this.onUserSignOut))
+                  .subscribe((snapshot: any) => {
 
                     const userData = snapshot.payload.data();
                     //console.log('currentUser data', userData, 'loaded');
@@ -235,19 +257,23 @@ export class BizFireService {
 
                     // multicast current user.
                     this._currentUser.next(userData as IUserData);
-                });
+                  });
 
-            } else {
+              } else {
                 // clear current users' data
                 if(this._currentUser.getValue() == null){
-                    this._currentUser.next(null);
+                  this._currentUser.next(null);
                 }
                 // * start load bizGroups
                 if(this.bizGroupSub){
-                    this.bizGroupSub();
-                    this.bizGroupSub = null;
+                  this.bizGroupSub();
+                  this.bizGroupSub = null;
                 }
-            }
+              }
+            });
+
+          }
+
         });
     }
 
@@ -364,7 +390,9 @@ export class BizFireService {
 
         this.firstLoginPage.next(false);
         this._currentUser.next(null);
+
         firebase.database().goOffline();
+        this.clear();
 
         // yes.
         if(this.bizGroupSub){
@@ -457,4 +485,24 @@ export class BizFireService {
       return this.afStore.collection(`users/${this.currentUID}/customlinks`).doc(link.mid).delete();
   }
 
+  updateProfile(data: any){
+    return this.afAuth.auth.currentUser.updateProfile(data);
+  }
+
+  private clear() {
+
+    // unsubscribe old one for UserData
+    if(this.currentUserSubscription != null){
+      this.currentUserSubscription.unsubscribe();
+      this.currentUserSubscription = null;
+    }
+
+    this._currentUser.next(null);
+
+    if(this.authStateSub){
+      this.authStateSub.unsubscribe();
+      this.authStateSub = null;
+    }
+
+  }
 }

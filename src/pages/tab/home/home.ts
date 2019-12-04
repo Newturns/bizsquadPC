@@ -28,7 +28,7 @@ import {IonGrid} from "@ionic/angular";
 })
 export class HomePage implements OnInit {
 
-  @ViewChild('ionGrid') appGrid : ElementRef;
+  @ViewChild('ionGrid',{static: true}) appGrid : ElementRef;
 
   currentUser: IUserData;
   group: IBizGroup;

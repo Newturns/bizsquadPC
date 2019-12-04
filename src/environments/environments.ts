@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  firebase: {
+  bizsquad: {
     apiKey: "AIzaSyCT8GgcwWfND7kmt3ZPLwSQ2YW1MDnfhEM",
     authDomain: "bizsquad-6d1be.firebaseapp.com",
     databaseURL: "https://bizsquad-6d1be.firebaseio.com",

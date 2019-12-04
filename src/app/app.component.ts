@@ -2,7 +2,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  templateUrl: 'app.html'
+  selector: 'app-root',
+  templateUrl: 'app.html',
+  styleUrls: ['app.scss']
 })
 export class MyApp {
 
@@ -14,6 +16,8 @@ export class MyApp {
 
 
   ngOnInit(): void {
+
+    console.log("app component Ts");
   }
 
   ionViewDidLoad(){

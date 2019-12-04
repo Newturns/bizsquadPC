@@ -31,10 +31,10 @@ import {formatDate} from "@angular/common";
 export class ChatFramePage extends TakeUntil{
 
   // 스크롤 컨텐츠
-  @ViewChild('scrollContent') contentArea: Content;
+  @ViewChild('scrollContent',{static: true}) contentArea: Content;
 
   //ion text-area
-  @ViewChild('msgInput') msgInput: ElementRef;
+  @ViewChild('msgInput',{static: true}) msgInput: ElementRef;
 
   // 채팅 input
   chatForm : FormGroup;

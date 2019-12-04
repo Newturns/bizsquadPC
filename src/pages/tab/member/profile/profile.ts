@@ -125,7 +125,7 @@ export class ProfilePage {
             displayName: this.editProfileForm.value['displayName'],
             photoURL: url
           };
-          this.bizFire.afAuth.auth.currentUser.updateProfile(updateProfileData).then(()=>{
+          this.bizFire.updateProfile(updateProfileData).then(()=>{
             this.bizFire.afStore.doc(`users/${this.bizFire.currentUID}`).update({
               displayName: this.editProfileForm.value['displayName'],
               photoURL: url,
@@ -174,7 +174,7 @@ export class ProfilePage {
         displayName: this.editProfileForm.value['displayName'],
         photoURL: this.bizFire.afAuth.auth.currentUser.photoURL
       };
-      this.bizFire.afAuth.auth.currentUser.updateProfile(updateProfileData).then(() =>{
+      this.bizFire.updateProfile(updateProfileData).then(() =>{
         this.bizFire.editUserProfile(editData).then(() => {
           console.log(this.editProfileForm['displayName']);
           console.log("바뀐값이 없어도 실행됨.");

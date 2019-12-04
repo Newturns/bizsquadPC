@@ -109,7 +109,6 @@ function createWindow() {
         webPreferences: { nodeIntegration : true }
     });
 
-
     win.loadURL(url.format({
         pathname: path.join(__dirname, '../www/index.html'),
         protocol: 'file:',

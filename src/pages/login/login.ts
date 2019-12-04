@@ -12,6 +12,7 @@ import {UserStatusProvider} from "../../providers/user-status";
 import firebase from 'firebase';
 import {environment} from "../../environments/environments";
 import {HttpClient} from "@angular/common/http";
+import {ConfigService} from "../../app/config.service";
 
 @IonicPage({
   name: 'page-login',
@@ -25,7 +26,7 @@ import {HttpClient} from "@angular/common/http";
 
 export class LoginPage implements OnInit {
 
-  @ViewChild('submitBtn') submitBtn : Button;
+  @ViewChild('submitBtn',{static: true}) submitBtn : Button;
 
 
   rememberId : boolean = false;
@@ -66,9 +67,12 @@ export class LoginPage implements OnInit {
     private bizFire: BizFireService,
     private loading: LoadingProvider,
     public formBuilder: FormBuilder,
-    private userStatusService: UserStatusProvider,
+    // private userStatusService: UserStatusProvider,
+    private configSerivce: ConfigService,
     private http: HttpClient
     ) {
+
+    console.log("login component Ts");
 
       this.loginForm = formBuilder.group({
         company: [''],
@@ -112,6 +116,8 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
 
+    console.log("login component Ts");
+
     // 버전 가져오기
     this.version = electron.remote.app.getVersion();
 
@@ -144,9 +150,9 @@ export class LoginPage implements OnInit {
 
         console.log(email,password);
 
-        if(this.bizFire.afAuth.auth.currentUser != null) {
-          await this.bizFire.signOut();
-        }
+        // if(this.bizFire.afAuth.auth.currentUser != null) {
+        //   await this.bizFire.signOut();
+        // }
 
         let companyCheckOk;
         if(this.inputServer === true) {
@@ -170,7 +176,7 @@ export class LoginPage implements OnInit {
           this.navCtrl.setRoot('page-group-list');
         }
 
-        this.userStatusService.onUserStatusChange();
+        // this.userStatusService.onUserStatusChange();
 
         this.loading.hide();
       } catch (e) {
@@ -210,41 +216,6 @@ export class LoginPage implements OnInit {
     this.inputServer = !this.inputServer;
   }
 
-  ngOnDestroy(): void {
-    this._unsubscribeAll.next();
-    this._unsubscribeAll.complete();
-  }
-
-  async changeDB() {
-
-    console.log(firebase.app());
-
-    console.log("db Change");
-
-    await firebase.app().delete().then(async () => {
-      firebase.initializeApp(environment.taxline);
-      console.log(firebase.app());
-    }).catch(e => {console.log("delete error:",e)});
-
-    // this.electron.localStorage.get('userData', (error, data) => {
-    //
-    //   if (error) throw error;
-    //
-    //   console.log(data);
-    // });
-
-    // this.angularFIreDB.database.app.delete().then(() => {
-    //
-    //   const a = firebase.initializeApp(environment.taxline).database().app.firestore().collection('user');
-    //   console.log(a);
-    //
-    // }).catch(err => {
-    //   console.log("에러발생",err)
-    // });
-
-  }
-
-
   private checkCompanyName(company: string): Promise<any>{
     return new Promise<boolean>((resolve, reject) => {
       if(company == null || company.length === 0){
@@ -266,10 +237,14 @@ export class LoginPage implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
+  }
+
   // ------------------------------------------------------------------
   // * electron function.
   // ------------------------------------------------------------------
-
   gotoSignUp() {
     this.ipc.send('loadGH','http://product.bizsquad.net/signUp/step1');
   }
@@ -277,6 +252,7 @@ export class LoginPage implements OnInit {
   onAutoLogin() {
     this.autoLoign = !this.autoLoign;
   }
+
   windowHide() {
     this.electron.windowHide();
   }

@@ -1,7 +1,7 @@
 import { Injectable, Optional, SkipSelf } from '@angular/core';
 import { BehaviorSubject, Subscription, Observable, timer } from 'rxjs';
 import {BizFireService} from '../biz-fire/biz-fire';
-import {CacheOptionBuilderFn, ICacheOption, ICacheOptionBuilder} from './cache-option';
+import { ICacheOption, ICacheOptionBuilder} from './cache-option';
 import { ICachePath } from './i-cache-path';
 import {CacheOptionBuilder} from './cache-option-builder';
 import {Path} from './path';

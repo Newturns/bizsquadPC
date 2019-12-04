@@ -7,7 +7,6 @@ import {NotificationService} from "../notification.service";
 import {INotificationItem} from "../../_models";
 import {TokenProvider} from "../token/token";
 import {take} from "rxjs/operators";
-import {isValid} from "ionicons/dist/types/icon/utils";
 import {IChat} from "../../_models/message";
 
 @Injectable()
@@ -23,7 +22,7 @@ export class AlertProvider {
     public electron : Electron,
     public bizFire : BizFireService,
     private noticeService : NotificationService,
-    private   tokenService : TokenProvider
+    private tokenService : TokenProvider
     ) {
       this.ipc = this.electron.ipc;
 

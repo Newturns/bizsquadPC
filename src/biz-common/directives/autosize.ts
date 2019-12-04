@@ -1,5 +1,4 @@
 import {ElementRef, HostListener, Directive, OnInit, Input} from '@angular/core';
-import {text} from "@angular/core/src/render3";
 
 @Directive({
   selector: 'ion-textarea[autosize]'

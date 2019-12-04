@@ -47,27 +47,6 @@ export class AccountService {
         }
     }
 
-    /*
-    * Get ALL USER INFOS
-    * */
-    getAllUserInfos(uids: string[]): Observable<IUser[]> {
-
-        if(uids.length === 0){
-            // just resolve []
-            return of([]);
-        } else {
-
-            const push = [];
-
-            uids.forEach(uid => {
-              push.push(this.cacheService.userGetObserver(uid));
-                // push.push(this.getUserObserver(uid));
-            });
-
-            return combineLatest(push);
-        }
-    }
-
 
     static userInfoSorter(a: IUser, b: IUser): number {
         let index = 0;

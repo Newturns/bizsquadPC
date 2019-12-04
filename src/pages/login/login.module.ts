@@ -5,15 +5,21 @@ import {ComponentsModule} from "../../components/components.module";
 import {AngularFireDatabase} from "@angular/fire/database";
 import {AngularFireModule} from "@angular/fire";
 import {environment} from "../../environments/environments";
+import {RouterModule, Routes} from "@angular/router";
+
+const routes: Routes = [
+  {
+    path: '',
+    component: LoginPage,
+  }
+];
+
 @NgModule({
-  declarations: [
-    LoginPage,
-  ],
   imports: [
-    IonicPageModule.forChild(LoginPage),
-    AngularFireModule.initializeApp(environment.taxline),
+    RouterModule.forChild(routes),
     ComponentsModule,
   ],
+  declarations: [LoginPage],
   providers: [
     AngularFireDatabase
   ]

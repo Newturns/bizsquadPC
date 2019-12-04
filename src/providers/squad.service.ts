@@ -18,6 +18,9 @@ export interface ISquad extends IBizGroupBase{
 
 export interface ISquadData {
 
+
+  default?: boolean,
+
   members: any,
   created: any,
   type: string,
